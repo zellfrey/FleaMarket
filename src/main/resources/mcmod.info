@@ -1,0 +1,15 @@
+[
+{
+  "modid": "fleamarket",
+  "name": "Flea Market",
+  "description": "A server-side market mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Beardedflea"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
