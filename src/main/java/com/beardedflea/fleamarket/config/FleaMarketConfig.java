@@ -27,58 +27,39 @@ public class FleaMarketConfig{
   
   @Config.RequiresWorldRestart
   @Config.Name("Broadcast Reminder")
-  @Config.Comment({
-      "How often (in minutes) between each item broadcast"
-    })
+  @Config.Comment({"How often (in minutes) between each item broadcast"})
   @RangeInt(min = 0)
   public static int broadCastReminder = 10;
 
   @Config.RequiresWorldRestart
   @Config.Name("Player join message")
   @Config.Comment({
-      "Whether or not the player should receive the broadcast message on joining a server"
+      "Whether or not the player should receive the broadcast message of an item on joining a server"
     })
   public static boolean joinMessage = true;
+ 
+  @Config.RequiresMcRestart
+    @Config.Name("Default Item Fields")
+    @Config.Comment({
+    "If any of the listed fields are not included within the item.json, they will use these default fields listed below.",
+    "If a placeholder is not listed for the field, the message will display an empty message."
+  })
+  public static ItemFields defaultItemFields = new ItemFields();
+    
+  public static class ItemFields {
+    
+    @Config.Comment({"[placeholders: %item%, %amount%]"})
+    public String defaultSoldMessage = "You have sold an item!";
 
-  @Config.RequiresWorldRestart
-  @Config.Name("Default Reward")
-  @Config.Comment({
-      "If a reward object is not used for selling an item, the reward listed below will be used as default",
-      "[placeholders: %playerName%]"
-    })
-  public static String defaultReward = "/give %playerName% 3 2";
-  
-  @Config.RequiresWorldRestart
-  @Config.Name("Default Broadcast")
-  @Config.Comment({
-      "If a broadcast object is not used for selling an item, the broadcast listed below will be used as default",
-      "[placeholders: %item%, %amount%]"
-    })
-  public static String defaultBroadcast = "This is a config test";
-  
-  @Config.RequiresWorldRestart
-  @Config.Name("Default Uptime")
-  @Config.Comment({
-      "If a uptime object is not used for selling an item, the uptime listed below will be used as default",
-      "[placeholders: %item%]"
-    })
-  @RangeInt(min = 0)
-  public static int defaultUptime = 20;
+    @RangeInt(min = 0, max = 1000)
+    @Config.Comment({"How long (in minutes) the item will be up for sale"})
+    public int defaultUptime = 20;
 
-  @Config.RequiresWorldRestart
-  @Config.Name("Default sell message")
-  @Config.Comment({
-      "If a message object is not used for selling an item, the message listed below will be used as default",
-      "[placeholders: %item%]"
-    })
-  public static String defaultSellMessage = "This is a config test";
+    @Config.Comment("[placeholders: %item%, %amount%]")
+    public String defaultBroadcast = "This is a broadCast";
 
-  
-  // public static SubCategory subCatTest = new SubCategory();
-
-  // private static class SubCategory {
-  //     public boolean someBool = true; 
-  //     public int relatedInt = 10;
-  // }
+    @Config.Comment("[placeholders: %playerName%]")
+    public String defaultReward = "/give %playerName% 3 2";
+  }
 
 }
