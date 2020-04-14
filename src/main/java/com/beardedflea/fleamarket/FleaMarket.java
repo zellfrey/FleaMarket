@@ -5,14 +5,17 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+// import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
+
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = FleaMarket.MODID, name = FleaMarket.NAME, version = FleaMarket.VERSION, serverSideOnly = true)
+@Mod(modid = FleaMarket.MODID, name = FleaMarket.NAME, version = FleaMarket.VERSION, acceptedMinecraftVersions = FleaMarket.MCVERSIONS, acceptableRemoteVersions = "*", serverSideOnly = true)
 public class FleaMarket
 {
     public static final String MODID = "fleamarket";
     public static final String NAME = "Flea Market";
-    public static final String VERSION = "0.03";
+    public static final String MCVERSIONS = "[1.12, 1.13)";
+    public static final String VERSION = "0.05";
 
     private static Logger logger;
 
