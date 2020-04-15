@@ -1,6 +1,7 @@
 package com.beardedflea.fleamarket.event;
 
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.*;
@@ -15,7 +16,7 @@ public class BroadcastEventHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if(FleaMarketConfig.joinMessage){
-            event.player.sendMessage(new TextComponentString("This is a player broadcast test"));
+            event.player.sendMessage(new TextComponentString("This is a player broadcast test" + TextFormatting.BLUE));
         }
     }
 

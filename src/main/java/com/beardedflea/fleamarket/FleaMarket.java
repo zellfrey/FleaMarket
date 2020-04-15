@@ -5,9 +5,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 // import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.beardedflea.fleamarket.command.CommandFleaMarket;
 
 @Mod(modid = FleaMarket.MODID, name = FleaMarket.NAME, version = FleaMarket.VERSION, acceptedMinecraftVersions = FleaMarket.MCVERSIONS, acceptableRemoteVersions = "*", serverSideOnly = true)
 public class FleaMarket
@@ -15,21 +20,32 @@ public class FleaMarket
     public static final String MODID = "fleamarket";
     public static final String NAME = "Flea Market";
     public static final String MCVERSIONS = "[1.12, 1.13)";
-    public static final String VERSION = "0.05";
+    public static final String VERSION = "0.06";
 
-    private static Logger logger;
+    private static final Logger log = LogManager.getLogger(MODID);
+
+
+    public static Logger getLogger() {
+        return log;
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        logger = event.getModLog();
+        log.info("Pre int of Flea market");
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         // some example code
-        logger.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-        logger.info("Flea market test");
+        log.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+        log.info("Flea market test");
+    }
+    
+    @EventHandler
+    public void onServerStarting(FMLServerStartingEvent event){
+        event.registerServerCommand(new CommandFleaMarket());
+        log.info("Registered command /fleamarket");
     }
 }
