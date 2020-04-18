@@ -32,6 +32,12 @@ public class FleaMarketConfig{
   public static int broadCastReminder = 10;
 
   @Config.RequiresWorldRestart
+  @Config.Name("sales Interval")
+  @Config.Comment({"How long (in minutes) between the next item to be on sale"})
+  @RangeInt(min = 0)
+  public static int saleInterval = 5;
+
+  @Config.RequiresWorldRestart
   @Config.Name("Player join message")
   @Config.Comment({
       "Whether or not the player should receive the broadcast message of an item on joining a server"

@@ -16,7 +16,7 @@ public class BroadcastEventHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if(FleaMarketConfig.joinMessage){
-            event.player.sendMessage(new TextComponentString("This is a player broadcast test" + TextFormatting.BLUE));
+            event.player.sendMessage(new TextComponentString(TextFormatting.BLUE + "This is a player broadcast test"));
         }
     }
 
