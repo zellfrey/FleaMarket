@@ -4,7 +4,7 @@ import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
-// import com.beardedflea.fleamarket.FleaMarket;
+import com.beardedflea.fleamarket.FleaMarket;
 import com.beardedflea.fleamarket.utils.*;
 
 public class CommandFleaMarket extends CommandBase{
@@ -60,6 +60,11 @@ public class CommandFleaMarket extends CommandBase{
 
                 case "sell":
                     playerMP.sendMessage(new TextComponentString("Current method of selling item"));
+                    FleaMarket.getLogger().info(playerMP.inventory.mainInventory.toString() + "main Inventory string");
+                    FleaMarket.getLogger().info(playerMP.inventory.mainInventory.toArray() + "main Inventory array");
+                    // FleaMarket.getLogger().info(playerMP.inventory.currentItem + "player hot bar index");
+                    FleaMarket.getLogger().info(playerMP.inventory.getCurrentItem() + "current item");
+                    FleaMarket.getLogger().info(playerMP.inventory.getItemStack().getItem().getRegistryName() + "get itemstack");
                 break;
 
                 default:
