@@ -2,7 +2,10 @@ package io.github.beardedflea.fleamarket.command;
 
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.*;
@@ -60,11 +63,8 @@ public class CommandFleaMarket extends CommandBase{
 
                 case "sell":
                     playerMP.sendMessage(new TextComponentString("Current method of selling item"));
-                    FleaMarket.getLogger().info(playerMP.inventory.mainInventory.toString() + "main Inventory string");
-                    FleaMarket.getLogger().info(playerMP.inventory.mainInventory.toArray() + "main Inventory array");
-                    // FleaMarket.getLogger().info(playerMP.inventory.currentItem + "player hot bar index");
-                    FleaMarket.getLogger().info(playerMP.inventory.getCurrentItem() + "current item");
-                    FleaMarket.getLogger().info(playerMP.inventory.getItemStack().getItem().getRegistryName() + "get itemstack");
+
+                    sellItemOffer(sender, playerMP.inventory.mainInventory);
                 break;
 
                 default:
@@ -75,5 +75,39 @@ public class CommandFleaMarket extends CommandBase{
         else{
             throw new WrongUsageException(getUsage(playerMP));
         }
+    }
+
+
+
+    private static void sellItemOffer(ICommandSender sender, NonNullList<ItemStack> playerInventory){
+        String currentOfferTest = "minecraft:potion";
+        String currentOfferTestNBTStr = "{Potion:\"minecraft:long_night_vision\"}";
+        boolean containsItemOffer = false;
+        int amountOfCorrectItem = 0;
+            //scans inventory checking for current ItemOffer
+            for(ItemStack item : playerInventory){
+
+                String itemFullName = item.getItem().getRegistryName()+ "";
+                int itemDamageNum = item.getItem().getDamage(item);
+                itemFullName += itemDamageNum != 0 ? ":"+ itemDamageNum : "";
+
+                String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
+
+                //Get name displayed on item e.g "Potion of Night Vision"
+                FleaMarket.getLogger().info(item.getItem().getItemStackDisplayName(item));
+                FleaMarket.getLogger().info(itemFullName);
+                FleaMarket.getLogger().info(itemNBTRaw);
+
+                if(itemFullName.equals(currentOfferTest) && itemNBTRaw.equals(currentOfferTestNBTStr)){
+                    containsItemOffer = true;
+                    amountOfCorrectItem +=item.getCount();
+                }
+            }
+            if(containsItemOffer){
+                sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "You have " + amountOfCorrectItem + " " + currentOfferTest));
+            }
+            else{
+                sender.sendMessage(new TextComponentString(TextFormatting.RED + "You do not have the required item on offer"));
+            }
     }
 }
