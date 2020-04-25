@@ -1,4 +1,4 @@
-package com.beardedflea.fleamarket;
+package io.github.beardedflea.fleamarket;
 
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
@@ -12,8 +12,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.beardedflea.fleamarket.command.CommandFleaMarket;
-import com.beardedflea.fleamarket.command.CommandOPFleaMarket;
+import io.github.beardedflea.fleamarket.command.*;
 
 @Mod(modid = FleaMarket.MODID, name = FleaMarket.NAME, version = FleaMarket.VERSION, acceptedMinecraftVersions = FleaMarket.MCVERSIONS, acceptableRemoteVersions = "*", serverSideOnly = true)
 public class FleaMarket

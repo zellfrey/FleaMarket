@@ -1,4 +1,4 @@
-package com.beardedflea.fleamarket.config;
+package io.github.beardedflea.fleamarket.config;
 
 import net.minecraftforge.common.config.*;
 // import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.*;
 // import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Config.RangeInt;
 
-import static com.beardedflea.fleamarket.FleaMarket.*;
+import static io.github.beardedflea.fleamarket.FleaMarket.*;
 /**
  * @author Beardedflea
  */

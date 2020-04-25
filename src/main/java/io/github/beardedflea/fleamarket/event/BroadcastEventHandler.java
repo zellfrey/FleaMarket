@@ -1,4 +1,4 @@
-package com.beardedflea.fleamarket.event;
+package io.github.beardedflea.fleamarket.event;
 
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.beardedflea.fleamarket.FleaMarket;
-import com.beardedflea.fleamarket.config.FleaMarketConfig;
+import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 
 @Mod.EventBusSubscriber(value = Side.SERVER, modid = FleaMarket.MODID)
 public class BroadcastEventHandler {

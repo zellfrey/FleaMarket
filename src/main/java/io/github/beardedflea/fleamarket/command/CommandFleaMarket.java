@@ -1,11 +1,11 @@
-package com.beardedflea.fleamarket.command;
+package io.github.beardedflea.fleamarket.command;
 
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
-import com.beardedflea.fleamarket.FleaMarket;
-import com.beardedflea.fleamarket.utils.*;
+import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.utils.*;
 
 public class CommandFleaMarket extends CommandBase{
 

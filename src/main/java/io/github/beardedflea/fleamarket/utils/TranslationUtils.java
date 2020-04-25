@@ -1,7 +1,7 @@
-package com.beardedflea.fleamarket.utils;
+package io.github.beardedflea.fleamarket.utils;
 
 import net.minecraft.util.text.*;
-import com.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.FleaMarket;
 
 public class TranslationUtils {
 
