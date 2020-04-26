@@ -2,12 +2,12 @@ package io.github.beardedflea.fleamarket.command;
 
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.store.*;
 import io.github.beardedflea.fleamarket.utils.*;
 
 public class CommandFleaMarket extends CommandBase{
@@ -33,7 +33,7 @@ public class CommandFleaMarket extends CommandBase{
         return true;
     }
 
-    public static ITextComponent getHelpUsage(){
+    private static ITextComponent getHelpUsage(){
         ITextComponent comp1 = TranslationUtils.getTextBorder();
         ITextComponent comp2 = new TextComponentString("\n/fm help - what you are currently looking at\n");
         ITextComponent comp3 = new TextComponentString("/fm check - checks the current item on offer\n");
@@ -58,7 +58,7 @@ public class CommandFleaMarket extends CommandBase{
                 break;
 
                 case "check":
-                    playerMP.sendMessage(new TextComponentString("checks the current item on offer"));
+                    playerMP.sendMessage(new TextComponentString(ItemOffer.currentItemBroadcast));
                 break;
 
                 case "sell":
@@ -80,31 +80,36 @@ public class CommandFleaMarket extends CommandBase{
 
 
     private static void sellItemOffer(ICommandSender sender, NonNullList<ItemStack> playerInventory){
-        String currentOfferTest = "minecraft:potion";
-        String currentOfferTestNBTStr = "{Potion:\"minecraft:long_night_vision\"}";
         boolean containsItemOffer = false;
         int amountOfCorrectItem = 0;
-            //scans inventory checking for current ItemOffer
-            for(ItemStack item : playerInventory){
+        Item itemToRemove ;
+        //scans inventory checking for current ItemOffer
+        for(ItemStack item : playerInventory) {
 
-                String itemFullName = item.getItem().getRegistryName()+ "";
-                int itemDamageNum = item.getItem().getDamage(item);
-                itemFullName += itemDamageNum != 0 ? ":"+ itemDamageNum : "";
+            String itemFullName = item.getItem().getRegistryName() + "";
+            int itemDamageNum = item.getItem().getDamage(item);
+            //Stitches the registry name with the meta data id: modName:blockName:dmgVal
+            itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
 
-                String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
+            String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
 
+            if (itemFullName.equals(ItemOffer.currentItemName) && itemNBTRaw.equals(ItemOffer.currentItemNBTRaw)) {
+                containsItemOffer = true;
+                amountOfCorrectItem += item.getCount();
+                itemToRemove = item.getItem();
                 //Get name displayed on item e.g "Potion of Night Vision"
-                FleaMarket.getLogger().info(item.getItem().getItemStackDisplayName(item));
-                FleaMarket.getLogger().info(itemFullName);
-                FleaMarket.getLogger().info(itemNBTRaw);
-
-                if(itemFullName.equals(currentOfferTest) && itemNBTRaw.equals(currentOfferTestNBTStr)){
-                    containsItemOffer = true;
-                    amountOfCorrectItem +=item.getCount();
-                }
+                DebugUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw);
             }
+        }
+            //checks if item is inventory
             if(containsItemOffer){
-                sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "You have " + amountOfCorrectItem + " " + currentOfferTest));
+                //final check to see if the amount is equal or greater to the desired amount in the offer
+                if(amountOfCorrectItem >= ItemOffer.currentItemAmount){
+//                    int k = playerInventory.clearMatchingItems(itemToRemove, 0,ItemOffer.currentItemAmount,  ItemOffer.currentItemNBTRaw);
+
+                }
+                sender.sendMessage(new TextComponentString("Flea Market wants " + ItemOffer.currentItemAmount + " " + ItemOffer.currentItemName));
+                sender.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " in your inventory."));
             }
             else{
                 sender.sendMessage(new TextComponentString(TextFormatting.RED + "You do not have the required item on offer"));
