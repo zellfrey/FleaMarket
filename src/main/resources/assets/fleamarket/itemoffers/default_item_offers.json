@@ -1,7 +1,8 @@
 {
   "itemOffers":[
     {
-      "item": "minecraft:carpet:3",
+      "item": "minecraft:carpet",
+      "damage": 3,
       "amount": 5,
       "uptime": 120,
       "broadcastMsg": "Flea market is offering $400 for 5 light blue carpets",

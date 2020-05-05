@@ -4,20 +4,26 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.*;
 import net.minecraft.command.CommandBase;
 
+import javax.annotation.Nullable;
+
 public class ItemOffer {
 
-//    private final ItemStack itemStack;
-//    private final String item, nbtRaw, soldMessage, broadcastMessage, rewardCommand;
-//    private final int amount, uptime;
-//
-//
-//
-//    public RewardItem(Item item, int amount, @Nullable String nbtString) {
-//        this(item, count, 0, nbtString);
-//    }
-//
-//    public RewardItem(Item item, int count, int meta, @Nullable String nbtString) {
-//        itemStack = new ItemStack(item, count, meta);
-//        nbtRaw = nbtString;
-//    }
+    private final ItemStack itemStack;
+    private final String nbtRaw, soldMessage, broadcastMessage, rewardCommand;
+    private final int uptime;
+
+    public ItemOffer(Item item, int meta, @Nullable String nbtString,
+                     String sellMsg, String broadcastMsg, String rewardCmd, int time) {
+
+        itemStack = new ItemStack(item, 1, meta);
+        nbtRaw = nbtString;
+        soldMessage = sellMsg;
+        broadcastMessage = broadcastMsg;
+        rewardCommand = rewardCmd;
+        uptime = time;
+    }
+
+    public ItemStack getItemStack(){
+        return itemStack;
+    }
 }

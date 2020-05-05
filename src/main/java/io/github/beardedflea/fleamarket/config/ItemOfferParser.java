@@ -22,9 +22,9 @@ import java.util.Locale;
 
 public class ItemOfferParser{
 
-    public static File configDir;
+    private static File configDir;
 
-    public static JsonParser parser = new JsonParser();
+    private static JsonParser parser = new JsonParser();
 
     public static void init(FMLPreInitializationEvent event) {
         configDir = new File(event.getModConfigurationDirectory(), "fleamarket/itemoffers");
@@ -38,7 +38,6 @@ public class ItemOfferParser{
         FleaMarket.getLogger().info("Loading FleaMarket item offers");
         ItemOfferList.clearItemOffers();
         File[] jsonFiles = configDir.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".json"));
-        int regCount = 0;
 
         if(jsonFiles == null) {
             //if this returns null, something is seriously wrong.
@@ -64,20 +63,41 @@ public class ItemOfferParser{
                     else{
                         for(int i = 0; i < itemOfferArray.size(); i++){
                             JsonObject object = itemOfferArray.get(i).getAsJsonObject();
-                            String item = object.get("item").getAsString();
-                            FleaMarket.getLogger().info(item);
+                            ItemOffer itemOffer;
+                            //Item, meta data, nbt
+                            //nbt is null if not included. if no metadata found, falls to 0
+                            Item item = CommandBase.getItemByText(null, object.get("item").getAsString());
+
+
+                            //nbt is null if not included. if no metadata found, falls to 0
+                            int dmgValue = object.has("damage") ? object.get("damage").getAsInt() : 0;
+                            String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
+
+                            //get itemOffer variables. If fields aren't included, will fallback to default values in config file
+                            int uptime = object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarketConfig.defaultItemFields.defaultUptime;
+                            String broadcastMsg = object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultBroadcast;
+                            String soldMsg = object.has("soldMsg") ? object.get("soldMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultSoldMessage;
+                            String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarketConfig.defaultItemFields.defaultReward;
+
+                            itemOffer = new ItemOffer(item, dmgValue, nbtRaw, soldMsg, broadcastMsg, rewardCmd, uptime);
+
+                            ItemOfferList.addItemOffer(itemOffer);
                         }
+
 
                     }
 
                 }
-                catch (FileNotFoundException e) {
+                catch (FileNotFoundException | NumberInvalidException e) {
                     FleaMarket.getLogger().error("error parsing item offer file " + jsonFile.getName() + "!", e);
                 }
             }
 
         }
-
+        if(ItemOfferList.getItemOfferSize() == 0){
+            FleaMarket.getLogger().error("FleaMarket found no itemOffers. Is this intentional?");
+        }
+        FleaMarket.getLogger().info("FleaMarket registered a total of {} itemOffers in {} files!", ItemOfferList.getItemOfferSize(), jsonFiles.length);
     }
 
     private static void setupDefaultItemOffers(File itemOffersDir) {
