@@ -49,35 +49,35 @@ public class CommandOPFleaMarket extends CommandBase{
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
-        
+
         if(args.length > 1){
             throw new SyntaxErrorException("Too many arguments");
         }
         if(args.length == 1){
             switch(args[0].toLowerCase()){
                 case "help":
-                    playerMP.sendMessage(getOPHelpUsage());
+                    sender.sendMessage(getOPHelpUsage());
                 break;
 
                 case "start":
-                    playerMP.sendMessage(new TextComponentString("starts automatic cycling of item offers"));
+                    sender.sendMessage(new TextComponentString("starts automatic cycling of item offers"));
+                    sender.sendMessage(new TextComponentString(sender.getName()));
                 break;
 
                 case "pause":
-                    playerMP.sendMessage(new TextComponentString("Pauses the cycle. Players can still offer the item"));
+                    sender.sendMessage(new TextComponentString("Pauses the cycle. Players can still offer the item"));
                 break;
 
                 case "skip":
-                    playerMP.sendMessage(new TextComponentString("Moves to the next item offer in the list"));
+                    sender.sendMessage(new TextComponentString("Moves to the next item offer in the list"));
                 break;
 
                 default:
-                throw new WrongUsageException(getUsage(playerMP));
+                throw new WrongUsageException(getUsage(sender));
             }
 
         }else{
-            throw new WrongUsageException(getUsage(playerMP));
+            throw new WrongUsageException(getUsage(sender));
         }
     }
 }

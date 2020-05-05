@@ -43,6 +43,11 @@ public class FleaMarketConfig{
       "Whether or not the player should receive the broadcast message of an item on joining a server"
     })
   public static boolean joinMessage = true;
+
+  @Config.RequiresWorldRestart
+  @Config.Name("Debug mode")
+  @Config.Comment({"Outputs more plugin information onto the console "})
+  public static boolean debugMode = true;
  
   @Config.RequiresMcRestart
     @Config.Name("Default Item Fields")

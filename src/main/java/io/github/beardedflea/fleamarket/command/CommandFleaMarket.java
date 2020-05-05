@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket.command;
 
+import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -9,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import io.github.beardedflea.fleamarket.store.*;
 import io.github.beardedflea.fleamarket.utils.*;
+import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 
 public class CommandFleaMarket extends CommandBase{
 
@@ -54,17 +56,17 @@ public class CommandFleaMarket extends CommandBase{
         if(args.length == 1){
             switch(args[0].toLowerCase()){
                 case "help":
-                    playerMP.sendMessage(getHelpUsage());
+                    sender.sendMessage(getHelpUsage());
                 break;
 
                 case "check":
-                    playerMP.sendMessage(new TextComponentString(ItemOffer.currentItemBroadcast));
+//                    sender.sendMessage(new TextComponentString(ItemOffer.getCurrentBroadCast()));
                 break;
 
                 case "sell":
-                    playerMP.sendMessage(new TextComponentString("Current method of selling item"));
+                    sender.sendMessage(new TextComponentString("Current method of selling item"));
 
-                    sellItemOffer(sender, playerMP.inventory.mainInventory);
+                    sellItemOffer(playerMP);
                 break;
 
                 default:
@@ -79,40 +81,48 @@ public class CommandFleaMarket extends CommandBase{
 
 
 
-    private static void sellItemOffer(ICommandSender sender, NonNullList<ItemStack> playerInventory){
+    private static void sellItemOffer(EntityPlayerMP playerMP){
         boolean containsItemOffer = false;
         int amountOfCorrectItem = 0;
-        Item itemToRemove ;
+        Item itemToRemove = null;
         //scans inventory checking for current ItemOffer
-        for(ItemStack item : playerInventory) {
+        for(ItemStack item : playerMP.inventory.mainInventory) {
 
             String itemFullName = item.getItem().getRegistryName() + "";
             int itemDamageNum = item.getItem().getDamage(item);
+
             //Stitches the registry name with the meta data id: modName:blockName:dmgVal
             itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
 
             String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
+            //Get name displayed on item e.g "Potion of Night Vision"
+//            if(FleaMarketConfig.debugMode){DebugUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw);}
 
-            if (itemFullName.equals(ItemOffer.currentItemName) && itemNBTRaw.equals(ItemOffer.currentItemNBTRaw)) {
-                containsItemOffer = true;
-                amountOfCorrectItem += item.getCount();
-                itemToRemove = item.getItem();
-                //Get name displayed on item e.g "Potion of Night Vision"
-                DebugUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw);
-            }
+//            if(itemFullName.equals(ItemOffer.currentItemName)) {
+////                && itemNBTRaw.equals(ItemOffer.currentItemNBTRaw)
+//                containsItemOffer = true;
+//                amountOfCorrectItem += item.getCount();
+//                itemToRemove = item.getItem();
+//                FleaMarket.getLogger().info(itemToRemove);
+//            }
         }
             //checks if item is inventory
-            if(containsItemOffer){
-                //final check to see if the amount is equal or greater to the desired amount in the offer
-                if(amountOfCorrectItem >= ItemOffer.currentItemAmount){
-//                    int k = playerInventory.clearMatchingItems(itemToRemove, 0,ItemOffer.currentItemAmount,  ItemOffer.currentItemNBTRaw);
+        if(containsItemOffer){
+            //final check to see if the amount is equal or greater to the desired amount in the offer
+//            if(amountOfCorrectItem >= ItemOffer.currentItemAmount){
+//                int k = playerMP.inventory.clearMatchingItems(itemToRemove, 0,3,  null);
+//                playerMP.inventoryContainer.detectAndSendChanges();
+//                FleaMarket.getLogger().info("Removed " + k + "  items from " + playerMP.getName() + "'s inventory");
+//
+//            }
+//            else{
+//                playerMP.sendMessage(new TextComponentString("Flea Market wants " + ItemOffer.currentItemAmount + " " + ItemOffer.currentItemName));
+//                playerMP.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " in your inventory."));
+//            }
 
-                }
-                sender.sendMessage(new TextComponentString("Flea Market wants " + ItemOffer.currentItemAmount + " " + ItemOffer.currentItemName));
-                sender.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " in your inventory."));
-            }
-            else{
-                sender.sendMessage(new TextComponentString(TextFormatting.RED + "You do not have the required item on offer"));
-            }
+        }
+        else{
+            playerMP.sendMessage(new TextComponentString(TextFormatting.RED + "You do not have the required item on offer"));
+        }
     }
 }
