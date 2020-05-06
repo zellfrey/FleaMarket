@@ -22,7 +22,7 @@ import java.util.Locale;
 
 public class ItemOfferParser{
 
-    private static File configDir;
+    public static File configDir;
 
     private static JsonParser parser = new JsonParser();
 
@@ -64,24 +64,32 @@ public class ItemOfferParser{
                         for(int i = 0; i < itemOfferArray.size(); i++){
                             JsonObject object = itemOfferArray.get(i).getAsJsonObject();
                             ItemOffer itemOffer;
-                            //Item, meta data, nbt
-                            //nbt is null if not included. if no metadata found, falls to 0
-                            Item item = CommandBase.getItemByText(null, object.get("item").getAsString());
 
+                            if(!object.has("item")){
+                                FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"item\" field. Skipping...", i, jsonFile.getName());
+                            }
+                            else if(!object.has("amount")){
+                                FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"amount\" field. Skipping...", i, jsonFile.getName());
+                            }
+                            else{
+                                Item item = CommandBase.getItemByText(null, object.get("item").getAsString());
+                                int amount = object.get("amount").getAsInt();
 
-                            //nbt is null if not included. if no metadata found, falls to 0
-                            int dmgValue = object.has("damage") ? object.get("damage").getAsInt() : 0;
-                            String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
+                                //nbt is null if not included. if no metadata found, falls to 0
+                                int dmgValue = object.has("damage") ? object.get("damage").getAsInt() : 0;
+                                String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
 
-                            //get itemOffer variables. If fields aren't included, will fallback to default values in config file
-                            int uptime = object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarketConfig.defaultItemFields.defaultUptime;
-                            String broadcastMsg = object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultBroadcast;
-                            String soldMsg = object.has("soldMsg") ? object.get("soldMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultSoldMessage;
-                            String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarketConfig.defaultItemFields.defaultReward;
+                                //get itemOffer variables. If fields aren't included, will fallback to default values in config file
+                                int uptime = object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarketConfig.defaultItemFields.defaultUptime;
+                                String broadcastMsg = object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultBroadcast;
+                                String soldMsg = object.has("soldMsg") ? object.get("soldMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultSoldMessage;
+                                String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarketConfig.defaultItemFields.defaultReward;
 
-                            itemOffer = new ItemOffer(item, dmgValue, nbtRaw, soldMsg, broadcastMsg, rewardCmd, uptime);
+                                itemOffer = new ItemOffer(item, dmgValue, nbtRaw, amount, soldMsg, broadcastMsg, rewardCmd, uptime);
 
-                            ItemOfferList.addItemOffer(itemOffer);
+                                ItemOfferList.addItemOffer(itemOffer);
+                            }
+
                         }
 
 

@@ -7,6 +7,8 @@ import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.*;
+import io.github.beardedflea.fleamarket.config.ItemOfferParser;
+import io.github.beardedflea.fleamarket.store.ItemOfferList;
 
 public class CommandOPFleaMarket extends CommandBase{
 
@@ -72,6 +74,9 @@ public class CommandOPFleaMarket extends CommandBase{
                     sender.sendMessage(new TextComponentString("Moves to the next item offer in the list"));
                 break;
 
+                case "reload":
+                    reloadItemOfferData(sender);
+                break;
                 default:
                 throw new WrongUsageException(getUsage(sender));
             }
@@ -79,5 +84,21 @@ public class CommandOPFleaMarket extends CommandBase{
         }else{
             throw new WrongUsageException(getUsage(sender));
         }
+    }
+
+    private static void reloadItemOfferData(ICommandSender sender){
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Reloading FleaMarket ItemOffers"));
+
+        ItemOfferParser.loadItemOfferData();
+        int itemOfferCount = ItemOfferList.getItemOfferSize();
+        int fileCount = ItemOfferParser.configDir.listFiles().length;
+        if(itemOfferCount == 0){
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers!"));
+        }
+        if(fileCount == 0){
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers files!"));
+        }
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "FleaMarket registered a total of " + itemOfferCount + " ItemOffers in " + fileCount + " files!"));
+        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Finished reloading"));
     }
 }
