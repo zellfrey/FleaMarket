@@ -8,8 +8,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+
 import io.github.beardedflea.fleamarket.store.*;
-import io.github.beardedflea.fleamarket.utils.*;
+import io.github.beardedflea.fleamarket.utils.TextUtils;
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 
 public class CommandFleaMarket extends CommandBase{
@@ -36,13 +37,14 @@ public class CommandFleaMarket extends CommandBase{
     }
 
     private static ITextComponent getHelpUsage(){
-        ITextComponent comp1 = TranslationUtils.getTextBorder();
+        ITextComponent comp1 = TextUtils.getTextBorder();
         ITextComponent comp2 = new TextComponentString("\n/fm help - what you are currently looking at\n");
         ITextComponent comp3 = new TextComponentString("/fm check - checks the current item on offer\n");
         ITextComponent comp4 = new TextComponentString("/fm sell - Current method of selling items\n");
-        ITextComponent comp5 = TranslationUtils.getTextBorder();
+        ITextComponent comp5 = TextUtils.getTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
+
         return comp1;
     }
 
@@ -60,22 +62,35 @@ public class CommandFleaMarket extends CommandBase{
                 break;
 
                 case "check":
-//                    sender.sendMessage(new TextComponentString(ItemOffer.getCurrentBroadCast()));
+
+                    if(ItemOfferList.currentItemOffer == null){
+                        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
+                    }
+                    else{
+                        sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                    }
+
                 break;
 
                 case "sell":
-                    sender.sendMessage(new TextComponentString("Current method of selling item"));
 
-                    sellItemOffer(playerMP);
+                    if(ItemOfferList.currentItemOffer == null){
+                        playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
+                    }
+                    else{
+//                      sellItemOffer(playerMP);
+                        playerMP.sendMessage(new TextComponentString("Selling item"));
+                    }
+
                 break;
 
                 default:
-                throw new WrongUsageException(getUsage(playerMP));
+                throw new WrongUsageException(getUsage(sender));
             }
 
         }
         else{
-            throw new WrongUsageException(getUsage(playerMP));
+            throw new WrongUsageException(getUsage(sender));
         }
     }
 

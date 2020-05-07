@@ -1,9 +1,7 @@
 package io.github.beardedflea.fleamarket.command;
 
 import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.*;
-// import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.*;
@@ -37,15 +35,16 @@ public class CommandOPFleaMarket extends CommandBase{
         return MinecraftServer.getCurrentTimeMillis();
     }
 
-    public static ITextComponent getOPHelpUsage(){
-        ITextComponent comp1 = TranslationUtils.getTextBorder();
+    private static ITextComponent getOPHelpUsage(){
+        ITextComponent comp1 = TextUtils.getTextBorder();
         ITextComponent comp2 = new TextComponentString("\n/opfm help - what you are currently looking at\n");
         ITextComponent comp3 = new TextComponentString("/opfm start - starts the cycle of item offers\n");
         ITextComponent comp4 = new TextComponentString("/opfm pause - Pauses the cycle. Players can still offer the item\n");
         ITextComponent comp5 = new TextComponentString("/opfm skip - Moves to the next item on the list\n");
-        ITextComponent comp6 = TranslationUtils.getTextBorder();
+        ITextComponent comp6 = new TextComponentString("/opfm reload - Reloads ItemOffers folder\n");
+        ITextComponent comp7 = TextUtils.getTextBorder();
 
-        comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5).appendSibling(comp6);
+        comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5).appendSibling(comp6).appendSibling(comp7);
         return comp1;
     }
 
@@ -62,8 +61,16 @@ public class CommandOPFleaMarket extends CommandBase{
                 break;
 
                 case "start":
-                    sender.sendMessage(new TextComponentString("starts automatic cycling of item offers"));
-                    sender.sendMessage(new TextComponentString(sender.getName()));
+
+                    boolean startedCycle = ItemOfferList.startItemOfferCycle(server);
+
+                    if(!startedCycle){
+                        sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "ItemOffers cycle has already started"));
+                    }
+                    else{
+                        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Starting cycle of itemOffers"));
+                    }
+
                 break;
 
                 case "pause":
