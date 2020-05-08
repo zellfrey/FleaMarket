@@ -3,9 +3,6 @@ package io.github.beardedflea.fleamarket.command;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -14,7 +11,6 @@ import io.github.beardedflea.fleamarket.store.*;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 
-import javax.annotation.Nullable;
 
 public class CommandFleaMarket extends CommandBase{
 

@@ -25,23 +25,24 @@ public class ItemOffer {
     }
 
     public ItemStack getItemStack(){
-        return itemStack;
+        return this.itemStack;
     }
 
-    public String getSoldMsg(){return soldMessage;}
+    public String getSoldMsg(){return this.soldMessage;}
 
-    public String getBroadcastMsg(){return broadcastMessage;}
+    public String getBroadcastMsg(){return this.broadcastMessage;}
 
-    public int getItemAmount(){return amount;}
+    public int getItemAmount(){return this.amount;}
 
-    public String getNbtRaw(){return nbtRaw;}
+    public String getNbtRaw(){return this.nbtRaw;}
 
     public String getDisplayName(){
-        return itemStack.getItem().getItemStackDisplayName(itemStack);
+        return this.itemStack.getItem().getItemStackDisplayName(this.itemStack);
     }
+
     public String getItemName(){
-        String itemToRemove = itemStack.getItem().getRegistryName() + "";
-        itemToRemove += itemStack.getItem().getMetadata(itemStack) != 0 ? ":" + itemStack.getItem().getMetadata(itemStack) : "";
+        String itemToRemove = this.itemStack.getItem().getRegistryName() + "";
+        itemToRemove += this.itemStack.getItem().getMetadata(this.itemStack) != 0 ? ":" + this.itemStack.getItem().getMetadata(this.itemStack) : "";
         return itemToRemove;
     }
 }

@@ -43,63 +43,65 @@ public class ItemOfferParser{
         if(jsonFiles == null) {
             //if this returns null, something is seriously wrong.
             throw new IllegalStateException("error initializing fleamarket, could not list files for " + configDir.getAbsolutePath());
-
-        }
-        else if(configDir.listFiles().length == 0){
-
-            FleaMarket.getLogger().error("There were no files in " + configDir.getAbsolutePath());
         }
         else{
             for(File jsonFile : jsonFiles){
-                try {
-                    JsonObject root = parser.parse(new FileReader(jsonFile)).getAsJsonObject();
-                    if(!root.has("itemOffers")){
-                        FleaMarket.getLogger().error("cannot parse item offers file {}!", jsonFile.getName());
-                        continue;
-                    }
-                    JsonArray itemOfferArray = root.get("itemOffers").getAsJsonArray();
-                    if(itemOfferArray.size() == 0){
-                        FleaMarket.getLogger().info("FleaMarket has found itemOffer file {}. But there appears to be 0 items on offer.\nSkipping file", jsonFile.getName());
-                    }
-                    else{
-                        for(int i = 0; i < itemOfferArray.size(); i++){
-                            JsonObject object = itemOfferArray.get(i).getAsJsonObject();
-                            ItemOffer itemOffer;
 
-                            if(!object.has("item")){
-                                FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"item\" field. Skipping...", i, jsonFile.getName());
+                if(jsonFile.length() == 0){
+                    FleaMarket.getLogger().warn("{} is empty! Skipping...", jsonFile.getName());
+                }
+                else{
+                    try {
+                        JsonObject root = parser.parse(new FileReader(jsonFile)).getAsJsonObject();
+                        if(!root.has("itemOffers")){
+                            FleaMarket.getLogger().error("cannot parse item offers file {}!", jsonFile.getName());
+                            continue;
+                        }
+                        JsonArray itemOfferArray = root.get("itemOffers").getAsJsonArray();
+                        if(itemOfferArray.size() == 0){
+                            FleaMarket.getLogger().info("FleaMarket has found itemOffer file {}. But there appears to be 0 items on offer.\nSkipping file", jsonFile.getName());
+                        }
+                        else{
+                            for(int i = 0; i < itemOfferArray.size(); i++){
+                                JsonObject object = itemOfferArray.get(i).getAsJsonObject();
+                                ItemOffer itemOffer;
+
+                                if(!object.has("item")){
+                                    FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"item\" field. Skipping...", i, jsonFile.getName());
+                                }
+                                else if(!object.has("amount")){
+                                    FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"amount\" field. Skipping...", i, jsonFile.getName());
+                                }
+                                else{
+                                    Item item = CommandBase.getItemByText(null, object.get("item").getAsString());
+                                    int amount = object.get("amount").getAsInt();
+
+                                    //nbt is null if not included. if no metadata found, falls to 0
+                                    int dmgValue = object.has("damage") ? object.get("damage").getAsInt() : 0;
+                                    String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
+
+                                    //get itemOffer variables. If fields aren't included, will fallback to default values in config file
+                                    int uptime = object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarketConfig.defaultItemFields.defaultUptime;
+                                    String broadcastMsg = object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultBroadcast;
+                                    String soldMsg = object.has("soldMsg") ? object.get("soldMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultSoldMessage;
+                                    String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarketConfig.defaultItemFields.defaultReward;
+
+                                    itemOffer = new ItemOffer(item, dmgValue, nbtRaw, amount, soldMsg, broadcastMsg, rewardCmd, uptime);
+
+                                    ItemOfferList.addItemOffer(itemOffer);
+                                }
+
                             }
-                            else if(!object.has("amount")){
-                                FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"amount\" field. Skipping...", i, jsonFile.getName());
-                            }
-                            else{
-                                Item item = CommandBase.getItemByText(null, object.get("item").getAsString());
-                                int amount = object.get("amount").getAsInt();
 
-                                //nbt is null if not included. if no metadata found, falls to 0
-                                int dmgValue = object.has("damage") ? object.get("damage").getAsInt() : 0;
-                                String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
-
-                                //get itemOffer variables. If fields aren't included, will fallback to default values in config file
-                                int uptime = object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarketConfig.defaultItemFields.defaultUptime;
-                                String broadcastMsg = object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultBroadcast;
-                                String soldMsg = object.has("soldMsg") ? object.get("soldMsg").getAsString() : FleaMarketConfig.defaultItemFields.defaultSoldMessage;
-                                String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarketConfig.defaultItemFields.defaultReward;
-
-                                itemOffer = new ItemOffer(item, dmgValue, nbtRaw, amount, soldMsg, broadcastMsg, rewardCmd, uptime);
-
-                                ItemOfferList.addItemOffer(itemOffer);
-                            }
 
                         }
 
-
                     }
+                    catch (FileNotFoundException | NumberInvalidException e) {
+                        FleaMarket.getLogger().error("error parsing item offer file " + jsonFile.getName() + "!", e);
+                    }
+                }
 
-                }
-                catch (FileNotFoundException | NumberInvalidException e) {
-                    FleaMarket.getLogger().error("error parsing item offer file " + jsonFile.getName() + "!", e);
-                }
             }
 
         }
