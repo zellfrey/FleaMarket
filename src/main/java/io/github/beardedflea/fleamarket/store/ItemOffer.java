@@ -1,8 +1,11 @@
 package io.github.beardedflea.fleamarket.store;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
 import net.minecraft.command.CommandBase;
+import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nullable;
 
@@ -44,5 +47,9 @@ public class ItemOffer {
         String itemToRemove = this.itemStack.getItem().getRegistryName() + "";
         itemToRemove += this.itemStack.getItem().getMetadata(this.itemStack) != 0 ? ":" + this.itemStack.getItem().getMetadata(this.itemStack) : "";
         return itemToRemove;
+    }
+
+    public void activate(MinecraftServer server, EntityPlayerMP playerMP){
+        server.commandManager.executeCommand(server, "/say Congratulations on your reward");
     }
 }

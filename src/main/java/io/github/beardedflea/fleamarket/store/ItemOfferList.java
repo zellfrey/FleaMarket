@@ -4,6 +4,7 @@ import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
@@ -18,7 +19,7 @@ public class ItemOfferList {
 
     private static ArrayList<String> playerTransactionList = new ArrayList<>();
 
-    private static ItemOffer currentItemOffer;
+    public static ItemOffer currentItemOffer;
 
 
 //    private static int itemOfferIndx;
@@ -81,6 +82,7 @@ public class ItemOfferList {
     //fm sell
     public static void sellItemOffer(EntityPlayerMP playerMP){
         String playerUUID = playerMP.getUniqueID().toString();
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if(ItemOfferList.checkPlayerTransactionList(playerUUID)){
             playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "You have already sold the current item offer to Flea Market"));
@@ -121,6 +123,7 @@ public class ItemOfferList {
                 playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + currentItemOffer.getSoldMsg()));
 
                 ItemOfferList.addPlayerTransactionUUID(playerMP.getUniqueID().toString());
+                currentItemOffer.activate(server, playerMP);
             }
             else{
                 playerMP.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " " +
