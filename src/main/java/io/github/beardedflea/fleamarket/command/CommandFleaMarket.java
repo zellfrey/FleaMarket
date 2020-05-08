@@ -1,16 +1,12 @@
 package io.github.beardedflea.fleamarket.command;
 
-import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.*;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 
 import io.github.beardedflea.fleamarket.store.*;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
-import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
-
 
 public class CommandFleaMarket extends CommandBase{
 
@@ -68,7 +64,6 @@ public class CommandFleaMarket extends CommandBase{
                     else{
                         sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     }
-
                 break;
 
                 case "sell":
@@ -77,71 +72,17 @@ public class CommandFleaMarket extends CommandBase{
                         playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
                     }
                     else{
-                      sellItemOffer(playerMP);
+                      ItemOfferList.sellItemOffer(playerMP);
                     }
-
                 break;
 
                 default:
-                throw new WrongUsageException(getUsage(sender));
+                    throw new WrongUsageException(getUsage(sender));
             }
-
         }
         else{
             throw new WrongUsageException(getUsage(sender));
         }
     }
 
-
-
-    private static void sellItemOffer(EntityPlayerMP playerMP){
-        String playerUUID = playerMP.getUniqueID().toString();
-
-        if(ItemOfferList.checkPlayerTransactionList(playerUUID)){
-            playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "You have already sold the current item offer to Flea Market"));
-            return;
-        }
-        boolean containsItemOffer = false;
-        int amountOfCorrectItem = 0;
-        //scans inventory checking for current ItemOffer
-        for(ItemStack item : playerMP.inventory.mainInventory) {
-
-            String itemFullName = item.getItem().getRegistryName() + "";
-            int itemDamageNum = item.getItem().getDamage(item);
-            //Stitches the registry name with the meta data id: modName:blockName:dmgVal
-            itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
-            String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
-
-            if(FleaMarketConfig.debugMode){TextUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw);}
-
-            if(itemFullName.equals(ItemOfferList.currentItemOffer.getItemName())
-                    && itemNBTRaw.equals(ItemOfferList.currentItemOffer.getNbtRaw() + "")) {
-
-                containsItemOffer = true;
-                amountOfCorrectItem += item.getCount();
-                FleaMarket.getLogger().info("item found, moving to item removal");
-
-            }
-        }
-        //checks if item is inventory
-        if(containsItemOffer){
-            //final check to see if the amount is equal or greater to the desired amount in the offer
-            if(amountOfCorrectItem >= ItemOfferList.currentItemOffer.getItemAmount()){
-//                int k = playerMP.inventory.clearMatchingItems( , 0,3,  null);
-//                playerMP.inventoryContainer.detectAndSendChanges();
-                FleaMarket.getLogger().info("Removed {} items from {}'s inventory", amountOfCorrectItem, playerMP.getName());
-
-                playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + ItemOfferList.currentItemOffer.getSoldMsg()));
-
-                ItemOfferList.addPlayerTransactionUUID(playerMP.getUniqueID().toString());
-            }
-            else{
-                playerMP.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " " +
-                        ItemOfferList.currentItemOffer.getDisplayName() +  " in your inventory."));
-            }
-        }
-        else{
-            playerMP.sendMessage(new TextComponentString(TextFormatting.RED + "You do not have the required item on offer"));
-        }
-    }
 }

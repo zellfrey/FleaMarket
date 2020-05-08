@@ -90,20 +90,14 @@ public class ItemOfferParser{
 
                                     ItemOfferList.addItemOffer(itemOffer);
                                 }
-
                             }
-
-
                         }
-
                     }
                     catch (FileNotFoundException | NumberInvalidException e) {
                         FleaMarket.getLogger().error("error parsing item offer file " + jsonFile.getName() + "!", e);
                     }
                 }
-
             }
-
         }
         if(ItemOfferList.getItemOfferSize() == 0){
             FleaMarket.getLogger().error("FleaMarket found no itemOffers. Is this intentional?");
