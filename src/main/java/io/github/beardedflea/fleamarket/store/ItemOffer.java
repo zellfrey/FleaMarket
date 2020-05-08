@@ -33,4 +33,15 @@ public class ItemOffer {
     public String getBroadcastMsg(){return broadcastMessage;}
 
     public int getItemAmount(){return amount;}
+
+    public String getNbtRaw(){return nbtRaw;}
+
+    public String getDisplayName(){
+        return itemStack.getItem().getItemStackDisplayName(itemStack);
+    }
+    public String getItemName(){
+        String itemToRemove = itemStack.getItem().getRegistryName() + "";
+        itemToRemove += itemStack.getItem().getMetadata(itemStack) != 0 ? ":" + itemStack.getItem().getMetadata(itemStack) : "";
+        return itemToRemove;
+    }
 }

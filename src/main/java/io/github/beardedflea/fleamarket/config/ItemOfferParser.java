@@ -6,6 +6,7 @@ import io.github.beardedflea.fleamarket.store.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.item.Item;

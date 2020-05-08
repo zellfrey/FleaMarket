@@ -2,6 +2,8 @@ package io.github.beardedflea.fleamarket.store;
 
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
@@ -12,11 +14,14 @@ public class ItemOfferList {
 
     private static final ArrayList<ItemOffer> ITEM_OFFERS = new ArrayList<>();
 
+    private static ArrayList<String> PlayerTransactionList = new ArrayList<>();
+
     public static ItemOffer currentItemOffer;
+
 
 //    private static int itemOfferIndx;
 
-
+    //manages ITEM_OFFERS array
     public static void addItemOffer(ItemOffer itemOffer) {
         ITEM_OFFERS.add(itemOffer);
     }
@@ -46,6 +51,24 @@ public class ItemOfferList {
             return;
         }
         currentItemOffer = ITEM_OFFERS.get(0);
+        clearPlayerTransactionList();
         server.getPlayerList().sendMessage(new TextComponentString(currentItemOffer.getBroadcastMsg()));
+    }
+
+    //manages PlayerTransactionList array
+    public static void addPlayerTransactionUUID(String uuid){PlayerTransactionList.add(uuid);}
+
+    public static void clearPlayerTransactionList(){PlayerTransactionList.clear();}
+
+    public static boolean checkPlayerTransactionList(String uuid){
+        boolean soldItemOffer = false;
+
+        for(String playerUUID : PlayerTransactionList){
+            if(playerUUID.equals(uuid)){
+                soldItemOffer = true;
+            }
+        }
+
+        return soldItemOffer;
     }
 }
