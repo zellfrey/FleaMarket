@@ -78,7 +78,8 @@ public class CommandOPFleaMarket extends CommandBase{
                 break;
 
                 case "skip":
-                    sender.sendMessage(new TextComponentString("Moves to the next item offer in the list"));
+                    sender.sendMessage(new TextComponentString("Moving to next time offer"));
+                    ItemOfferList.setCurrentItemOffer(server);
                 break;
 
                 case "reload":

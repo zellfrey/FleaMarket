@@ -1,17 +1,22 @@
 package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.*;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.*;
+import net.minecraft.nbt.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
+
+
+
 import java.util.ArrayList;
+import java.util.Objects;
+
 
 public class ItemOfferList {
 
@@ -20,6 +25,8 @@ public class ItemOfferList {
     private static ArrayList<String> playerTransactionList = new ArrayList<>();
 
     public static ItemOffer currentItemOffer;
+
+    public static int itemOfferIndex = -1;
 
 
 //    private static int itemOfferIndx;
@@ -74,7 +81,28 @@ public class ItemOfferList {
             FleaMarket.getLogger().info("Try reloading the files with /opfm reload" );
             return;
         }
-        currentItemOffer = ITEM_OFFERS.get(0);
+        switch(FleaMarketConfig.selectionType){
+            case "descending" :
+                if(itemOfferIndex == -1){
+                    itemOfferIndex = 0;
+                }else{
+                    itemOfferIndex = itemOfferIndex == ITEM_OFFERS.size()-1 ? 0 : itemOfferIndex+1;
+                }
+            break;
+            case "ascending" :
+                if(itemOfferIndex == -1){
+                    itemOfferIndex = ITEM_OFFERS.size()-1;
+                }else {
+                    itemOfferIndex = itemOfferIndex == 0 ? ITEM_OFFERS.size()-1 : itemOfferIndex-1;
+                }
+            break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + FleaMarketConfig.selectionType);
+        }
+
+        if(FleaMarketConfig.debugMode){TextUtils.printDebugStrConsole(itemOfferIndex+"", FleaMarketConfig.selectionType, ITEM_OFFERS.size()+"");}
+
+        currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
         clearPlayerTransactionList();
         server.getPlayerList().sendMessage(new TextComponentString(currentItemOffer.getBroadcastMsg()));
     }
@@ -88,12 +116,11 @@ public class ItemOfferList {
             playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "You have already sold the current item offer to Flea Market"));
             return;
         }
-        boolean containsItemOffer = false;
         int amountOfCorrectItem = 0;
         //scans inventory checking for current ItemOffer
         for(ItemStack item : playerMP.inventory.mainInventory) {
 
-            String itemFullName = item.getItem().getRegistryName() + "";
+            String itemFullName = item.getItem().getRegistryName().toString();
             int itemDamageNum = item.getItem().getDamage(item);
             //Stitches the registry name with the meta data id: modName:blockName:dmgVal
             itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
@@ -106,18 +133,19 @@ public class ItemOfferList {
             if(itemFullName.equals(currentItemOffer.getItemName())
                     && itemNBTRaw.equals(currentItemOffer.getNbtRaw() + "")) {
 
-                containsItemOffer = true;
                 amountOfCorrectItem += item.getCount();
                 FleaMarket.getLogger().info("item found, moving to item removal");
 
             }
         }
         //checks if item is inventory
-        if(containsItemOffer){
+        if(amountOfCorrectItem > 0){
             //final check to see if the amount is equal or greater to the desired amount in the offer
             if(amountOfCorrectItem >= currentItemOffer.getItemAmount()){
-//                int k = playerMP.inventory.clearMatchingItems( , 0,3,  null);
-//                playerMP.inventoryContainer.detectAndSendChanges();
+                int k = playerMP.inventory.clearMatchingItems(currentItemOffer.getItemStack().getItem(), currentItemOffer.getItemStack().getMetadata(),
+                    currentItemOffer.getItemAmount(), currentItemOffer.getItemStack().getTagCompound());
+
+                playerMP.inventoryContainer.detectAndSendChanges();
                 FleaMarket.getLogger().info("Removed {} items from {}'s inventory", amountOfCorrectItem, playerMP.getName());
 
                 playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + currentItemOffer.getSoldMsg()));
