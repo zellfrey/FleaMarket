@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.lang.Math;
 
 
 public class ItemOfferList {
@@ -89,6 +89,7 @@ public class ItemOfferList {
                     itemOfferIndex = itemOfferIndex == ITEM_OFFERS.size()-1 ? 0 : itemOfferIndex+1;
                 }
             break;
+
             case "ascending" :
                 if(itemOfferIndex == -1){
                     itemOfferIndex = ITEM_OFFERS.size()-1;
@@ -96,11 +97,18 @@ public class ItemOfferList {
                     itemOfferIndex = itemOfferIndex == 0 ? ITEM_OFFERS.size()-1 : itemOfferIndex-1;
                 }
             break;
+
+            case "random" :
+                 itemOfferIndex = (int)(Math.random() * ITEM_OFFERS.size());
+            break;
+
             default:
                 throw new IllegalStateException("Unexpected value: " + FleaMarketConfig.selectionType);
         }
 
-        if(FleaMarketConfig.debugMode){TextUtils.printDebugStrConsole(itemOfferIndex+"", FleaMarketConfig.selectionType, ITEM_OFFERS.size()+"");}
+        if(FleaMarketConfig.debugMode){
+            TextUtils.printDebugStrConsole(itemOfferIndex+"", FleaMarketConfig.selectionType, ITEM_OFFERS.size()+"");
+        }
 
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
         clearPlayerTransactionList();
@@ -126,16 +134,13 @@ public class ItemOfferList {
             itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
             String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
 
-            if(FleaMarketConfig.debugMode){
-                TextUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw);
-            }
+            if(FleaMarketConfig.debugMode){ TextUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw); }
 
             if(itemFullName.equals(currentItemOffer.getItemName())
                     && itemNBTRaw.equals(currentItemOffer.getNbtRaw() + "")) {
 
                 amountOfCorrectItem += item.getCount();
                 FleaMarket.getLogger().info("item found, moving to item removal");
-
             }
         }
         //checks if item is inventory
