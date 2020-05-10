@@ -7,13 +7,13 @@
       "uptime": 120,
       "broadcastMsg": "Flea market is offering $400 for 5 light blue carpets",
       "soldMsg": "You have sold 5 carpets and gained $400",
-      "rewardCommand": "give @playerName@ diamond 3"
+      "rewardCommand": "give %playerName% diamond 3"
     },
     {
       "item": "minecraft:potion",
       "nbt": "{Potion:\"minecraft:night_vision\"}",
       "amount": 2,
-      "rewardCommand": "say Thank you @playerName@. You have been rewarded"
+      "rewardCommand": "say Thank you %playerName%. You have been rewarded"
     },
     {
       "item": "minecraft:diamond",

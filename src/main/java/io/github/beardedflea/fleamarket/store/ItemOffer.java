@@ -1,10 +1,12 @@
 package io.github.beardedflea.fleamarket.store;
 
+import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.utils.TextUtils;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
-import net.minecraft.command.CommandBase;
 import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nullable;
@@ -22,7 +24,8 @@ public class ItemOffer {
         amount = quantity;
         nbtRaw = nbtString;
         soldMessage = sellMsg;
-        broadcastMessage = broadcastMsg;
+        //Message doesn't need to constantly change due to playerName, might as well execute once and be done with it
+        broadcastMessage = TextUtils.replaceBroadCastPlaceHolder(broadcastMsg, this.amount, this.getDisplayName());
         rewardCommand = rewardCmd;
         uptime = time;
     }
@@ -49,7 +52,10 @@ public class ItemOffer {
         return itemToRemove;
     }
 
+
     public void activate(MinecraftServer server, EntityPlayerMP playerMP){
-        server.commandManager.executeCommand(server, "/say Congratulations on your reward");
+        String rwdCmdString = TextUtils.replacePlayerPlaceHolder(this.rewardCommand, playerMP.getName());
+        FleaMarket.getLogger().info(rwdCmdString);
+        server.commandManager.executeCommand(server, rwdCmdString);
     }
 }

@@ -151,9 +151,11 @@ public class ItemOfferList {
                     currentItemOffer.getItemAmount(), currentItemOffer.getItemStack().getTagCompound());
 
                 playerMP.inventoryContainer.detectAndSendChanges();
-                FleaMarket.getLogger().info("Removed {} items from {}'s inventory", amountOfCorrectItem, playerMP.getName());
+                FleaMarket.getLogger().info("Removed {} items from {}'s inventory", currentItemOffer.getItemAmount(), playerMP.getName());
 
-                playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + currentItemOffer.getSoldMsg()));
+                String soldString = TextUtils.replaceSoldPlaceHolders(currentItemOffer.getSoldMsg(), playerMP.getName(),currentItemOffer.getItemAmount(), currentItemOffer.getDisplayName());
+
+                playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + soldString));
 
                 ItemOfferList.addPlayerTransactionUUID(playerMP.getUniqueID().toString());
                 currentItemOffer.activate(server, playerMP);

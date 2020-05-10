@@ -9,14 +9,16 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
+import io.github.beardedflea.fleamarket.store.ItemOfferList;
 
 @Mod.EventBusSubscriber(value = Side.SERVER, modid = FleaMarket.MODID)
 public class BroadcastEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if(FleaMarketConfig.joinMessage){
-            event.player.sendMessage(new TextComponentString(TextFormatting.BLUE + "This is a player broadcast test"));
+
+        if( (FleaMarketConfig.joinMessage) && (ItemOfferList.currentItemOffer != null) ){
+            event.player.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         }
     }
 

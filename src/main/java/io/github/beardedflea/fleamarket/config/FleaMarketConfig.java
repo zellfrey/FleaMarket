@@ -59,7 +59,7 @@ public class FleaMarketConfig{
     
   public static class ItemFields {
     
-    @Config.Comment({"[placeholders: %item%, %amount%]"})
+    @Config.Comment({"[placeholders: %item%, %amount%, %playerName%]"})
     public String defaultSoldMessage = "You have sold an item!";
 
     @RangeInt(min = 0, max = 1000)
