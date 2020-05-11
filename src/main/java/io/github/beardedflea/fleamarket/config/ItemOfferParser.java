@@ -11,7 +11,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
 

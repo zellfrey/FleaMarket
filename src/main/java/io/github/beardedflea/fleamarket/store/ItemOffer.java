@@ -23,11 +23,12 @@ public class ItemOffer {
         itemStack = new ItemStack(item, 1, meta);
         amount = quantity;
         nbtRaw = nbtString;
-        soldMessage = sellMsg;
-        //Message doesn't need to constantly change due to playerName, might as well execute once and be done with it
-        broadcastMessage = TextUtils.replaceBroadCastPlaceHolder(broadcastMsg, this.amount, this.getDisplayName());
         rewardCommand = rewardCmd;
         uptime = time;
+        //Message doesn't need to constantly change due to playerName, might as well execute once and be done with it
+        soldMessage = TextUtils.replaceItemAndAmount(sellMsg, this.amount, this.getDisplayName());
+        broadcastMessage = TextUtils.replaceItemAndAmount(broadcastMsg, this.amount, this.getDisplayName());
+
     }
 
     public ItemStack getItemStack(){

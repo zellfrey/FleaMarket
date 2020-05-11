@@ -30,16 +30,11 @@ public class TextUtils {
         return bracketLeft;
     }
 
-    public static String replaceSoldPlaceHolders(String line, String playerName, int itemAmount, String itemName){
-        String lineProcessed = replacePlayerPlaceHolder(line, playerName);
-        return replaceBroadCastPlaceHolder(lineProcessed, itemAmount, itemName);
-    }
-
     public static String replacePlayerPlaceHolder(String line, String playerName){
         return line.replace("%playerName%", playerName);
     }
 
-    public static String replaceBroadCastPlaceHolder(String line, int itemAmount, String itemName){
+    public static String replaceItemAndAmount(String line, int itemAmount, String itemName){
         return line.replace("%item%", itemName).replace("%amount%", Integer.toString(itemAmount));
     }
 }

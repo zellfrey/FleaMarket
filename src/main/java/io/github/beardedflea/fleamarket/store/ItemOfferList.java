@@ -20,7 +20,7 @@ import java.lang.Math;
 
 public class ItemOfferList {
 
-    private static final ArrayList<ItemOffer> ITEM_OFFERS = new ArrayList<>();
+    private static  ArrayList<ItemOffer> ITEM_OFFERS = new ArrayList<>();
 
     private static ArrayList<String> playerTransactionList = new ArrayList<>();
 
@@ -112,6 +112,8 @@ public class ItemOfferList {
 
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
         clearPlayerTransactionList();
+        FleaMarket.getLogger().info(currentItemOffer.getItemStack().getItem().getNBTShareTag(currentItemOffer.getItemStack()));
+
         server.getPlayerList().sendMessage(new TextComponentString(currentItemOffer.getBroadcastMsg()));
     }
 
@@ -153,7 +155,7 @@ public class ItemOfferList {
                 playerMP.inventoryContainer.detectAndSendChanges();
                 FleaMarket.getLogger().info("Removed {} items from {}'s inventory", currentItemOffer.getItemAmount(), playerMP.getName());
 
-                String soldString = TextUtils.replaceSoldPlaceHolders(currentItemOffer.getSoldMsg(), playerMP.getName(),currentItemOffer.getItemAmount(), currentItemOffer.getDisplayName());
+                String soldString = TextUtils.replacePlayerPlaceHolder(currentItemOffer.getSoldMsg(), playerMP.getName());
 
                 playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + soldString));
 

@@ -29,7 +29,7 @@ public class FleaMarketConfig{
   @Config.Name("Broadcast Reminder")
   @Config.Comment({"How often (in minutes) between each item broadcast. Set to 0 to disable broadcasts"})
   @RangeInt(min = 0)
-  public static int broadCastReminder = 10;
+  public static int broadcastReminder = 10;
 
   @Config.RequiresWorldRestart
   @Config.Name("sales Interval")
@@ -70,7 +70,7 @@ public class FleaMarketConfig{
     public String defaultBroadcast = "This is a broadCast";
 
     @Config.Comment("[placeholders: %playerName%]")
-    public String defaultReward = "/give %playerName% 3 2";
+    public String defaultReward = "/give %playerName% dirt 2";
   }
 
 }

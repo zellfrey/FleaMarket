@@ -50,5 +50,6 @@ public class FleaMarket
     public void onServerStarting(FMLServerStartingEvent event){
         event.registerServerCommand(new CommandFleaMarket());
         event.registerServerCommand(new CommandOPFleaMarket());
+
     }
 }
