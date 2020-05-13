@@ -4,7 +4,6 @@ import net.minecraft.command.*;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
 
-import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import io.github.beardedflea.fleamarket.config.ItemOfferParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
@@ -47,7 +46,7 @@ public class CommandOPFleaMarket extends CommandBase{
 
     private static ITextComponent getOPHelpUsage(){
         ITextComponent comp1 = TextUtils.getTextBorder();
-        ITextComponent comp2 = new TextComponentString("\n/opfm help - what you are currently looking at\n");
+        ITextComponent comp2 = new TextComponentString("\n/opfm help - Shows a list of commands for operators\n");
         ITextComponent comp3 = new TextComponentString("/opfm start - starts the cycle of item offers\n");
         ITextComponent comp4 = new TextComponentString("/opfm pause - Pauses the cycle. Players can still offer the item\n");
         ITextComponent comp5 = new TextComponentString("/opfm skip - Moves to the next item on the list\n");

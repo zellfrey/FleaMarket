@@ -31,10 +31,6 @@ public class ItemOfferList {
 
     public static int itemOfferIndex = -1;
 
-
-
-//    private static int itemOfferIndx;
-
     //manages ITEM_OFFERS array
     public static void addItemOffer(ItemOffer itemOffer) {
         ITEM_OFFERS.add(itemOffer);

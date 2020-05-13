@@ -46,7 +46,7 @@ public class CommandFleaMarket extends CommandBase{
 
     private static ITextComponent getHelpUsage(){
         ITextComponent comp1 = TextUtils.getTextBorder();
-        ITextComponent comp2 = new TextComponentString("\n/fm help - what you are currently looking at\n");
+        ITextComponent comp2 = new TextComponentString("\n/fm help - Shows a list of commands for players\n");
         ITextComponent comp3 = new TextComponentString("/fm check - checks the current item on offer\n");
         ITextComponent comp4 = new TextComponentString("/fm sell - Current method of selling items\n");
         ITextComponent comp5 = TextUtils.getTextBorder();
