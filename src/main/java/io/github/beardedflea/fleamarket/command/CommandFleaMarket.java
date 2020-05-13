@@ -1,6 +1,5 @@
 package io.github.beardedflea.fleamarket.command;
 
-import io.github.beardedflea.fleamarket.event.BroadcastEventHandler;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.*;
@@ -9,17 +8,30 @@ import net.minecraft.server.MinecraftServer;
 import io.github.beardedflea.fleamarket.store.*;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandFleaMarket extends CommandBase{
 
 
     @Override
     public String getName() {
-        return "fm";
+        return "fleamarket";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/fm [help:check:sell]";
+        return "/fleamarket [help:check:sell]";
+    }
+
+
+    @Override
+    public List<String> getAliases()
+    {
+        ArrayList<String> aliases = new ArrayList<>();
+        aliases.add("fm");
+        aliases.add("fleamkt");
+        return aliases;
     }
 
     @Override

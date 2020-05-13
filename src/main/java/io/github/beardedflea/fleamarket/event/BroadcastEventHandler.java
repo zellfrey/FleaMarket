@@ -42,10 +42,15 @@ public class BroadcastEventHandler {
                 if(++minuteCounter >= 1200 *2) {
                     executing = true;
                     minuteCounter -= 1200 *2;
-                    ItemOfferList.itemOfferUptime--;
-                    FleaMarket.getLogger().info(ItemOfferList.itemOfferUptime + "item offer uptime");
-                    executing = false;
 
+                    if(!ItemOfferList.pauseCycle){
+                        ItemOfferList.itemOfferUptime--;
+
+                    }else{
+                        FleaMarket.getLogger().info("Item offer cycle is paused!");
+                        FleaMarket.getLogger().info(ItemOfferList.itemOfferUptime + " minutes remaining for item offer");
+                    }
+                    executing = false;
                     if(salesInterval == 0 && ItemOfferList.itemOfferUptime == 0){
                         ItemOfferList.setCurrentItemOffer(server);
                     }
@@ -57,7 +62,6 @@ public class BroadcastEventHandler {
                     executing = true;
                     salesIntervalCounter -= 1200 *2;
                     salesInterval -= 1;
-                    FleaMarket.getLogger().info(salesInterval + "sale interval");
                     executing = false;
 
                     if(salesInterval == 0){

@@ -3,23 +3,35 @@ package io.github.beardedflea.fleamarket.command;
 import net.minecraft.command.*;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
+
 import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.utils.*;
+import io.github.beardedflea.fleamarket.utils.TextUtils;
 import io.github.beardedflea.fleamarket.config.ItemOfferParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandOPFleaMarket extends CommandBase{
 
 
     @Override
     public String getName() {
-        return "opfm";
+        return "opfleamarket";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/opfm [help:start:pause:skip]";
+        return "/opfleamarket [help:start:pause:skip]";
+    }
+
+    @Override
+    public List<String> getAliases()
+    {
+        ArrayList<String> aliases = new ArrayList<>();
+        aliases.add("opfm");
+        aliases.add("opfleamkt");
+        return aliases;
     }
 
     @Override
@@ -59,7 +71,6 @@ public class CommandOPFleaMarket extends CommandBase{
                 break;
 
                 case "start":
-
                     boolean startedCycle = ItemOfferList.startItemOfferCycle(server);
 
                     if(!startedCycle){
@@ -72,17 +83,20 @@ public class CommandOPFleaMarket extends CommandBase{
                 break;
 
                 case "pause":
-                    sender.sendMessage(new TextComponentString("Pauses the cycle. Players can still offer the item"));
+                    ItemOfferList.pauseCycle = !ItemOfferList.pauseCycle;
+                    sender.sendMessage(new TextComponentString("ItemOffer paused: " + ItemOfferList.pauseCycle));
                 break;
 
                 case "skip":
                     sender.sendMessage(new TextComponentString("Moving to next time offer"));
                     ItemOfferList.setCurrentItemOffer(server);
+
                 break;
 
                 case "reload":
                     reloadItemOfferData(sender);
                 break;
+
                 default:
                 throw new WrongUsageException(getUsage(sender));
             }
@@ -104,7 +118,9 @@ public class CommandOPFleaMarket extends CommandBase{
         if(fileCount == 0){
             sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers files!"));
         }
-        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "FleaMarket registered a total of " + itemOfferCount + " ItemOffers in " + fileCount + " files!"));
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "FleaMarket registered a total of " +
+                                                    itemOfferCount + " ItemOffers in " + fileCount + " files!"));
+
         sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Finished reloading"));
     }
 }

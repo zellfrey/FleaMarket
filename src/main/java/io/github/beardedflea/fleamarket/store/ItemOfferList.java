@@ -2,8 +2,6 @@ package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.event.BroadcastEventHandler;
-import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 
 import net.minecraft.item.ItemStack;
@@ -25,11 +23,14 @@ public class ItemOfferList {
 
     private static ArrayList<String> playerTransactionList = new ArrayList<>();
 
+    public static boolean pauseCycle = false;
+
     public static ItemOffer currentItemOffer;
 
     public static int itemOfferUptime = 0;
 
     public static int itemOfferIndex = -1;
+
 
 
 //    private static int itemOfferIndx;
