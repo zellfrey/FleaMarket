@@ -13,9 +13,9 @@ import javax.annotation.Nullable;
 
 public class ItemOffer {
 
-    private final ItemStack itemStack;
-    private final String nbtRaw, soldMessage, broadcastMessage, rewardCommand;
-    private final int amount, uptime;
+    private ItemStack itemStack;
+    private String nbtRaw, soldMessage, broadcastMessage, rewardCommand;
+    private int amount, uptime;
 
     public ItemOffer(Item item, int meta, @Nullable String nbtString,
                      int quantity, String sellMsg, String broadcastMsg, String rewardCmd, int time) {
@@ -30,6 +30,8 @@ public class ItemOffer {
         broadcastMessage = TextUtils.replaceItemAndAmount(broadcastMsg, this.amount, this.getDisplayName());
 
     }
+
+    public int getUpTime(){ return this.uptime; }
 
     public ItemStack getItemStack(){
         return this.itemStack;

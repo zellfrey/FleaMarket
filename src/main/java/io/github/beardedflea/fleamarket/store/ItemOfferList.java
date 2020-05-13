@@ -2,6 +2,7 @@ package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.event.BroadcastEventHandler;
 import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 
@@ -25,6 +26,8 @@ public class ItemOfferList {
     private static ArrayList<String> playerTransactionList = new ArrayList<>();
 
     public static ItemOffer currentItemOffer;
+
+    public static int itemOfferUptime = 0;
 
     public static int itemOfferIndex = -1;
 
@@ -111,9 +114,8 @@ public class ItemOfferList {
         }
 
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
+        itemOfferUptime = ItemOfferList.currentItemOffer.getUpTime();
         clearPlayerTransactionList();
-        FleaMarket.getLogger().info(currentItemOffer.getItemStack().getItem().getNBTShareTag(currentItemOffer.getItemStack()));
-
         server.getPlayerList().sendMessage(new TextComponentString(currentItemOffer.getBroadcastMsg()));
     }
 

@@ -3,6 +3,7 @@ package io.github.beardedflea.fleamarket.command;
 import net.minecraft.command.*;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.*;
 import io.github.beardedflea.fleamarket.config.ItemOfferParser;
@@ -31,9 +32,6 @@ public class CommandOPFleaMarket extends CommandBase{
         return true;
     }
 
-    public static long getServerTime(){
-        return MinecraftServer.getCurrentTimeMillis();
-    }
 
     private static ITextComponent getOPHelpUsage(){
         ITextComponent comp1 = TextUtils.getTextBorder();

@@ -2,8 +2,6 @@ package io.github.beardedflea.fleamarket.config;
 
 import net.minecraftforge.common.config.*;
 // import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-// import net.minecraftforge.fml.common.Mod;
-// import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Config.RangeInt;
 
 import static io.github.beardedflea.fleamarket.FleaMarket.*;
@@ -29,11 +27,11 @@ public class FleaMarketConfig{
   @Config.Name("Broadcast Reminder")
   @Config.Comment({"How often (in minutes) between each item broadcast. Set to 0 to disable broadcasts"})
   @RangeInt(min = 0)
-  public static int broadcastReminder = 10;
+  public static int broadcastReminder = 2;
 
   @Config.RequiresWorldRestart
   @Config.Name("sales Interval")
-  @Config.Comment({"How long (in minutes) between the next item to be on sale"})
+  @Config.Comment({"How long (in minutes) between each itemOffer on sale. Set to 0 to skip straight to next ItemOffer"})
   @RangeInt(min = 0)
   public static int saleInterval = 5;
 
@@ -60,14 +58,14 @@ public class FleaMarketConfig{
   public static class ItemFields {
     
     @Config.Comment({"[placeholders: %item%, %amount%, %playerName%]"})
-    public String defaultSoldMessage = "You have sold an item!";
+    public String defaultSoldMessage = "%playerName%, you have sold %amount% %item% to Flea Market";
 
     @RangeInt(min = 0, max = 1000)
     @Config.Comment({"How long (in minutes) the item will be up for sale"})
     public int defaultUptime = 20;
 
     @Config.Comment("[placeholders: %item%, %amount%]")
-    public String defaultBroadcast = "This is a broadCast";
+    public String defaultBroadcast = "Flea market is buying %amount% %item%";
 
     @Config.Comment("[placeholders: %playerName%]")
     public String defaultReward = "/give %playerName% dirt 2";

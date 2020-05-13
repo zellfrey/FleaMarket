@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket.command;
 
+import io.github.beardedflea.fleamarket.event.BroadcastEventHandler;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.*;
@@ -70,6 +71,9 @@ public class CommandFleaMarket extends CommandBase{
 
                     if(ItemOfferList.currentItemOffer == null){
                         playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
+                    }
+                    else if(ItemOfferList.itemOfferUptime <= 0){
+                        playerMP.sendMessage(new TextComponentString(TextFormatting.BLUE + "Flea market is finding another item to offer"));
                     }
                     else{
                       ItemOfferList.sellItemOffer(playerMP);
