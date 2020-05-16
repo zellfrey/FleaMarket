@@ -1,20 +1,21 @@
 package io.github.beardedflea.fleamarket.event;
 
-import io.github.beardedflea.fleamarket.store.ItemOffer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.eventhandler.*;
-import net.minecraftforge.fml.common.gameevent.*;
-import net.minecraftforge.fml.common.*;
-import net.minecraftforge.fml.relauncher.Side;
-
 import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(value = Side.SERVER, modid = FleaMarket.MODID)
-public class BroadcastEventHandler {
+public class FleaMarketEventHandler {
 
     //run checking on 1 minute basis i.e 1200 minecraft ticks
     private static final int broadCastInterval =  FleaMarketConfig.broadcastReminder;
@@ -22,6 +23,7 @@ public class BroadcastEventHandler {
     public static MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
     private static int minuteCounter = 0;
+    private static int saveCounter = 0;
     private static int broadcastCounter = 0;
     private static int salesIntervalCounter = 0;
     private static boolean executing = false;
@@ -29,6 +31,14 @@ public class BroadcastEventHandler {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if(!executing && ItemOfferList.currentItemOffer != null) {
+
+            if (++saveCounter >= 1200 * 10 *2) {
+                //save currentItemOffer every 5mins
+                executing = true;
+                saveCounter -= 1200 * 10 *2;
+                CurrentItemOfferParser.saveCurrentItemOffer();
+                executing = false;
+            }
 
             if(broadCastInterval != 0 && ItemOfferList.itemOfferUptime > 0) {
                 if (++broadcastCounter >= 1200 * broadCastInterval *2) {
@@ -48,7 +58,6 @@ public class BroadcastEventHandler {
 
                     }else{
                         FleaMarket.getLogger().info("Item offer cycle is paused!");
-                        FleaMarket.getLogger().info(ItemOfferList.itemOfferUptime + " minutes remaining for item offer");
                     }
                     executing = false;
                     if(salesInterval == 0 && ItemOfferList.itemOfferUptime == 0){

@@ -4,9 +4,9 @@
       "item": "minecraft:carpet",
       "damage": 3,
       "amount": 5,
-      "uptime": 120,
-      "broadcastMsg": "Flea market is offering $400 for 5 light blue carpets",
-      "soldMsg": "You have sold 5 carpets and gained $400",
+      "uptime": 20,
+      "broadcastMsg": "Flea market is offering 3 diamonds for 5 light blue carpets",
+      "soldMsg": "You have sold 5 carpets and gained 3 diamonds",
       "rewardCommand": "give %playerName% diamond 3"
     },
     {

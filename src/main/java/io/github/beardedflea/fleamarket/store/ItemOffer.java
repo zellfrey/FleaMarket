@@ -2,8 +2,6 @@ package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
@@ -23,6 +21,7 @@ public class ItemOffer {
         itemStack = new ItemStack(item, 1, meta);
         amount = quantity;
         nbtRaw = nbtString;
+//        this.setNbtTag();
         rewardCommand = rewardCmd;
         uptime = time;
         //Message doesn't need to constantly change due to playerName, might as well execute once and be done with it
@@ -30,6 +29,17 @@ public class ItemOffer {
         broadcastMessage = TextUtils.replaceItemAndAmount(broadcastMsg, this.amount, this.getDisplayName());
 
     }
+//    private void setNbtTag (){
+//        if(nbtRaw != null) {
+//            try {
+//                NBTTagCompound nbt = JsonToNBT.getTagFromJson(this.nbtRaw);
+//                this.itemStack.setTagCompound(nbt);
+//            }
+//            catch (NBTException e) {
+//                FleaMarket.getLogger().error("unable to parse NBT string: {}", nbtRaw);
+//            }
+//        }
+//    }
 
     public int getUpTime(){ return this.uptime; }
 
@@ -54,6 +64,8 @@ public class ItemOffer {
         itemToRemove += this.itemStack.getItem().getMetadata(this.itemStack) != 0 ? ":" + this.itemStack.getItem().getMetadata(this.itemStack) : "";
         return itemToRemove;
     }
+
+    public String getRewardCommand(){ return this.rewardCommand; }
 
 
     public void activate(MinecraftServer server, EntityPlayerMP playerMP){

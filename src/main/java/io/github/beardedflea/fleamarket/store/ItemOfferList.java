@@ -1,20 +1,17 @@
 package io.github.beardedflea.fleamarket.store;
 
-import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.*;
-import net.minecraft.nbt.*;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
 import net.minecraft.entity.player.EntityPlayerMP;
-
-
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
-import java.lang.Math;
 
 
 public class ItemOfferList {
@@ -47,7 +44,7 @@ public class ItemOfferList {
     //manages PlayerTransactionList array
     public static ArrayList<String> getPlayerTransactionList(){return playerTransactionList;}
 
-    private static void addPlayerTransactionUUID(String uuid){playerTransactionList.add(uuid);}
+    public static void addPlayerTransactionUUID(String uuid){playerTransactionList.add(uuid);}
 
     private static void clearPlayerTransactionList(){playerTransactionList.clear();}
 
@@ -114,6 +111,7 @@ public class ItemOfferList {
         itemOfferUptime = ItemOfferList.currentItemOffer.getUpTime();
         clearPlayerTransactionList();
         server.getPlayerList().sendMessage(new TextComponentString(currentItemOffer.getBroadcastMsg()));
+        CurrentItemOfferParser.saveCurrentItemOffer();
     }
 
     //fm sell
@@ -160,6 +158,9 @@ public class ItemOfferList {
 
                 ItemOfferList.addPlayerTransactionUUID(playerMP.getUniqueID().toString());
                 currentItemOffer.activate(server, playerMP);
+
+                CurrentItemOfferParser.saveCurrentItemOffer();
+
             }
             else{
                 playerMP.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " " +

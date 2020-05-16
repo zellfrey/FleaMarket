@@ -6,7 +6,6 @@ import io.github.beardedflea.fleamarket.store.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.item.Item;
@@ -20,7 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 
-public class ItemOfferParser{
+public class ItemOfferParser {
 
     public static File configDir;
 
@@ -28,70 +27,70 @@ public class ItemOfferParser{
 
     public static void init(FMLPreInitializationEvent event) {
         configDir = new File(event.getModConfigurationDirectory(), "fleamarket/itemoffers");
-        if(!configDir.exists()) {
+        if (!configDir.exists()) {
             setupDefaultItemOffers(configDir);
         }
-        loadItemOfferData();
     }
 
-    public static void loadItemOfferData(){
+    public static void loadItemOfferData() {
         FleaMarket.getLogger().info("Loading FleaMarket item offers");
         ItemOfferList.clearItemOffers();
         File[] jsonFiles = configDir.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".json"));
 
-        if(jsonFiles == null) {
+        if (jsonFiles == null) {
             //if this returns null, something is seriously wrong.
             throw new IllegalStateException("error initializing fleamarket, could not list files for " + configDir.getAbsolutePath());
-        }
-        else{
-            for(File jsonFile : jsonFiles){
+        } else {
+            for (File jsonFile : jsonFiles) {
 
-                if(jsonFile.length() == 0){
+                if (jsonFile.length() == 0) {
                     FleaMarket.getLogger().warn("{} is empty! Skipping...", jsonFile.getName());
-                }
-                else{
+                } else {
                     try {
                         JsonObject root = parser.parse(new FileReader(jsonFile)).getAsJsonObject();
-                        if(!root.has("itemOffers")){
+                        if (!root.has("itemOffers")) {
                             FleaMarket.getLogger().error("cannot parse item offers file {}!", jsonFile.getName());
                             continue;
                         }
                         JsonArray itemOfferArray = root.get("itemOffers").getAsJsonArray();
-                        if(itemOfferArray.size() == 0){
+                        if (itemOfferArray.size() == 0) {
                             FleaMarket.getLogger().info("FleaMarket has found itemOffer file {}. But there appears to be 0 items on offer.\nSkipping file", jsonFile.getName());
-                        }
-                        else{
-                            for(int i = 0; i < itemOfferArray.size(); i++){
+                        } else {
+                            for (int i = 0; i < itemOfferArray.size(); i++) {
                                 JsonObject object = itemOfferArray.get(i).getAsJsonObject();
 
-                                setupItemOfferObjects(object, i, jsonFile);
+                                ItemOffer itemOffer = setupItemOfferObjects(object, i, jsonFile.getName());
+
+                                if(itemOffer == null){
+                                    FleaMarket.getLogger().error("error loading item offer object!");
+                                }
+                                else{
+                                    ItemOfferList.addItemOffer(itemOffer);
+                                }
                             }
                         }
-                    }
-                    catch (FileNotFoundException e) {
+                    }catch (FileNotFoundException e) {
                         FleaMarket.getLogger().error("error parsing item offer file " + jsonFile.getName() + "!", e);
                     }
                 }
             }
         }
-        if(ItemOfferList.getItemOfferSize() == 0){
+        if (ItemOfferList.getItemOfferSize() == 0) {
             FleaMarket.getLogger().error("FleaMarket found no itemOffers. Is this intentional?");
         }
         FleaMarket.getLogger().info("FleaMarket registered a total of {} itemOffers in {} files!", ItemOfferList.getItemOfferSize(), jsonFiles.length);
     }
 
     //Creates ItemOffers parsed from itemOffers.json files
-    public static void setupItemOfferObjects(JsonObject object, int idx, File itemJson){
+    public static ItemOffer setupItemOfferObjects(JsonObject object, int idx, String fileName) {
         ItemOffer itemOffer;
 
-        if(!object.has("item")){
-            FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"item\" field. Skipping...", idx, itemJson.getName());
-        }
-        else if(!object.has("amount")){
-            FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"amount\" field. Skipping...", idx, itemJson.getName());
-        }
-        else{
-            try{
+        if (!object.has("item")) {
+            FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"item\" field. Skipping...", idx, fileName);
+        } else if (!object.has("amount")) {
+            FleaMarket.getLogger().info("ItemOffer object {} in {} does not contain \"amount\" field. Skipping...", idx, fileName);
+        } else {
+            try {
                 Item item = CommandBase.getItemByText(null, object.get("item").getAsString());
                 int amount = object.get("amount").getAsInt();
 
@@ -106,14 +105,16 @@ public class ItemOfferParser{
                 String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarketConfig.defaultItemFields.defaultReward;
 
                 itemOffer = new ItemOffer(item, dmgValue, nbtRaw, amount, soldMsg, broadcastMsg, rewardCmd, uptime);
+                return itemOffer;
 
-                ItemOfferList.addItemOffer(itemOffer);
-            }
-            catch(NumberInvalidException e){
+            } catch (NumberInvalidException e) {
                 FleaMarket.getLogger().error("error finding item name " + object.get("item").getAsString() + "!", e);
             }
+
         }
+        return null;
     }
+
 
     private static void setupDefaultItemOffers(File itemOffersDir) {
         File defaultConfig = new File(itemOffersDir, "default_item_offers.json");

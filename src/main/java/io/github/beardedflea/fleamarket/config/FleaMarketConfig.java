@@ -27,7 +27,7 @@ public class FleaMarketConfig{
   @Config.Name("Broadcast Reminder")
   @Config.Comment({"How often (in minutes) between each item broadcast. Set to 0 to disable broadcasts"})
   @RangeInt(min = 0)
-  public static int broadcastReminder = 2;
+  public static int broadcastReminder = 0;
 
   @Config.RequiresWorldRestart
   @Config.Name("sales Interval")
