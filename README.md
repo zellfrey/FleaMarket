@@ -13,8 +13,8 @@ More information about the Flea market can be found on the [wiki](https://github
 1. Download the latest release  [latest release JAR](https://www.curseforge.com/minecraft/mc-mods) or clone this repository & build a JAR file.
 2. Place the JAR file in the `mods/` directory of the server
 3. Run/restart the server
-4. Open `config/fleamarket/` and you should find 2 folders and 1 cfg file. Edit those values to your liking. More info can 
-be found on the [wiki](https://github.com/zellfrey/FleaMarket/wiki)
+4. Open `config/fleamarket/` and you should find 2 folders and 1 cfg file. Edit those values to your liking. 
+5. Continue onto the [wiki](https://github.com/zellfrey/FleaMarket/wiki) for more information.
 
 ## Permissions:
 This mod is available under GPLv3.
