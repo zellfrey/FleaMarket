@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class ItemOfferParser {
 
-    public static File configDir;
+    private static File configDir;
 
     private static JsonParser parser = new JsonParser();
 

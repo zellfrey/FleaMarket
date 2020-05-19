@@ -1,7 +1,6 @@
 package io.github.beardedflea.fleamarket.config;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
@@ -9,12 +8,16 @@ import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Locale;
 
 public class CurrentItemOfferParser {
 
-    public static File configDir;
+    private static File configDir;
 
     private static JsonParser parser = new JsonParser();
 

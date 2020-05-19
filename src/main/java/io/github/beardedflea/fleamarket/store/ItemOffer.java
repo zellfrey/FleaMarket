@@ -21,7 +21,7 @@ public class ItemOffer {
         itemStack = new ItemStack(item, 1, meta);
         amount = quantity;
         nbtRaw = nbtString;
-//        this.setNbtTag();
+        this.setNbtTag();
         rewardCommand = rewardCmd;
         uptime = time;
         //Message doesn't need to constantly change due to playerName, might as well execute once and be done with it
@@ -29,17 +29,17 @@ public class ItemOffer {
         broadcastMessage = TextUtils.replaceItemAndAmount(broadcastMsg, this.amount, this.getDisplayName());
 
     }
-//    private void setNbtTag (){
-//        if(nbtRaw != null) {
-//            try {
-//                NBTTagCompound nbt = JsonToNBT.getTagFromJson(this.nbtRaw);
-//                this.itemStack.setTagCompound(nbt);
-//            }
-//            catch (NBTException e) {
-//                FleaMarket.getLogger().error("unable to parse NBT string: {}", nbtRaw);
-//            }
-//        }
-//    }
+    private void setNbtTag (){
+        if(nbtRaw != null) {
+            try {
+                NBTTagCompound nbt = JsonToNBT.getTagFromJson(this.nbtRaw);
+                this.itemStack.setTagCompound(nbt);
+            }
+            catch (NBTException e) {
+                FleaMarket.getLogger().error("unable to parse NBT string: {}", nbtRaw);
+            }
+        }
+    }
 
     public int getUpTime(){ return this.uptime; }
 

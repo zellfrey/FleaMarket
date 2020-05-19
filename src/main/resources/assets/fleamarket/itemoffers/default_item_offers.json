@@ -18,6 +18,12 @@
     {
       "item": "minecraft:diamond",
       "amount": 30
+    },
+    {
+      "item": "minecraft:iron_sword",
+      "amount": 1,
+      "nbt": "{ench:[{lvl:5s,id:16s}],RepairCost:1}",
+      "broadcastMsg": "Flea market is wanting an sharpness 5 iron sword."
     }
   ]
 }
