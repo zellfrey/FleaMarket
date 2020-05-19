@@ -2,7 +2,7 @@
 
 Flea Market is a market mod designed to replicate a flea market(heh, get it)
 
-Flea market adds a command-based market system that implements a timed system in which certain items can be sold to flea market with in a specific time frame. Once a player has sold the current item, they cannot sell it again and will have to wait until another item is on offer. Once the item offer cycle is complete, then a player can start selling those items again.
+Flea market adds a command-based market mod that allows players to sell specific items in a given period of time. Once a player has sold the current item, they cannot sell it again and will have to wait until another item is on offer. Once the item offer cycle is complete, then a player can start selling those items again.
 
 More information about the Flea market can be found on the [wiki](https://github.com/zellfrey/FleaMarket/wiki).
 
