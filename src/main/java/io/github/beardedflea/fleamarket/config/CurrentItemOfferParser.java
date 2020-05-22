@@ -2,6 +2,7 @@ package io.github.beardedflea.fleamarket.config;
 
 import com.google.gson.*;
 import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.event.FleaMarketEventHandler;
 import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
@@ -36,6 +37,7 @@ public class CurrentItemOfferParser {
     public static void loadCurrentItemOffer(){
         File[] currentItemOfferFile = configDir.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".json"));
         FleaMarket.getLogger().info("Loading current Item Offer...");
+        FleaMarket.getLogger().info(FleaMarketEventHandler.salesInterval);
         if(currentItemOfferFile == null) {
             //if this returns null, something is seriously wrong.
             FleaMarket.getLogger().info("No current item offer file was found.");
@@ -59,7 +61,10 @@ public class CurrentItemOfferParser {
                             ItemOfferList.itemOfferIndex = currentItemObject.get("itemIndex").getAsInt();
                             ItemOfferList.itemOfferUptime = currentItemObject.get("uptimeLeft").getAsInt();
 
+                            FleaMarketEventHandler.salesInterval = currentItemObject.get("saleTimeLeft").getAsInt();
+
                             JsonArray playerIds = currentItemObject.get("playerTransactionList").getAsJsonArray();
+
 
                             //it just works: https://stackoverflow.com/questions/18544133/parsing-json-array-into-java-util-list-with-gson
                             String[] idsArray = new Gson().fromJson(playerIds, String[].class);
@@ -77,6 +82,7 @@ public class CurrentItemOfferParser {
                 }
             }
         }
+        FleaMarket.getLogger().info(FleaMarketEventHandler.salesInterval);
     }
 
     public static void saveCurrentItemOffer(){
@@ -103,6 +109,7 @@ public class CurrentItemOfferParser {
             //wow thats a lot. Okay we cool, lets move on
             ItemObject.addProperty("uptimeLeft", ItemOfferList.itemOfferUptime);
             ItemObject.addProperty("itemIndex", ItemOfferList.itemOfferIndex);
+            ItemObject.addProperty("saleTimeLeft", FleaMarketEventHandler.salesInterval);
 
             //add playerTransactionList to Json file
             JsonArray playerTransactionArray = new Gson().toJsonTree(ItemOfferList.getPlayerTransactionList()).getAsJsonArray();
@@ -113,9 +120,12 @@ public class CurrentItemOfferParser {
                 file.write(new GsonBuilder().setPrettyPrinting().create().toJson(ItemObject));
                 file.close();
 
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            if(FleaMarket.isDebugMode()){FleaMarket.getLogger().info(ItemObject.toString());}
         }
     }
 }

@@ -58,7 +58,7 @@ public class CommandFleaMarket extends CommandBase{
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
+
         
         if(args.length > 1){
             throw new SyntaxErrorException("Too many arguments");
@@ -75,7 +75,7 @@ public class CommandFleaMarket extends CommandBase{
                         sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
                     }
                     else if(ItemOfferList.itemOfferUptime <= 0){
-                        playerMP.sendMessage(new TextComponentString(TextFormatting.BLUE + "Flea market is finding another item to offer"));
+                        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Flea market is finding another item to offer"));
                     }
                     else{
                         sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
@@ -84,6 +84,7 @@ public class CommandFleaMarket extends CommandBase{
 
                 case "sell":
 
+                    EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
                     if(ItemOfferList.currentItemOffer == null){
                         playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
                     }

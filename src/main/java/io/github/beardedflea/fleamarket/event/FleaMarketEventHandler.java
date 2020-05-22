@@ -19,7 +19,7 @@ public class FleaMarketEventHandler {
 
     //run checking on 1 minute basis i.e 1200 minecraft ticks
     private static final int broadCastInterval =  FleaMarketConfig.broadcastReminder;
-    private static int salesInterval = FleaMarketConfig.saleInterval;
+    public static int salesInterval = FleaMarketConfig.saleInterval;
     public static MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
     private static int minuteCounter = 0;
