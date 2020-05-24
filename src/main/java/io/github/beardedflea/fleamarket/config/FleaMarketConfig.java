@@ -19,7 +19,6 @@ public class FleaMarketConfig{
       "\"descending\" = Starts at the top, and selects to the bottom",
       "\"ascending\" = It's like descending but upwards",
       "\"random\" = Ignores items being selected in a list. Item X could appear twice in a row",
-      "\"fairrandom\" = once and item has been used, it will not pick that item again until the list has been completed.",
     })
   public static String selectionType = "descending";
   
@@ -45,13 +44,12 @@ public class FleaMarketConfig{
   @Config.RequiresWorldRestart
   @Config.Name("Debug mode")
   @Config.Comment({"Outputs more plugin information onto the console "})
-  public static boolean debugMode = true;
+  public static boolean debugMode = false;
  
   @Config.RequiresMcRestart
     @Config.Name("Default Item Fields")
     @Config.Comment({
     "If any of the listed fields are not included within the item.json, they will use these default fields listed below.",
-    "If a placeholder is not listed for the field, the message will display an empty message."
   })
   public static ItemFields defaultItemFields = new ItemFields();
     

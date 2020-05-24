@@ -78,7 +78,6 @@ public class CommandOPFleaMarket extends CommandBase{
                     else{
                         sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Starting cycle of itemOffers"));
                     }
-
                 break;
 
                 case "pause":
@@ -89,7 +88,6 @@ public class CommandOPFleaMarket extends CommandBase{
                 case "skip":
                     sender.sendMessage(new TextComponentString("Moving to next time offer"));
                     ItemOfferList.setCurrentItemOffer(server);
-
                 break;
 
                 case "reload":
@@ -111,12 +109,15 @@ public class CommandOPFleaMarket extends CommandBase{
         ItemOfferParser.loadItemOfferData();
         int itemOfferCount = ItemOfferList.getItemOfferSize();
         int fileCount = ItemOfferParser.configDir.listFiles().length;
+
         if(itemOfferCount == 0){
             sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers!"));
         }
+
         if(fileCount == 0){
             sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers files!"));
         }
+
         sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "FleaMarket registered a total of " +
                                                     itemOfferCount + " ItemOffers in " + fileCount + " files!"));
 

@@ -37,7 +37,7 @@ public class CurrentItemOfferParser {
     public static void loadCurrentItemOffer(){
         File[] currentItemOfferFile = configDir.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".json"));
         FleaMarket.getLogger().info("Loading current Item Offer...");
-        FleaMarket.getLogger().info(FleaMarketEventHandler.salesInterval);
+
         if(currentItemOfferFile == null) {
             //if this returns null, something is seriously wrong.
             FleaMarket.getLogger().info("No current item offer file was found.");
@@ -70,7 +70,6 @@ public class CurrentItemOfferParser {
                             String[] idsArray = new Gson().fromJson(playerIds, String[].class);
 
                             if(idsArray.length !=0){
-
                                 for (String uuid : idsArray) {
                                     ItemOfferList.addPlayerTransactionUUID(uuid);
                                 }
@@ -82,7 +81,6 @@ public class CurrentItemOfferParser {
                 }
             }
         }
-        FleaMarket.getLogger().info(FleaMarketEventHandler.salesInterval);
     }
 
     public static void saveCurrentItemOffer(){

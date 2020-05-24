@@ -6,6 +6,7 @@ import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -44,7 +45,7 @@ public class FleaMarketEventHandler {
                 if (++broadcastCounter >= 1200 * broadCastInterval *2) {
                     executing = true;
                     broadcastCounter -= 1200 * broadCastInterval *2;
-                    server.getPlayerList().sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                    server.getPlayerList().sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     executing = false;
                 }
             }

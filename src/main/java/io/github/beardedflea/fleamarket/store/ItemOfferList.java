@@ -99,6 +99,12 @@ public class ItemOfferList {
                  itemOfferIndex = (int)(Math.random() * ITEM_OFFERS.size());
             break;
 
+//            case "fairrandom":
+//
+//                //"\"fairrandom\" = once and item has been used, it will not pick that item again until the list has been completed."
+//                // Will implement at somepoint in version 1.1
+//                break;
+
             default:
                 throw new IllegalStateException("Unexpected value: " + FleaMarketConfig.selectionType);
         }
@@ -110,7 +116,7 @@ public class ItemOfferList {
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
         itemOfferUptime = ItemOfferList.currentItemOffer.getUpTime();
         clearPlayerTransactionList();
-        server.getPlayerList().sendMessage(new TextComponentString(currentItemOffer.getBroadcastMsg()));
+        server.getPlayerList().sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
         CurrentItemOfferParser.saveCurrentItemOffer();
     }
 
@@ -139,7 +145,6 @@ public class ItemOfferList {
                     && itemNBTRaw.equals(currentItemOffer.getNbtRaw() + "")) {
 
                 amountOfCorrectItem += item.getCount();
-                FleaMarket.getLogger().info("item found, moving to item removal");
             }
         }
         //checks if item is inventory
@@ -150,8 +155,10 @@ public class ItemOfferList {
                     currentItemOffer.getItemAmount(), currentItemOffer.getItemStack().getTagCompound());
 
                 playerMP.inventoryContainer.detectAndSendChanges();
-                FleaMarket.getLogger().info("Removed {} items from {}'s inventory", currentItemOffer.getItemAmount(), playerMP.getName());
 
+                if(FleaMarket.isDebugMode()){
+                    FleaMarket.getLogger().info("Removed {} items from {}'s inventory", currentItemOffer.getItemAmount(), playerMP.getName());
+                }
                 String soldString = TextUtils.replacePlayerPlaceHolder(currentItemOffer.getSoldMsg(), playerMP.getName());
 
                 playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + soldString));

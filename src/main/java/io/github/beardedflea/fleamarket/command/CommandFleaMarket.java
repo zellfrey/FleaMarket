@@ -78,7 +78,7 @@ public class CommandFleaMarket extends CommandBase{
                         sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Flea market is finding another item to offer"));
                     }
                     else{
-                        sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                        sender.sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     }
                 break;
 

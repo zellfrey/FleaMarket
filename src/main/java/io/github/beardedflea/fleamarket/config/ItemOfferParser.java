@@ -115,7 +115,6 @@ public class ItemOfferParser {
         return null;
     }
 
-
     private static void setupDefaultItemOffers(File itemOffersDir) {
         File defaultConfig = new File(itemOffersDir, "default_item_offers.json");
         try {

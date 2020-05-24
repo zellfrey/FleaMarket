@@ -21,14 +21,15 @@ public class TextUtils {
         return borderLeft;
     }
 
-    public static ITextComponent getModTextTag(){
-        ITextComponent bracketLeft = new TextComponentString(TextFormatting.BLUE + "[");
-        ITextComponent bracketRight = new TextComponentString(TextFormatting.BLUE + "]");
-        ITextComponent modNameMid = new TextComponentString(TextFormatting.LIGHT_PURPLE + " " + FleaMarket.NAME + " ");
-        bracketLeft.appendSibling(modNameMid).appendSibling(bracketRight);
-        // [ Flea Market ]
-        return bracketLeft;
-    }
+    //Will implement with version 1.1
+//    public static ITextComponent getModTextTag(){
+//        ITextComponent bracketLeft = new TextComponentString(TextFormatting.BLUE + "[");
+//        ITextComponent bracketRight = new TextComponentString(TextFormatting.BLUE + "]");
+//        ITextComponent modNameMid = new TextComponentString(TextFormatting.LIGHT_PURPLE + " " + FleaMarket.NAME + " ");
+//        bracketLeft.appendSibling(modNameMid).appendSibling(bracketRight);
+//        // [ Flea Market ]
+//        return bracketLeft;
+//    }
 
     public static String replacePlayerPlaceHolder(String line, String playerName){
         return line.replace("%playerName%", playerName);
