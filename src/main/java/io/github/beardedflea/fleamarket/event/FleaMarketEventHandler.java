@@ -87,7 +87,7 @@ public class FleaMarketEventHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if( (FleaMarketConfig.joinMessage) && (ItemOfferList.currentItemOffer != null) ){
-            event.player.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+            event.player.sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
         }
     }
 }
