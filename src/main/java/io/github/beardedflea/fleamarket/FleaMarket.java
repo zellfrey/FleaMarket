@@ -18,7 +18,7 @@ public class FleaMarket
     public static final String MODID = "fleamarket";
     public static final String NAME = "Flea Market";
     public static final String MCVERSIONS = "[1.12, 1.13)";
-    public static final String VERSION = "1.01";
+    public static final String VERSION = "1.02";
 
     private static final Logger log = LogManager.getLogger(MODID);
 
@@ -29,6 +29,7 @@ public class FleaMarket
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         log.info("Pre int of Flea market, creating folders");
+        LanguageParser.init(event);
         ItemOfferParser.init(event);
         CurrentItemOfferParser.init(event);
     }

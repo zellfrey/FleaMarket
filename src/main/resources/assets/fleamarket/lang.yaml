@@ -1,0 +1,29 @@
+#This is the language file for Flea Market. Change the values as you see fit.
+#Do not delete and of the fields. If they are deleted, the mod will result with just
+# an empty string.
+opCommands:
+  opfmhelp: "/opfm help - Shows a list of commands for operators",
+  opfmstart: "/opfm start - starts the cycle of item offers",
+  opfmpause: "opfm pause - Pauses the cycle. Players can still offer the item",
+  opfmskip: "/opfm skip - Moves to the next item on the list",
+  opfmreload: "/opfm reload - Reloads ItemOffers folder & lang.json"
+
+playerCommands:
+  fmhelp: "/fm help - Shows a list of commands for players"
+  fmcheck: "/fm check - checks the current item on offer"
+  fmsell: "/fm sell - Current method of selling items"
+
+defaultItemFields:
+  #placeholders: %item%, %amount%, %playerName%
+  defaultSoldMessage: "%playerName%, you have sold %amount% %item% to Flea Market"
+  defaultUptime: 20
+  #placeholders: %item%, %amount%
+  defaultBroadcast: "Flea market is buying %amount% %item%"
+  #placeholders: %playerName%
+  defaultReward: "/give %playerName% dirt 2"
+
+playerMessages:
+  itemOfferNoneMsg: "There is no item offer available at this time"
+  itemOfferFindingMsg: "Flea market is finding another item to offer"
+  #placeholders: %playerName%
+  alreadySoldMsg: "%playerName%, you have already sold the current item offer to Flea Market"
