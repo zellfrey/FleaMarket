@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class LanguageParser {
@@ -19,6 +20,29 @@ public class LanguageParser {
         if(!configDir.exists()){
             setupDefaultLangFile(configDir);
         }
+        loadModLanguage();
+    }
+
+    private static void loadModLanguage(){
+//        Yaml yaml = new Yaml();
+//        Yaml yamlConstruct = new Yaml(new Constructor(LanguageParser.class));
+//        Yaml yamlClassLoader = new Yaml(new CustomClassLoaderConstructor(LanguageParser.class.getClassLoader()));
+        try{
+            FileReader langFile = new FileReader(configDir);
+//            HashMap<String, Object> modLangMap = yaml.load(langFile);
+            langFile.close();
+
+//            modLangMap.forEach((k,v) -> FleaMarket.getLogger().info("Key = "
+//                    + k + ", Value = " + v));
+//            FleaMarket.getLogger().info(modLangMap.get("nested").getClass().getSimpleName());
+//            HashMap<String, HashMap<String, Object>>
+            FleaMarket.getLogger().info("file load test");
+        }
+
+        catch(IOException e){
+            FleaMarket.getLogger().error("Exception loading fleamarket language file!", e);
+        }
+
     }
 
 
