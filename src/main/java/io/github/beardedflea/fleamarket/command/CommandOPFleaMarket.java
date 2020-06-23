@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import io.github.beardedflea.fleamarket.config.ItemOfferParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import io.github.beardedflea.fleamarket.config.LanguageParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CommandOPFleaMarket extends CommandBase{
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/opfleamarket [help:start:pause:skip]";
+        return "/opfleamarket [help:start:pause:skip:reload]";
     }
 
     @Override
@@ -45,13 +46,13 @@ public class CommandOPFleaMarket extends CommandBase{
 
 
     private static ITextComponent getOPHelpUsage(){
-        ITextComponent comp1 = TextUtils.getTextBorder();
+        ITextComponent comp1 = TextUtils.getModTextBorder();
         ITextComponent comp2 = new TextComponentString("\n/opfm help - Shows a list of commands for operators\n");
         ITextComponent comp3 = new TextComponentString("/opfm start - starts the cycle of item offers\n");
         ITextComponent comp4 = new TextComponentString("/opfm pause - Pauses the cycle. Players can still offer the item\n");
         ITextComponent comp5 = new TextComponentString("/opfm skip - Moves to the next item on the list\n");
         ITextComponent comp6 = new TextComponentString("/opfm reload - Reloads ItemOffers folder\n");
-        ITextComponent comp7 = TextUtils.getTextBorder();
+        ITextComponent comp7 = TextUtils.getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5).appendSibling(comp6).appendSibling(comp7);
         return comp1;
@@ -91,6 +92,8 @@ public class CommandOPFleaMarket extends CommandBase{
                 break;
 
                 case "reload":
+                    sender.sendMessage(new TextComponentString(TextFormatting.GRAY + "Reloading lang.yml..."));
+                    LanguageParser.loadModLanguage();
                     reloadItemOfferData(sender);
                 break;
 

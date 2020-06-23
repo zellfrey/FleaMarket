@@ -3,15 +3,21 @@ package io.github.beardedflea.fleamarket.utils;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.util.text.*;
 
+import java.util.HashMap;
+
 public class TextUtils {
 
-    public static void printDebugStrConsole(String... sArgs){
-        for(String line : sArgs){
-            FleaMarket.getLogger().info(line);
-        }
+    public static HashMap<String,Object> modLanguageMap = new HashMap<>();
+
+
+
+    public static ITextComponent TransformModLanguage(Object yamlObj){
+
+        ITextComponent textLine = new TextComponentString(yamlObj.toString());
+        return textLine;
     }
 
-    public static ITextComponent getTextBorder(){
+    public static ITextComponent getModTextBorder(){
         ITextComponent borderLeft = new TextComponentString(TextFormatting.BLUE + "==================");
         ITextComponent modNameMid = new TextComponentString(TextFormatting.LIGHT_PURPLE + " " + FleaMarket.NAME + " ");
         ITextComponent borderRight = new TextComponentString(TextFormatting.BLUE + "==================");
@@ -30,6 +36,12 @@ public class TextUtils {
 //        // [ Flea Market ]
 //        return bracketLeft;
 //    }
+
+    public static void printDebugStrConsole(String... sArgs){
+        for(String line : sArgs){
+            FleaMarket.getLogger().info(line);
+        }
+    }
 
     public static String replacePlayerPlaceHolder(String line, String playerName){
         return line.replace("%playerName%", playerName);

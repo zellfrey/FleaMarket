@@ -6,7 +6,8 @@ import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
 
 import io.github.beardedflea.fleamarket.store.*;
-import io.github.beardedflea.fleamarket.utils.TextUtils;
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +46,11 @@ public class CommandFleaMarket extends CommandBase{
     }
 
     private static ITextComponent getHelpUsage(){
-        ITextComponent comp1 = TextUtils.getTextBorder();
+        ITextComponent comp1 = getModTextBorder();
         ITextComponent comp2 = new TextComponentString("\n/fm help - Shows a list of commands for players\n");
         ITextComponent comp3 = new TextComponentString("/fm check - checks the current item on offer\n");
         ITextComponent comp4 = new TextComponentString("/fm sell - Current method of selling items\n");
-        ITextComponent comp5 = TextUtils.getTextBorder();
+        ITextComponent comp5 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
 
@@ -59,7 +60,7 @@ public class CommandFleaMarket extends CommandBase{
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        
+        boolean isItemOn;
         if(args.length > 1){
             throw new SyntaxErrorException("Too many arguments");
         }
@@ -70,29 +71,19 @@ public class CommandFleaMarket extends CommandBase{
                 break;
 
                 case "check":
+                     isItemOn = checkItemOffer(sender);
 
-                    if(ItemOfferList.currentItemOffer == null){
-                        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
-                    }
-                    else if(ItemOfferList.itemOfferUptime <= 0){
-                        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Flea market is finding another item to offer"));
-                    }
-                    else{
-                        sender.sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                    if(isItemOn){
+                        sender.sendMessage(TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     }
                 break;
 
                 case "sell":
+                    isItemOn = checkItemOffer(sender);
 
-                    EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
-                    if(ItemOfferList.currentItemOffer == null){
-                        playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "There is no item offer available at this time"));
-                    }
-                    else if(ItemOfferList.itemOfferUptime <= 0){
-                        playerMP.sendMessage(new TextComponentString(TextFormatting.BLUE + "Flea market is finding another item to offer"));
-                    }
-                    else{
-                      ItemOfferList.sellItemOffer(playerMP);
+                    if(isItemOn){
+                        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
+                        ItemOfferList.sellItemOffer(playerMP);
                     }
                 break;
 
@@ -102,6 +93,22 @@ public class CommandFleaMarket extends CommandBase{
         }
         else{
             throw new WrongUsageException(getUsage(sender));
+        }
+    }
+
+    private static boolean checkItemOffer(ICommandSender sender){
+        if(ItemOfferList.currentItemOffer == null){
+            sender.sendMessage(TransformModLanguage(modLanguageMap.get("itemOfferNoneMsg")));
+
+            return false;
+        }
+        else if(ItemOfferList.itemOfferUptime <= 0){
+            sender.sendMessage(TransformModLanguage(modLanguageMap.get("itemOfferFindingMsg")));
+
+            return false;
+
+        }else{
+            return true;
         }
     }
 
