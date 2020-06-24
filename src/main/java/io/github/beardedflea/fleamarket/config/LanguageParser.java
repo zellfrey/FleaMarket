@@ -22,6 +22,7 @@ public class LanguageParser {
         if(!configDir.exists()){
             setupDefaultLangFile(configDir);
         }
+        TextUtils.populateColourMap();
         loadModLanguage();
     }
 

@@ -3,20 +3,6 @@
 # an empty string.
 
 #-------------------------------------------------
-#opCommands:
-opfmhelp: "/opfm help - Shows a list of commands for operators"
-opfmstart: "/opfm start - starts the cycle of item offers"
-opfmpause: "opfm pause - Pauses the cycle. Players can still offer the item"
-opfmskip: "/opfm skip - Moves to the next item on the list"
-opfmreload: "/opfm reload - Reloads ItemOffers folder & lang.json"
-
-#-------------------------------------------------
-#playerCommands
-
-fmhelp: "/fm help - Shows a list of commands for players"
-fmcheck: "/fm check - checks the current item on offer"
-fmsell: "/fm sell - Current method of selling items"
-#-------------------------------------------------
 #defaultItemFields - "If any of the listed fields are not included within the item.json, they will use these default fields listed below."
 
 #placeholders: %item%, %amount%, %playerName%
@@ -27,11 +13,34 @@ defaultUptime: 20
 defaultBroadcast: "Flea market is buying %amount% %item%"
 #placeholders: %playerName%
 defaultReward: "/give %playerName% dirt 2"
+
 #-------------------------------------------------
+
+#playerCommands
+fmhelp: "\n/fm help - Shows a list of commands for players\n"
+fmcheck: "/fm check - checks the current item on offer\n"
+fmsell: "/fm sell - Current method of selling items\n"
+
 #playerMessages - messages displayed to players
 
-itemOfferNoneMsg: "There is no item offer available at this time"
+itemOfferNoneMsg: "&2There is no item offer available at this time"
 itemOfferFindingMsg: "Flea market is finding another item to offer"
 #placeholders: %playerName%
 alreadySoldMsg: "%playerName%, you have already sold the current item offer to Flea Market"
+
 #-------------------------------------------------
+
+#opCommands:
+opfmhelp: "\n/opfm help - Shows a list of commands for operators\n"
+opfmstart: "/opfm start - starts the cycle of item offers\n"
+opfmpause: "/opfm pause - Pauses the cycle. Players can still offer the item\n"
+opfmskip: "/opfm skip - Moves to the next item on the list\n"
+opfmreload: "/opfm reload - Reloads ItemOffers folder & lang.json\n"
+
+#opMessages - messages displayed to Opped players
+
+#itemOfferNoneMsg: "There is no item offer available at this time"
+#itemOfferFindingMsg: "Flea market is finding another item to offer"
+##placeholders: %playerName%
+#alreadySoldMsg: "%playerName%, you have already sold the current item offer to Flea Market"
+

@@ -2,7 +2,7 @@ package io.github.beardedflea.fleamarket.command;
 
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.server.MinecraftServer;
 
 import io.github.beardedflea.fleamarket.store.*;
@@ -47,9 +47,9 @@ public class CommandFleaMarket extends CommandBase{
 
     private static ITextComponent getHelpUsage(){
         ITextComponent comp1 = getModTextBorder();
-        ITextComponent comp2 = new TextComponentString("\n/fm help - Shows a list of commands for players\n");
-        ITextComponent comp3 = new TextComponentString("/fm check - checks the current item on offer\n");
-        ITextComponent comp4 = new TextComponentString("/fm sell - Current method of selling items\n");
+        ITextComponent comp2 = TransformModLanguage(modLanguageMap.get("fmhelp"));
+        ITextComponent comp3 = TransformModLanguage(modLanguageMap.get("fmcheck"));
+        ITextComponent comp4 = TransformModLanguage(modLanguageMap.get("fmsell"));
         ITextComponent comp5 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
@@ -75,6 +75,7 @@ public class CommandFleaMarket extends CommandBase{
 
                     if(isItemOn){
                         sender.sendMessage(TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+//                        sender.sendMessage(ItemOfferList.currentItemOffer.getBroadcastMsg());
                     }
                 break;
 

@@ -4,7 +4,7 @@ import net.minecraft.command.*;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
 
-import io.github.beardedflea.fleamarket.utils.TextUtils;
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 import io.github.beardedflea.fleamarket.config.ItemOfferParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import io.github.beardedflea.fleamarket.config.LanguageParser;
@@ -46,13 +46,13 @@ public class CommandOPFleaMarket extends CommandBase{
 
 
     private static ITextComponent getOPHelpUsage(){
-        ITextComponent comp1 = TextUtils.getModTextBorder();
-        ITextComponent comp2 = new TextComponentString("\n/opfm help - Shows a list of commands for operators\n");
-        ITextComponent comp3 = new TextComponentString("/opfm start - starts the cycle of item offers\n");
-        ITextComponent comp4 = new TextComponentString("/opfm pause - Pauses the cycle. Players can still offer the item\n");
-        ITextComponent comp5 = new TextComponentString("/opfm skip - Moves to the next item on the list\n");
-        ITextComponent comp6 = new TextComponentString("/opfm reload - Reloads ItemOffers folder\n");
-        ITextComponent comp7 = TextUtils.getModTextBorder();
+        ITextComponent comp1 = getModTextBorder();
+        ITextComponent comp2 = TransformModLanguage(modLanguageMap.get("opfmhelp"));
+        ITextComponent comp3 = TransformModLanguage(modLanguageMap.get("opfmstart"));
+        ITextComponent comp4 = TransformModLanguage(modLanguageMap.get("opfmpause"));
+        ITextComponent comp5 = TransformModLanguage(modLanguageMap.get("opfmskip"));
+        ITextComponent comp6 = TransformModLanguage(modLanguageMap.get("opfmreload"));
+        ITextComponent comp7 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5).appendSibling(comp6).appendSibling(comp7);
         return comp1;
@@ -74,25 +74,26 @@ public class CommandOPFleaMarket extends CommandBase{
                     boolean startedCycle = ItemOfferList.startItemOfferCycle(server);
 
                     if(!startedCycle){
-                        sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "ItemOffers cycle has already started"));
+                        sender.sendMessage(TransformModLanguage("&4ItemOffers cycle has already started"));
                     }
                     else{
-                        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Starting cycle of itemOffers"));
+                        sender.sendMessage(TransformModLanguage("&aStarting cycle of itemOffers"));
                     }
                 break;
 
                 case "pause":
                     ItemOfferList.pauseCycle = !ItemOfferList.pauseCycle;
-                    sender.sendMessage(new TextComponentString("ItemOffer paused: " + ItemOfferList.pauseCycle));
+//                    sender.sendMessage(new TextComponentString("ItemOffer paused: " + ItemOfferList.pauseCycle));
+                    sender.sendMessage(TransformModLanguage("ItemOffer paused: " + ItemOfferList.pauseCycle));
                 break;
 
                 case "skip":
-                    sender.sendMessage(new TextComponentString("Moving to next time offer"));
+                    sender.sendMessage(TransformModLanguage("Moving to next time offer"));
                     ItemOfferList.setCurrentItemOffer(server);
                 break;
 
                 case "reload":
-                    sender.sendMessage(new TextComponentString(TextFormatting.GRAY + "Reloading lang.yml..."));
+                    sender.sendMessage(TransformModLanguage("&8Reloading lang.yml..."));
                     LanguageParser.loadModLanguage();
                     reloadItemOfferData(sender);
                 break;
@@ -107,23 +108,23 @@ public class CommandOPFleaMarket extends CommandBase{
     }
 
     private static void reloadItemOfferData(ICommandSender sender){
-        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Reloading FleaMarket ItemOffers"));
+        sender.sendMessage(TransformModLanguage( "&8Reloading FleaMarket ItemOffers"));
 
         ItemOfferParser.loadItemOfferData();
         int itemOfferCount = ItemOfferList.getItemOfferSize();
         int fileCount = ItemOfferParser.configDir.listFiles().length;
 
         if(itemOfferCount == 0){
-            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers!"));
+            sender.sendMessage(TransformModLanguage( "&c&lFound 0 ItemOffers!"));
         }
 
         if(fileCount == 0){
-            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 ItemOffers files!"));
+            sender.sendMessage(TransformModLanguage( "&c&lFound 0 ItemOffer files!"));
         }
 
         sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "FleaMarket registered a total of " +
                                                     itemOfferCount + " ItemOffers in " + fileCount + " files!"));
 
-        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Finished reloading"));
+        sender.sendMessage(TransformModLanguage("&2Finished reloading"));
     }
 }
