@@ -4,9 +4,8 @@ import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -45,7 +44,7 @@ public class FleaMarketEventHandler {
                 if (++broadcastCounter >= 1200 * broadCastInterval *2) {
                     executing = true;
                     broadcastCounter -= 1200 * broadCastInterval *2;
-                    server.getPlayerList().sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                    server.getPlayerList().sendMessage(TextUtils.TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     executing = false;
                 }
             }
@@ -87,7 +86,7 @@ public class FleaMarketEventHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if( (FleaMarketConfig.joinMessage) && (ItemOfferList.currentItemOffer != null) ){
-            event.player.sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
+            event.player.sendMessage(TextUtils.TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         }
     }
 }

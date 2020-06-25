@@ -25,8 +25,8 @@ fmsell: "/fm sell - Current method of selling items\n"
 
 itemOfferNoneMsg: "&2There is no item offer available at this time"
 itemOfferFindingMsg: "Flea market is finding another item to offer"
-#placeholders: %playerName%
-alreadySoldMsg: "%playerName%, you have already sold the current item offer to Flea Market"
+alreadySoldMsg: "You have already sold the current item offer to Flea Market"
+noItemFoundMsg: "&cYou do not have the required item on offer"
 
 #-------------------------------------------------
 
@@ -39,8 +39,8 @@ opfmreload: "/opfm reload - Reloads ItemOffers folder & lang.json\n"
 
 #opMessages - messages displayed to Opped players
 
-#itemOfferNoneMsg: "There is no item offer available at this time"
-#itemOfferFindingMsg: "Flea market is finding another item to offer"
-##placeholders: %playerName%
-#alreadySoldMsg: "%playerName%, you have already sold the current item offer to Flea Market"
+cycleStart: "&aStarting cycle of itemOffers"
+cycleInProgress: "&4ItemOffers cycle has already started"
+skipItemOffer: "&7Moving to next time offer"
+reloadMod: "&7Reloading Flea Market..."
 

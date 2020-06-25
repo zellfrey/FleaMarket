@@ -75,7 +75,6 @@ public class CommandFleaMarket extends CommandBase{
 
                     if(isItemOn){
                         sender.sendMessage(TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
-//                        sender.sendMessage(ItemOfferList.currentItemOffer.getBroadcastMsg());
                     }
                 break;
 

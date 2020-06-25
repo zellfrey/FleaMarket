@@ -46,9 +46,13 @@ public class TextUtils {
 
     public static ITextComponent TransformModLanguage(Object yamlObj){
 
+        if(yamlObj == null){
+            return new TextComponentString("");
+        }
+
         ArrayList<String> colourCodes = new ArrayList<>();
 
-        String inputString = yamlObj.toString();
+        String inputString = yamlObj.toString() + "";
 
         Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(inputString);
 

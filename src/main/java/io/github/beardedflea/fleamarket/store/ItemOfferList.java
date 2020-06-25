@@ -2,16 +2,17 @@ package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
-import io.github.beardedflea.fleamarket.utils.TextUtils;
 import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
+
+
 
 
 public class ItemOfferList {
@@ -110,13 +111,13 @@ public class ItemOfferList {
         }
 
         if(FleaMarketConfig.debugMode){
-            TextUtils.printDebugStrConsole(itemOfferIndex+"", FleaMarketConfig.selectionType, ITEM_OFFERS.size()+"");
+            printDebugStrConsole(itemOfferIndex+"", FleaMarketConfig.selectionType, ITEM_OFFERS.size()+"");
         }
 
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
         itemOfferUptime = ItemOfferList.currentItemOffer.getUpTime();
         clearPlayerTransactionList();
-        server.getPlayerList().sendMessage(new TextComponentString(TextFormatting.AQUA + ItemOfferList.currentItemOffer.getBroadcastMsg()));
+        server.getPlayerList().sendMessage(TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         CurrentItemOfferParser.saveCurrentItemOffer();
     }
 
@@ -126,7 +127,7 @@ public class ItemOfferList {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if(ItemOfferList.checkPlayerTransactionList(playerUUID)){
-            playerMP.sendMessage(new TextComponentString(TextFormatting.GREEN + "You have already sold the current item offer to Flea Market"));
+            playerMP.sendMessage(TransformModLanguage(modLanguageMap.get("alreadySoldMsg")));
             return;
         }
         int amountOfCorrectItem = 0;
@@ -139,7 +140,7 @@ public class ItemOfferList {
             itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
             String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
 
-            if(FleaMarketConfig.debugMode){ TextUtils.printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw); }
+            if(FleaMarketConfig.debugMode){ printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw); }
 
             if(itemFullName.equals(currentItemOffer.getItemName())
                     && itemNBTRaw.equals(currentItemOffer.getNbtRaw() + "")) {
@@ -159,9 +160,9 @@ public class ItemOfferList {
                 if(FleaMarket.isDebugMode()){
                     FleaMarket.getLogger().info("Removed {} items from {}'s inventory", currentItemOffer.getItemAmount(), playerMP.getName());
                 }
-                String soldString = TextUtils.replacePlayerPlaceHolder(currentItemOffer.getSoldMsg(), playerMP.getName());
+                String soldString = replacePlayerPlaceHolder(currentItemOffer.getSoldMsg(), playerMP.getName());
 
-                playerMP.sendMessage(new TextComponentString(TextFormatting.GOLD + soldString));
+                playerMP.sendMessage(TransformModLanguage(soldString));
 
                 ItemOfferList.addPlayerTransactionUUID(playerMP.getUniqueID().toString());
                 currentItemOffer.activate(server, playerMP);
@@ -175,7 +176,7 @@ public class ItemOfferList {
             }
         }
         else{
-            playerMP.sendMessage(new TextComponentString(TextFormatting.RED + "You do not have the required item on offer"));
+            playerMP.sendMessage(TransformModLanguage(modLanguageMap.get("noItemFoundMsg")));
         }
     }
 }

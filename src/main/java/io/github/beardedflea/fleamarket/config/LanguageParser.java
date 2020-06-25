@@ -1,7 +1,6 @@
 package io.github.beardedflea.fleamarket.config;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.store.*;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -36,7 +35,7 @@ public class LanguageParser {
         catch(IOException e){
             FleaMarket.getLogger().error("Exception loading fleamarket language file!", e);
         }
-        TextUtils.modLanguageMap.forEach((k,v) -> FleaMarket.getLogger().info(k + " = " + v));
+
     }
 
     private static void setupDefaultLangFile(File langFile) {
