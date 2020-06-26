@@ -5,8 +5,8 @@
       "damage": 3,
       "amount": 5,
       "uptime": 20,
-      "broadcastMsg": "Flea market is offering 3 diamonds for 5 light blue carpets",
-      "soldMsg": "You have sold 5 carpets and gained 3 diamonds",
+      "broadcastMsg": "&aFlea market is offering &6&l3 &bdiamonds &r&afor 5 light blue carpets",
+      "soldMsg": "You have sold 5 carpets and gained &6&l3 &bdiamonds",
       "rewardCommand": "give %playerName% diamond 3"
     },
     {
@@ -23,7 +23,7 @@
       "item": "minecraft:iron_sword",
       "amount": 1,
       "nbt": "{ench:[{lvl:5s,id:16s}],RepairCost:1}",
-      "broadcastMsg": "Flea market is wanting a sharpness 5 iron sword."
+      "broadcastMsg": "Flea market is wanting a sharpness &l&b5 &riron sword."
     }
   ]
 }

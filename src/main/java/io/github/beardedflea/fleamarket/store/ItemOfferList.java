@@ -117,7 +117,7 @@ public class ItemOfferList {
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
         itemOfferUptime = ItemOfferList.currentItemOffer.getUpTime();
         clearPlayerTransactionList();
-        server.getPlayerList().sendMessage(TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+        server.getPlayerList().sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         CurrentItemOfferParser.saveCurrentItemOffer();
     }
 
@@ -127,7 +127,7 @@ public class ItemOfferList {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if(ItemOfferList.checkPlayerTransactionList(playerUUID)){
-            playerMP.sendMessage(TransformModLanguage(modLanguageMap.get("alreadySoldMsg")));
+//            playerMP.sendMessage(TransformModLanguage(modLanguageMap.get("alreadySoldMsg")));
             return;
         }
         int amountOfCorrectItem = 0;
@@ -162,7 +162,7 @@ public class ItemOfferList {
                 }
                 String soldString = replacePlayerPlaceHolder(currentItemOffer.getSoldMsg(), playerMP.getName());
 
-                playerMP.sendMessage(TransformModLanguage(soldString));
+                playerMP.sendMessage(new TextComponentString(soldString));
 
                 ItemOfferList.addPlayerTransactionUUID(playerMP.getUniqueID().toString());
                 currentItemOffer.activate(server, playerMP);
@@ -176,7 +176,7 @@ public class ItemOfferList {
             }
         }
         else{
-            playerMP.sendMessage(TransformModLanguage(modLanguageMap.get("noItemFoundMsg")));
+            playerMP.sendMessage(new TextComponentString(modLanguageMap.get("noItemFoundMsg")));
         }
     }
 }

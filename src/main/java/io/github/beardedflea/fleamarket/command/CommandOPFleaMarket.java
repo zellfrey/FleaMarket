@@ -47,11 +47,11 @@ public class CommandOPFleaMarket extends CommandBase{
 
     private static ITextComponent getOPHelpUsage(){
         ITextComponent comp1 = getModTextBorder();
-        ITextComponent comp2 = TransformModLanguage(modLanguageMap.get("opfmhelp"));
-        ITextComponent comp3 = TransformModLanguage(modLanguageMap.get("opfmstart"));
-        ITextComponent comp4 = TransformModLanguage(modLanguageMap.get("opfmpause"));
-        ITextComponent comp5 = TransformModLanguage(modLanguageMap.get("opfmskip"));
-        ITextComponent comp6 = TransformModLanguage(modLanguageMap.get("opfmreload"));
+        ITextComponent comp2 = new TextComponentString(modLanguageMap.get("opfmhelp"));
+        ITextComponent comp3 = new TextComponentString(modLanguageMap.get("opfmstart"));
+        ITextComponent comp4 = new TextComponentString(modLanguageMap.get("opfmpause"));
+        ITextComponent comp5 = new TextComponentString(modLanguageMap.get("opfmskip"));
+        ITextComponent comp6 = new TextComponentString(modLanguageMap.get("opfmreload"));
         ITextComponent comp7 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5).appendSibling(comp6).appendSibling(comp7);
@@ -74,25 +74,25 @@ public class CommandOPFleaMarket extends CommandBase{
                     boolean startedCycle = ItemOfferList.startItemOfferCycle(server);
 
                     if(!startedCycle){
-                        sender.sendMessage(TransformModLanguage(modLanguageMap.get("cycleInProgress")));
+                        sender.sendMessage(new TextComponentString(modLanguageMap.get("cycleInProgress")));
                     }
                     else{
-                        sender.sendMessage(TransformModLanguage(modLanguageMap.get("cycleStart")));
+                        sender.sendMessage(new TextComponentString(modLanguageMap.get("cycleStart")));
                     }
                 break;
 
                 case "pause":
                     ItemOfferList.pauseCycle = !ItemOfferList.pauseCycle;
-                    sender.sendMessage(TransformModLanguage("&7ItemOffer paused: " + ItemOfferList.pauseCycle));
+                    sender.sendMessage(new TextComponentString(TransformModLanguage("&7ItemOffer paused: " + ItemOfferList.pauseCycle)));
                 break;
 
                 case "skip":
-                    sender.sendMessage(TransformModLanguage(modLanguageMap.get("skipItemOffer")));
+                    sender.sendMessage(new TextComponentString(modLanguageMap.get("skipItemOffer")));
                     ItemOfferList.setCurrentItemOffer(server);
                 break;
 
                 case "reload":
-                    sender.sendMessage(TransformModLanguage("reloadMod"));
+                    sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadMod")));
                     LanguageParser.loadModLanguage();
                     reloadItemOfferData(sender);
                 break;
@@ -113,15 +113,16 @@ public class CommandOPFleaMarket extends CommandBase{
         int fileCount = ItemOfferParser.configDir.listFiles().length;
 
         if(itemOfferCount == 0){
-            sender.sendMessage(TransformModLanguage( "&c&lFound 0 ItemOffers!"));
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("noItemsFound")));
         }
 
         if(fileCount == 0){
-            sender.sendMessage(TransformModLanguage( "&c&lFound 0 ItemOffer files!"));
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("noFilesFound")));
         }
 
-        sender.sendMessage(TransformModLanguage("&9FleaMarket registered a total of " + itemOfferCount + " ItemOffers in " + fileCount + " files!"));
+        sender.sendMessage(new TextComponentString(TransformModLanguage("&9FleaMarket registered a total of " + itemOfferCount +
+                " ItemOffers in " + fileCount + " files!")));
 
-        sender.sendMessage(TransformModLanguage("&2Finished reloading"));
+        sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadFinished")));
     }
 }

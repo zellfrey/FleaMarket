@@ -45,28 +45,5 @@ public class FleaMarketConfig{
   @Config.Name("Debug mode")
   @Config.Comment({"Outputs more plugin information onto the console "})
   public static boolean debugMode = false;
- 
-  @Config.RequiresMcRestart
-    @Config.Name("Default Item Fields")
-    @Config.Comment({
-    "If any of the listed fields are not included within the item.json, they will use these default fields listed below.",
-  })
-  public static ItemFields defaultItemFields = new ItemFields();
-    
-  public static class ItemFields {
-    
-    @Config.Comment({"[placeholders: %item%, %amount%, %playerName%]"})
-    public String defaultSoldMessage = "%playerName%, you have sold %amount% %item% to Flea Market";
-
-    @RangeInt(min = 0, max = 1000)
-    @Config.Comment({"How long (in minutes) the item will be up for sale"})
-    public int defaultUptime = 20;
-
-    @Config.Comment("[placeholders: %item%, %amount%]")
-    public String defaultBroadcast = "Flea market is buying %amount% %item%";
-
-    @Config.Comment("[placeholders: %playerName%]")
-    public String defaultReward = "/give %playerName% dirt 2";
-  }
 
 }

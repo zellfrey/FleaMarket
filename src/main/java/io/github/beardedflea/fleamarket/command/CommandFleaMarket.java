@@ -6,6 +6,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.server.MinecraftServer;
 
 import io.github.beardedflea.fleamarket.store.*;
+import net.minecraft.util.text.TextComponentString;
+
 import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 
 
@@ -47,9 +49,9 @@ public class CommandFleaMarket extends CommandBase{
 
     private static ITextComponent getHelpUsage(){
         ITextComponent comp1 = getModTextBorder();
-        ITextComponent comp2 = TransformModLanguage(modLanguageMap.get("fmhelp"));
-        ITextComponent comp3 = TransformModLanguage(modLanguageMap.get("fmcheck"));
-        ITextComponent comp4 = TransformModLanguage(modLanguageMap.get("fmsell"));
+        ITextComponent comp2 = new TextComponentString(modLanguageMap.get("fmhelp"));
+        ITextComponent comp3 = new TextComponentString(modLanguageMap.get("fmcheck"));
+        ITextComponent comp4 = new TextComponentString(modLanguageMap.get("fmsell"));
         ITextComponent comp5 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
@@ -74,7 +76,7 @@ public class CommandFleaMarket extends CommandBase{
                      isItemOn = checkItemOffer(sender);
 
                     if(isItemOn){
-                        sender.sendMessage(TransformModLanguage(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                        sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     }
                 break;
 
@@ -98,12 +100,12 @@ public class CommandFleaMarket extends CommandBase{
 
     private static boolean checkItemOffer(ICommandSender sender){
         if(ItemOfferList.currentItemOffer == null){
-            sender.sendMessage(TransformModLanguage(modLanguageMap.get("itemOfferNoneMsg")));
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("itemOfferNoneMsg")));
 
             return false;
         }
         else if(ItemOfferList.itemOfferUptime <= 0){
-            sender.sendMessage(TransformModLanguage(modLanguageMap.get("itemOfferFindingMsg")));
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("itemOfferFindingMsg")));
 
             return false;
 

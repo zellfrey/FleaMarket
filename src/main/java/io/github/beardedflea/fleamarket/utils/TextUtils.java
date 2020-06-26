@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class TextUtils {
 
-    public static HashMap<String,Object> modLanguageMap = new HashMap<>();
+    public static HashMap<String,String> modLanguageMap = new HashMap<>();
 
     private static final Pattern COLOUR_CODE_PATTERN = Pattern.compile("&[0-9A-flmnork]");
 
@@ -44,10 +44,11 @@ public class TextUtils {
         //As seen here >>> https://minecraft.gamepedia.com/Formatting_codes
     }
 
-    public static ITextComponent TransformModLanguage(Object yamlObj){
+    //Iterate through strings to get MOTD colour format
+    public static String TransformModLanguage(Object yamlObj){
 
         if(yamlObj == null){
-            return new TextComponentString("");
+            return "";
         }
 
         ArrayList<String> colourCodes = new ArrayList<>();
@@ -68,9 +69,7 @@ public class TextUtils {
             }
         }
 
-        ITextComponent textLine = new TextComponentString(inputString);
-
-        return textLine;
+        return inputString;
     }
 
     public static ITextComponent getModTextBorder(){
@@ -83,7 +82,7 @@ public class TextUtils {
         return borderLeft;
     }
 
-    //Will implement with version 1.1
+    //Should i implement this? Do
 //    public static ITextComponent getModTextTag(){
 //        ITextComponent bracketLeft = new TextComponentString(TextFormatting.BLUE + "[");
 //        ITextComponent bracketRight = new TextComponentString(TextFormatting.BLUE + "]");
