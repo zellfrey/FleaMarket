@@ -19,8 +19,9 @@ public class FleaMarketConfig{
       "\"descending\" = Starts at the top, and selects to the bottom",
       "\"ascending\" = It's like descending but upwards",
       "\"random\" = Ignores items being selected in a list. Item X could appear twice in a row",
+      "\"fairrandom\" = once and item has been used, it will not pick that item again until the list has been completed."
     })
-  public static String selectionType = "descending";
+  public static String selectionType = "fairrandom";
   
   @Config.RequiresWorldRestart
   @Config.Name("Broadcast Reminder")
@@ -44,6 +45,6 @@ public class FleaMarketConfig{
   @Config.RequiresWorldRestart
   @Config.Name("Debug mode")
   @Config.Comment({"Outputs more plugin information onto the console "})
-  public static boolean debugMode = false;
+  public static boolean debugMode = true;
 
 }

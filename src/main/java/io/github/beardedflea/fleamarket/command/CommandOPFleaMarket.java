@@ -107,7 +107,7 @@ public class CommandOPFleaMarket extends CommandBase{
     }
 
     private static void reloadItemOfferData(ICommandSender sender){
-
+        ItemOfferList.clearFairRandomArray();
         ItemOfferParser.loadItemOfferData();
         int itemOfferCount = ItemOfferList.getItemOfferSize();
         int fileCount = ItemOfferParser.configDir.listFiles().length;

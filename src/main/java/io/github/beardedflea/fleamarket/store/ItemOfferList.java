@@ -11,8 +11,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
-
-
+import java.util.Collections;
+import java.util.Random;
 
 
 public class ItemOfferList {
@@ -20,6 +20,8 @@ public class ItemOfferList {
     private static  ArrayList<ItemOffer> ITEM_OFFERS = new ArrayList<>();
 
     private static ArrayList<String> playerTransactionList = new ArrayList<>();
+
+    private static  ArrayList<Integer> fairRandomArray = new ArrayList<>();
 
     public static boolean pauseCycle = false;
 
@@ -41,6 +43,12 @@ public class ItemOfferList {
     public static int getItemOfferSize(){
         return ITEM_OFFERS.size();
     }
+
+    public static ArrayList<Integer> getFairRandomArray(){return fairRandomArray;}
+
+    public static void addFairRandomArray(int itemIndex){fairRandomArray.add(itemIndex);}
+
+    public static void clearFairRandomArray(){fairRandomArray.clear();}
 
     //manages PlayerTransactionList array
     public static ArrayList<String> getPlayerTransactionList(){return playerTransactionList;}
@@ -100,11 +108,23 @@ public class ItemOfferList {
                  itemOfferIndex = (int)(Math.random() * ITEM_OFFERS.size());
             break;
 
-//            case "fairrandom":
-//
-//                //"\"fairrandom\" = once and item has been used, it will not pick that item again until the list has been completed."
-//                // Will implement at somepoint in version 1.1
-//                break;
+            case "fairrandom":
+
+                if(fairRandomArray.size()== 0){
+
+                    for(int i = 0; i <= ITEM_OFFERS.size()-1; i++){
+                        fairRandomArray.add(i);
+                    }
+
+                    Collections.shuffle(fairRandomArray);
+                    itemOfferIndex = fairRandomArray.get(0);
+                    fairRandomArray.remove(0);
+
+                }else{
+                    itemOfferIndex = fairRandomArray.get(0);
+                    fairRandomArray.remove(0);
+                }
+            break;
 
             default:
                 throw new IllegalStateException("Unexpected value: " + FleaMarketConfig.selectionType);
@@ -127,7 +147,7 @@ public class ItemOfferList {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if(ItemOfferList.checkPlayerTransactionList(playerUUID)){
-//            playerMP.sendMessage(TransformModLanguage(modLanguageMap.get("alreadySoldMsg")));
+            playerMP.sendMessage(new TextComponentString(modLanguageMap.get("alreadySoldMsg")));
             return;
         }
         int amountOfCorrectItem = 0;

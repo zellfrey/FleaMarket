@@ -8,6 +8,7 @@ import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
+import scala.Int;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -74,6 +75,15 @@ public class CurrentItemOfferParser {
                                     ItemOfferList.addPlayerTransactionUUID(uuid);
                                 }
                             }
+
+                            JsonArray fairRandInts = currentItemObject.get("fairRandomArray").getAsJsonArray();
+                            int[] fairRandArray = new Gson().fromJson(fairRandInts, int[].class);
+
+                            if(fairRandArray.length !=0){
+                                for (int itemIndex : fairRandArray) {
+                                    ItemOfferList.addFairRandomArray(itemIndex);
+                                }
+                            }
                         }
                     }catch (FileNotFoundException e) {
                         FleaMarket.getLogger().error("error parsing current item offer file " + jsonFile.getName() + "!", e);
@@ -112,6 +122,12 @@ public class CurrentItemOfferParser {
             //add playerTransactionList to Json file
             JsonArray playerTransactionArray = new Gson().toJsonTree(ItemOfferList.getPlayerTransactionList()).getAsJsonArray();
             ItemObject.add("playerTransactionList", playerTransactionArray);
+
+            //add fairRandomArray if "fairrandom" is enabled
+            if(FleaMarketConfig.selectionType.equals("fairrandom")){
+                JsonArray fairRandomArray = new Gson().toJsonTree(ItemOfferList.getFairRandomArray()).getAsJsonArray();
+                ItemObject.add("fairRandomArray", fairRandomArray);
+            }
 
             try {
                 FileWriter file = new FileWriter(configDir+"/currentItemOffer.json");
