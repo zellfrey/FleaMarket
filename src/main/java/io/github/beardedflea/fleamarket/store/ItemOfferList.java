@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
@@ -191,7 +192,7 @@ public class ItemOfferList {
 
             }
             else{
-                playerMP.sendMessage(new TextComponentString("You only have " + amountOfCorrectItem + " " +
+                playerMP.sendMessage(new TextComponentString(TextFormatting.YELLOW + "You only have " + amountOfCorrectItem + " " +
                         currentItemOffer.getDisplayName() +  " in your inventory."));
             }
         }
