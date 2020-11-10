@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 
 public class ItemOfferList {
@@ -88,7 +87,7 @@ public class ItemOfferList {
             FleaMarket.getLogger().info("Try reloading the files with /opfm reload" );
             return;
         }
-        switch(FleaMarketConfig.selectionType){
+        switch(FleaMarket.config.selectionType()){
             case "descending" :
                 if(itemOfferIndex == -1){
                     itemOfferIndex = 0;
@@ -128,11 +127,11 @@ public class ItemOfferList {
             break;
 
             default:
-                throw new IllegalStateException("Unexpected value: " + FleaMarketConfig.selectionType);
+                throw new IllegalStateException("Unexpected value: " + FleaMarket.config.selectionType());
         }
 
-        if(FleaMarketConfig.debugMode){
-            printDebugStrConsole(itemOfferIndex+"", FleaMarketConfig.selectionType, ITEM_OFFERS.size()+"");
+        if(FleaMarket.isDebugMode()){
+            printDebugStrConsole(itemOfferIndex+"", FleaMarket.config.selectionType(), ITEM_OFFERS.size()+"");
         }
 
         currentItemOffer = ITEM_OFFERS.get(itemOfferIndex);
@@ -161,7 +160,7 @@ public class ItemOfferList {
             itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
             String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
 
-            if(FleaMarketConfig.debugMode){ printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw); }
+            if(FleaMarket.isDebugMode()){ printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw); }
 
             if(itemFullName.equals(currentItemOffer.getItemName())
                     && itemNBTRaw.equals(currentItemOffer.getNbtRaw() + "")) {

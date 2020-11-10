@@ -2,7 +2,6 @@ package io.github.beardedflea.fleamarket.event;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
-import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
@@ -18,14 +17,10 @@ import net.minecraftforge.fml.relauncher.Side;
 public class FleaMarketEventHandler {
 
     //run checking on 1 minute basis i.e 1200 minecraft ticks
-    private static final int broadCastInterval =  FleaMarketConfig.broadcastReminder;
-    public static int salesInterval = FleaMarketConfig.saleInterval;
+    public static int salesInterval = FleaMarket.config.saleInterval();
     public static MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-    private static int minuteCounter = 0;
-    private static int saveCounter = 0;
-    private static int broadcastCounter = 0;
-    private static int salesIntervalCounter = 0;
+    private static int minuteCounter = 0, saveCounter = 0, broadcastCounter = 0, salesIntervalCounter = 0;
     private static boolean executing = false;
 
     @SubscribeEvent
@@ -40,10 +35,10 @@ public class FleaMarketEventHandler {
                 executing = false;
             }
 
-            if(broadCastInterval != 0 && ItemOfferList.itemOfferUptime > 0) {
-                if (++broadcastCounter >= 1200 * broadCastInterval *2) {
+            if(FleaMarket.config.broadcastReminder() != 0 && ItemOfferList.itemOfferUptime > 0) {
+                if (++broadcastCounter >= 1200 * FleaMarket.config.broadcastReminder() *2) {
                     executing = true;
-                    broadcastCounter -= 1200 * broadCastInterval *2;
+                    broadcastCounter -= 1200 * FleaMarket.config.broadcastReminder() *2;
                     server.getPlayerList().sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
                     executing = false;
                 }
@@ -65,7 +60,7 @@ public class FleaMarketEventHandler {
                     }
                 }
             }
-            if(salesInterval != 0 && ItemOfferList.itemOfferUptime <= 0){
+            if(FleaMarket.config.saleInterval() != 0 && ItemOfferList.itemOfferUptime <= 0){
 
                 if(++salesIntervalCounter >= 1200 *2) {
                     executing = true;
@@ -75,7 +70,7 @@ public class FleaMarketEventHandler {
 
                     if(salesInterval == 0){
                         ItemOfferList.setCurrentItemOffer(server);
-                        salesInterval = FleaMarketConfig.saleInterval;
+                        salesInterval = FleaMarket.config.saleInterval();
                     }
                 }
             }
@@ -85,7 +80,7 @@ public class FleaMarketEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if( (FleaMarketConfig.joinMessage) && (ItemOfferList.currentItemOffer != null) ){
+        if( (FleaMarket.config.joinMessage()) && (ItemOfferList.currentItemOffer != null) ){
             event.player.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         }
     }

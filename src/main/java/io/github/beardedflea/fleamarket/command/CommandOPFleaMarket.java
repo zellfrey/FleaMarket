@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket.command;
 
+import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.command.*;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
@@ -93,6 +94,7 @@ public class CommandOPFleaMarket extends CommandBase{
 
                 case "reload":
                     sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadMod")));
+                    FleaMarket.instance.reloadConfig();
                     LanguageParser.loadModLanguage();
                     reloadItemOfferData(sender);
                 break;

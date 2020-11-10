@@ -11,14 +11,29 @@ import org.apache.logging.log4j.Logger;
 import io.github.beardedflea.fleamarket.command.*;
 import io.github.beardedflea.fleamarket.config.*;
 
+import java.io.File;
+import java.io.IOException;
 
-@Mod(modid = FleaMarket.MODID, name = FleaMarket.NAME, version = FleaMarket.VERSION, acceptedMinecraftVersions = FleaMarket.MCVERSIONS, acceptableRemoteVersions = "*", serverSideOnly = true)
+
+@Mod(
+        modid = FleaMarket.MODID,
+        name = FleaMarket.NAME,
+        version = FleaMarket.VERSION,
+        acceptedMinecraftVersions = FleaMarket.MCVERSIONS,
+        acceptableRemoteVersions = "*",
+        serverSideOnly = true
+)
+
 public class FleaMarket
 {
     public static final String MODID = "fleamarket";
     public static final String NAME = "Flea Market";
     public static final String MCVERSIONS = "[1.12, 1.13)";
-    public static final String VERSION = "1.1";
+    public static final String VERSION = "1.15";
+    @Mod.Instance(MODID)
+    public static FleaMarket instance;
+    public static FleaMarketConfig config;
+    File modConfigDictionary;
 
     private static final Logger log = LogManager.getLogger(MODID);
 
@@ -28,14 +43,24 @@ public class FleaMarket
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+
+        this.modConfigDictionary = event.getModConfigurationDirectory();
+        FleaMarket.config = new FleaMarketConfig();
+        try {
+            FleaMarket.config.load(new File(this.modConfigDictionary, "fleamarket"));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         log.info("Pre int of Flea market, creating folders");
+
         LanguageParser.init(event);
         ItemOfferParser.init(event);
         CurrentItemOfferParser.init(event);
     }
 
     public static boolean isDebugMode(){
-        return FleaMarketConfig.debugMode;
+        return FleaMarket.config.debugMode();
     }
 
     @Mod.EventHandler
@@ -57,5 +82,15 @@ public class FleaMarket
     public void onServerStopping(FMLServerStoppingEvent event) {
         log.info("saving currentItemOffer data...");
         CurrentItemOfferParser.saveCurrentItemOffer();
+    }
+
+    public void reloadConfig() {
+        FleaMarket.config = new FleaMarketConfig();
+        try {
+            FleaMarket.config.load(new File(this.modConfigDictionary, "fleamarket"));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -20,7 +20,7 @@ public class LanguageParser {
     private static HashMap <String, Object> langYamlMap = new HashMap<>();
 
     public static void init(FMLPreInitializationEvent event) {
-        configDir = new File(event.getModConfigurationDirectory(),"\\fleamarket/lang.yaml");
+        configDir = new File(event.getModConfigurationDirectory(),"fleamarket/lang.yaml");
         FleaMarket.getLogger().info(configDir);
         if(!configDir.exists()){
             setupDefaultLangFile(configDir);
