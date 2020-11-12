@@ -14,9 +14,16 @@ public class FleaMarketConfig{
   int BroadcastReminder, saleInterval;
   String selectionType;
 
-  //Common defaultItemField variables
+  //Config defaultItemField variables
   int defaultUptime;
   String defaultSoldMessage, defaultBroadcast, defaultReward;
+
+  private static final String defaultItemFieldComment =
+          "If any of the listed fields are not included within the item.json, they will use these default fields listed below.";
+
+    private static final String messageFieldComment =
+            "Colour coding is possible. For the sake of convenience, bukkit colour codes will be used\n" +
+                    "E.g \"&a\" = green. Click the link for more information ---> https://wiki.ess3.net/mc/\n";
 
   private static final String[] selectionTypeArray = {"descending", "ascending", "random", "fairrandom"};
   private static final String[] selectionComments = {
@@ -44,8 +51,7 @@ public class FleaMarketConfig{
 
     loadDefaultItemFieldsConfig("Default_Item_Fields", configuration);
 
-//    configuration.setCategoryComment("Default_Item_Fields",
-//            "If any of the listed fields are not included within the item.json, they will use these default fields listed below.");
+    configuration.setCategoryComment("Default_Item_Fields", defaultItemFieldComment + "\n" + messageFieldComment);
 
 
     if (configuration.hasChanged()) {
@@ -81,8 +87,8 @@ public class FleaMarketConfig{
   }
 
   private void loadDefaultItemFieldsConfig(String category, Configuration configuration){
-// getString(String name, String category, String defaultValue, String comment)
-    String varComment = "placeholders: %item%, %amount%, %playerName%\n";
+
+    String varComment = "Placeholders: %item%, %amount%, %playerName%\n";
     this.defaultSoldMessage =
             configuration.getString("Default Sold Message", category,
             "&6%playerName%, you have sold %amount% %item% to Flea Market", varComment);
@@ -91,46 +97,17 @@ public class FleaMarketConfig{
     this.defaultUptime =
             configuration.getInt("Default Uptime", category, 20, 0, 1000, varComment);
 
-    varComment = "#placeholders: %item%, %amount%\n";
+    varComment = "#Placeholders: %item%, %amount%\n";
     this.defaultBroadcast =
             configuration.getString("Default Broadcast", category,
                     "&bFlea market is buying &l%amount% &r&b%item%", varComment);
 
-    varComment = "placeholders: %playerName%\n";
+    varComment = "As this is a command, color coding does not work. Placeholders: %playerName%\n";
     this.defaultReward =
             configuration.getString("Default Reward", category,
                     "/give %playerName% dirt 2", varComment);
 
   }
-
-//  default_item_fields {
-//    # #placeholders: %item%, %amount%
-//    #  [default: &bFlea market is buying &l%amount% &r&b%item%]
-//      S:"Default Broadcast"=&bFlea market is buying &l%amount% &r&b%item%
-//
-//    # placeholders: %playerName%
-//    #  [default: /give %playerName% dirt 2]
-//      S:"Default Reward"=/give %playerName% dirt 2
-//
-//    # placeholders: %item%, %amount%, %playerName%
-//    #  [default: &6%playerName%, you have sold %amount% %item% to Flea Market]
-//      S:"Default Sold Message"=&6%playerName%, you have sold %amount% %item% to Flea Market
-//
-//    # How long (in minutes) the item will be up for sale
-//    #  [range: 0 ~ 1000, default: 20]
-//      I:"Default Uptime"=20
-//  }
-
-//  #defaultItemFields - "If any of the listed fields are not included within the item.json, they will use these default fields listed below."
-//
-//          #placeholders: %item%, %amount%, %playerName%
-//  defaultSoldMessage: "&6%playerName%, you have sold %amount% %item% to Flea Market"
-//          #How long (in minutes) the item will be up for sale; Range (min = 0, max = 1000)
-//  defaultUptime: 20
-//          #placeholders: %item%, %amount%
-//  defaultBroadcast: "&bFlea market is buying &l%amount% &r&b%item%"
-//          #placeholders: %playerName%
-//  defaultReward: "/give %playerName% dirt 2"
 
   //getter methods
 
