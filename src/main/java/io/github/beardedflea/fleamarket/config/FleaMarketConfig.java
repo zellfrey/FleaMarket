@@ -3,6 +3,7 @@ package io.github.beardedflea.fleamarket.config;
 import net.minecraftforge.common.config.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 /**
  * @author Beardedflea
  */
@@ -17,6 +18,8 @@ public class FleaMarketConfig{
   //Config defaultItemField variables
   int defaultUptime;
   String defaultSoldMessage, defaultBroadcast, defaultReward;
+
+  HashMap<String,String> messagesConfigMap = new HashMap<>();
 
   private static final String defaultItemFieldComment =
           "If any of the listed fields are not included within the item.json, they will use these default fields listed below.";
@@ -44,15 +47,14 @@ public class FleaMarketConfig{
   private void loadConfig(File configDictionary) throws IOException {
     final Configuration configuration = new Configuration(new File(configDictionary, "FleaMarket.cfg"));
 
-
-    String category = "Common";
-
     loadGeneralConfig("Common", configuration);
 
     loadDefaultItemFieldsConfig("Default_Item_Fields", configuration);
 
     configuration.setCategoryComment("Default_Item_Fields", defaultItemFieldComment + "\n" + messageFieldComment);
 
+    loadModMessagesConfig("Messages", configuration);
+    configuration.setCategoryComment("Messages", messageFieldComment);
 
     if (configuration.hasChanged()) {
       configuration.save();
@@ -109,7 +111,82 @@ public class FleaMarketConfig{
 
   }
 
-  //getter methods
+  private void loadModMessagesConfig(String category, Configuration configuration){
+
+    //player Commands
+    this.messagesConfigMap.put("fmhelp",
+            configuration.get(category + ".playerCommands", "fmhelp",
+                    "/fm help - Shows a list of commands for players").getString());
+
+    this.messagesConfigMap.put("fmcheck",
+            configuration.get(category + ".playerCommands", "fmcheck",
+                    "/fm check - checks the current item on offer").getString());
+
+    this.messagesConfigMap.put("fmsell",
+            configuration.get(category + ".playerCommands", "fmsell",
+                    "/fm sell - Current method of selling items").getString());
+
+    //player Messages
+
+    this.messagesConfigMap.put("itemOfferNoneMsg",
+            configuration.get(category + ".playerMessages", "itemOfferNoneMsg",
+                    "&2There is no item offer available at this time").getString());
+
+    this.messagesConfigMap.put("itemOfferFindingMsg",
+            configuration.get(category + ".playerMessages", "itemOfferFindingMsg",
+                    "Flea market is finding another item to offer").getString());
+
+    this.messagesConfigMap.put("alreadySoldMsg",
+            configuration.get(category + ".playerMessages", "alreadySoldMsg",
+                    "You have already sold the current item offer to Flea Market").getString());
+
+    this.messagesConfigMap.put("noItemFoundMsg",
+            configuration.get(category + ".playerMessages", "noItemFoundMsg",
+                    "&cYou do not have the required item on offer").getString());
+
+  }
+
+//  #-------------------------------------------------
+//
+//          #playerCommands
+//  fmhelp: "\n/fm help - Shows a list of commands for players\n"
+//  fmcheck: "/fm check - checks the current item on offer\n"
+//  fmsell: "/fm sell - Current method of selling items\n"
+//
+//          #playerMessages - messages displayed to players
+//
+//  itemOfferNoneMsg: "&2There is no item offer available at this time"
+//  itemOfferFindingMsg: "Flea market is finding another item to offer"
+//  alreadySoldMsg: "You have already sold the current item offer to Flea Market"
+//  noItemFoundMsg: "&cYou do not have the required item on offer"
+
+//  ##########################################################################################################
+//          # messages
+//#--------------------------------------------------------------------------------------------------------#
+//        # Colour coding is possible. For the sake of convenience, bukkit colour codes will be used
+//# E.g "&a" = green. Click the link for more information ---> https://wiki.ess3.net/mc/
+//          #
+//          ##########################################################################################################
+//
+//  messages {
+//
+//    playercommands {
+//      S:fmcheck=/fm check - checks the current item on offer
+//      S:fmhelp=/fm help - Shows a list of commands for players
+//      S:fmsell=/fm sell - Current method of selling items
+//    }
+//
+//    playermessages {
+//      S:alreadySoldMsg=You have already sold the current item offer to Flea Market
+//      S:itemOfferFindingMsg=Flea market is finding another item to offer
+//      S:itemOfferNoneMsg=&2There is no item offer available at this time
+//      S:noItemFoundMsg=&cYou do not have the required item on offer
+//    }
+//
+//  }
+
+
+  //Config Common category getter methods
 
   public boolean debugMode(){
     return this.debugMode;
@@ -131,4 +208,10 @@ public class FleaMarketConfig{
     return this.selectionType;
   }
 
+  //Config Default Item Fields category getter methods
+
+  public int defaultUptime() { return this.defaultUptime; }
+
+  //Config mod Message map
+  public HashMap<String, String> messagesConfigMap() {return this.messagesConfigMap;}
 }

@@ -2,7 +2,6 @@ package io.github.beardedflea.fleamarket.config;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
-import io.github.beardedflea.fleamarket.config.ItemOfferParser;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
@@ -42,14 +41,8 @@ public class LanguageParser {
 
         //check for nulls, direct yamlObjects to appropriate variables
         for (String key : langYamlMap.keySet()) {
-//            FleaMarket.getLogger().info(langYamlMap.get(key));
-            if(key.equals("defaultUptime")){
-
-                ItemOfferParser.ItemOfferdefaultUptime = langYamlMap.get("defaultUptime") != null ? Integer.parseInt(langYamlMap.get("defaultUptime").toString()) : 10;
-
-            }else {
-                TextUtils.modLanguageMap.put(key, TextUtils.TransformModLanguage(langYamlMap.get(key)));
-            }
+//          FleaMarket.getLogger().info(langYamlMap.get(key));
+            TextUtils.modLanguageMap.put(key, TextUtils.TransformModLanguage(langYamlMap.get(key)));
         }
     }
 

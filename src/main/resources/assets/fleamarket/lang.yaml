@@ -9,8 +9,6 @@
 
 #placeholders: %item%, %amount%, %playerName%
 defaultSoldMessage: "&6%playerName%, you have sold %amount% %item% to Flea Market"
-#How long (in minutes) the item will be up for sale; Range (min = 0, max = 1000)
-defaultUptime: 20
 #placeholders: %item%, %amount%
 defaultBroadcast: "&bFlea market is buying &l%amount% &r&b%item%"
 #placeholders: %playerName%

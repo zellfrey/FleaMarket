@@ -27,7 +27,6 @@ public class ItemOfferParser {
 
     private static JsonParser parser = new JsonParser();
 
-    public static int ItemOfferdefaultUptime = 0;
 
     public static void init(FMLPreInitializationEvent event) {
         configDir = new File(event.getModConfigurationDirectory(), "fleamarket/itemoffers");
@@ -102,11 +101,15 @@ public class ItemOfferParser {
                 int dmgValue = object.has("damage") ? object.get("damage").getAsInt() : 0;
                 String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
 
-                //get itemOffer variables. If fields aren't included, will fallback to default values in lang.yaml file
-                int uptime = object.has("uptime") ? object.get("uptime").getAsInt() : ItemOfferdefaultUptime;
-                String broadcastMsg = object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : modLanguageMap.get("defaultBroadcast");
-                String soldMsg = object.has("soldMsg") ? object.get("soldMsg").getAsString() : modLanguageMap.get("defaultSoldMessage");
-                String rewardCmd = object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : modLanguageMap.get("defaultReward");
+                //get itemOffer variables. If fields aren't included, will fallback to default values in lang.yaml file and/or fleamarket.cfg
+                int uptime =
+                        object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarket.config.defaultUptime();
+                String broadcastMsg =
+                        object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : modLanguageMap.get("defaultBroadcast");
+                String soldMsg =
+                        object.has("soldMsg") ? object.get("soldMsg").getAsString() : modLanguageMap.get("defaultSoldMessage");
+                String rewardCmd =
+                        object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : modLanguageMap.get("defaultReward");
 
                 //Iterate through strings to get MOTD colour format
                 broadcastMsg = TransformModLanguage(broadcastMsg);
