@@ -105,11 +105,11 @@ public class ItemOfferParser {
                 int uptime =
                         object.has("uptime") ? object.get("uptime").getAsInt() : FleaMarket.config.defaultUptime();
                 String broadcastMsg =
-                        object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : modLanguageMap.get("defaultBroadcast");
+                        object.has("broadcastMsg") ? object.get("broadcastMsg").getAsString() : FleaMarket.config.defaultBroadcast();
                 String soldMsg =
-                        object.has("soldMsg") ? object.get("soldMsg").getAsString() : modLanguageMap.get("defaultSoldMessage");
+                        object.has("soldMsg") ? object.get("soldMsg").getAsString() : FleaMarket.config.defaultSoldMessage();
                 String rewardCmd =
-                        object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : modLanguageMap.get("defaultReward");
+                        object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarket.config.defaultReward();
 
                 //Iterate through strings to get MOTD colour format
                 broadcastMsg = TransformModLanguage(broadcastMsg);

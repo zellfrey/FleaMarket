@@ -92,8 +92,8 @@ public class FleaMarketConfig{
 
     String varComment = "Placeholders: %item%, %amount%, %playerName%\n";
     this.defaultSoldMessage =
-            configuration.getString("Default Sold Message", category,
-            "&6%playerName%, you have sold %amount% %item% to Flea Market", varComment);
+            configuration.get(category,"Default Sold Message",
+            "&6%playerName%, you have sold %amount% %item% to Flea Market", varComment).getString();
 
     varComment = "How long (in minutes) the item will be up for sale\n";
     this.defaultUptime =
@@ -101,13 +101,13 @@ public class FleaMarketConfig{
 
     varComment = "#Placeholders: %item%, %amount%\n";
     this.defaultBroadcast =
-            configuration.getString("Default Broadcast", category,
-                    "&bFlea market is buying &l%amount% &r&b%item%", varComment);
+            configuration.get(category,"Default Broadcast",
+                    "&bFlea market is buying &l%amount% &r&b%item%", varComment).getString();
 
     varComment = "As this is a command, color coding does not work. Placeholders: %playerName%\n";
     this.defaultReward =
-            configuration.getString("Default Reward", category,
-                    "/give %playerName% dirt 2", varComment);
+            configuration.get(category,"Default Reward",
+                    "/give %playerName% dirt 2", varComment).getString();
 
   }
 
@@ -126,6 +126,7 @@ public class FleaMarketConfig{
             configuration.get(category + ".playerCommands", "fmsell",
                     "/fm sell - Current method of selling items").getString());
 
+    //todo Add \n to fmhelp component
     //player Messages
 
     this.messagesConfigMap.put("itemOfferNoneMsg",
@@ -144,47 +145,60 @@ public class FleaMarketConfig{
             configuration.get(category + ".playerMessages", "noItemFoundMsg",
                     "&cYou do not have the required item on offer").getString());
 
+      //op Commands
+
+      this.messagesConfigMap.put("opfmhelp",
+              configuration.get(category + ".opCommands", "opfmhelp",
+                      "/opfm help - Shows a list of commands for operators").getString());
+
+      this.messagesConfigMap.put("opfmstart",
+              configuration.get(category + ".opCommands", "opfmstart",
+                      "/opfm start - starts the cycle of item offers").getString());
+
+      this.messagesConfigMap.put("opfmpause",
+              configuration.get(category + ".opCommands", "opfmpause",
+                      "/opfm pause - Pauses the cycle. Players can still offer the item").getString());
+
+      this.messagesConfigMap.put("opfmskip",
+              configuration.get(category + ".opCommands", "opfmskip",
+                      "/opfm skip - Moves to the next item on the list").getString());
+
+      this.messagesConfigMap.put("opfmreload",
+              configuration.get(category + ".opCommands", "opfmreload",
+                      "/opfm reload - Reloads ItemOffers folder & lang.json").getString());
+
+    //todo Add \n to opfmhelp component
+    // op Messages
+
+    this.messagesConfigMap.put("cycleStart",
+            configuration.get(category + ".opMessages", "cycleStart",
+                    "&aStarting cycle of itemOffers").getString());
+
+    this.messagesConfigMap.put("cycleInProgress",
+            configuration.get(category + ".opMessages", "cycleInProgress",
+                    "&4ItemOffers cycle has already started").getString());
+
+    this.messagesConfigMap.put("skipItemOffer",
+            configuration.get(category + ".opMessages", "skipItemOffer",
+                    "&7Moving to next time offer").getString());
+
+    this.messagesConfigMap.put("reloadMod",
+            configuration.get(category + ".opMessages", "reloadMod",
+                    "&7Reloading Flea Market...").getString());
+
+    this.messagesConfigMap.put("noItemsFound",
+            configuration.get(category + ".opMessages", "noItemsFound",
+                    "&c&lFound 0 ItemOffers!").getString());
+
+    this.messagesConfigMap.put("noFilesFound",
+            configuration.get(category + ".opMessages", "noFilesFound",
+                    "&c&lFound 0 ItemOffer files!").getString());
+
+    this.messagesConfigMap.put("reloadFinished",
+            configuration.get(category + ".opMessages", "reloadFinished",
+                    "&2Finished reloading").getString());
+
   }
-
-//  #-------------------------------------------------
-//
-//          #playerCommands
-//  fmhelp: "\n/fm help - Shows a list of commands for players\n"
-//  fmcheck: "/fm check - checks the current item on offer\n"
-//  fmsell: "/fm sell - Current method of selling items\n"
-//
-//          #playerMessages - messages displayed to players
-//
-//  itemOfferNoneMsg: "&2There is no item offer available at this time"
-//  itemOfferFindingMsg: "Flea market is finding another item to offer"
-//  alreadySoldMsg: "You have already sold the current item offer to Flea Market"
-//  noItemFoundMsg: "&cYou do not have the required item on offer"
-
-//  ##########################################################################################################
-//          # messages
-//#--------------------------------------------------------------------------------------------------------#
-//        # Colour coding is possible. For the sake of convenience, bukkit colour codes will be used
-//# E.g "&a" = green. Click the link for more information ---> https://wiki.ess3.net/mc/
-//          #
-//          ##########################################################################################################
-//
-//  messages {
-//
-//    playercommands {
-//      S:fmcheck=/fm check - checks the current item on offer
-//      S:fmhelp=/fm help - Shows a list of commands for players
-//      S:fmsell=/fm sell - Current method of selling items
-//    }
-//
-//    playermessages {
-//      S:alreadySoldMsg=You have already sold the current item offer to Flea Market
-//      S:itemOfferFindingMsg=Flea market is finding another item to offer
-//      S:itemOfferNoneMsg=&2There is no item offer available at this time
-//      S:noItemFoundMsg=&cYou do not have the required item on offer
-//    }
-//
-//  }
-
 
   //Config Common category getter methods
 
@@ -211,6 +225,12 @@ public class FleaMarketConfig{
   //Config Default Item Fields category getter methods
 
   public int defaultUptime() { return this.defaultUptime; }
+
+  public String defaultSoldMessage(){return this.defaultSoldMessage; }
+
+  public String defaultBroadcast(){return this.defaultBroadcast; }
+
+  public String defaultReward(){return this.defaultReward; }
 
   //Config mod Message map
   public HashMap<String, String> messagesConfigMap() {return this.messagesConfigMap;}
