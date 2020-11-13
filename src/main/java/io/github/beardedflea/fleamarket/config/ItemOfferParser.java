@@ -112,9 +112,9 @@ public class ItemOfferParser {
                         object.has("rewardCommand") ? object.get("rewardCommand").getAsString() : FleaMarket.config.defaultReward();
 
                 //Iterate through strings to get MOTD colour format
-                broadcastMsg = TransformModLanguage(broadcastMsg);
-                soldMsg = TransformModLanguage(soldMsg);
-                rewardCmd = TransformModLanguage(rewardCmd);
+                broadcastMsg = TransformModLanguageConfig(broadcastMsg);
+                soldMsg = TransformModLanguageConfig(soldMsg);
+                rewardCmd = TransformModLanguageConfig(rewardCmd);
 
                 itemOffer = new ItemOffer(item, dmgValue, nbtRaw, amount, soldMsg, broadcastMsg, rewardCmd, uptime);
                 return itemOffer;

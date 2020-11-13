@@ -16,7 +16,7 @@ public class TextUtils {
 
     private static HashMap<String, String> COLOUR_MAP = new HashMap <>();
 
-    public static void populateColourMap(){
+    private static void populateColourMap(){
         COLOUR_MAP.put("&0", "\u00A70");
         COLOUR_MAP.put("&1", "\u00A71");
         COLOUR_MAP.put("&2", "\u00A72");
@@ -44,18 +44,30 @@ public class TextUtils {
         //As seen here >>> https://minecraft.gamepedia.com/Formatting_codes
     }
 
-    //Iterate through strings to get MOTD colour format
-    public static String TransformModLanguage(Object yamlObj){
+    public static void init(HashMap<String,String> configMessages){
+        populateColourMap();
 
-        if(yamlObj == null){
-            return "";
+        for (String key : configMessages.keySet()) {
+          FleaMarket.getLogger().info(configMessages.get(key));
+            modLanguageMap.put(key, TransformModLanguageConfig(configMessages.get(key)));
         }
+
+    }
+
+    public static void reloadTextUtils(HashMap<String,String> configMessages){
+        for (String key : configMessages.keySet()) {
+            FleaMarket.getLogger().info(configMessages.get(key));
+            modLanguageMap.put(key, TransformModLanguageConfig(configMessages.get(key)));
+        }
+
+    }
+
+    //Iterate through strings to get MOTD colour format
+    public static String TransformModLanguageConfig(String configMessage){
 
         ArrayList<String> colourCodes = new ArrayList<>();
 
-        String inputString = yamlObj.toString() + "";
-
-        Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(inputString);
+        Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(configMessage);
 
         while (codeMatch.find()) {
             if(!colourCodes.contains(codeMatch.group())){
@@ -63,14 +75,40 @@ public class TextUtils {
             }
         }
         if(colourCodes.size() != 0){
-
             for(String colour : colourCodes){
-                inputString = inputString.replace(colour, COLOUR_MAP.get(colour));
+                configMessage = configMessage.replace(colour, COLOUR_MAP.get(colour));
             }
         }
 
-        return inputString;
+        return configMessage;
     }
+
+//    public static String TransformModLanguage(Object yamlObj){
+//
+//        if(yamlObj == null){
+//            return "";
+//        }
+//
+//        ArrayList<String> colourCodes = new ArrayList<>();
+//
+//        String inputString = yamlObj.toString() + "";
+//
+//        Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(inputString);
+//
+//        while (codeMatch.find()) {
+//            if(!colourCodes.contains(codeMatch.group())){
+//                colourCodes.add(codeMatch.group());
+//            }
+//        }
+//        if(colourCodes.size() != 0){
+//
+//            for(String colour : colourCodes){
+//                inputString = inputString.replace(colour, COLOUR_MAP.get(colour));
+//            }
+//        }
+//
+//        return inputString;
+//    }
 
     public static ITextComponent getModTextBorder(){
         ITextComponent borderLeft = new TextComponentString(TextFormatting.BLUE + "==================");

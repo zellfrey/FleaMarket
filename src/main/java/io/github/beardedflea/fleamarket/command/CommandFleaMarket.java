@@ -49,9 +49,9 @@ public class CommandFleaMarket extends CommandBase{
 
     private static ITextComponent getHelpUsage(){
         ITextComponent comp1 = getModTextBorder();
-        ITextComponent comp2 = new TextComponentString(modLanguageMap.get("fmhelp"));
-        ITextComponent comp3 = new TextComponentString(modLanguageMap.get("fmcheck"));
-        ITextComponent comp4 = new TextComponentString(modLanguageMap.get("fmsell"));
+        ITextComponent comp2 = new TextComponentString("\n" + modLanguageMap.get("fmhelp") + "\n");
+        ITextComponent comp3 = new TextComponentString(modLanguageMap.get("fmcheck") + "\n");
+        ITextComponent comp4 = new TextComponentString(modLanguageMap.get("fmsell") + "\n");
         ITextComponent comp5 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);

@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket;
 
+import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -54,7 +55,8 @@ public class FleaMarket
         }
         log.info("Pre int of Flea market, creating folders");
 
-        LanguageParser.init(event);
+        TextUtils.init(FleaMarket.config.messagesConfigMap());
+//        LanguageParser.init(event);
         ItemOfferParser.init(event);
         CurrentItemOfferParser.init(event);
     }
