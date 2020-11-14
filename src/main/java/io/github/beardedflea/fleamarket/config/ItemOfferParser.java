@@ -132,7 +132,8 @@ public class ItemOfferParser {
         try {
             FileUtils.forceMkdir(itemOffersDir);
             //noinspection ConstantConditions
-            FileUtils.copyToFile(MinecraftServer.class.getClassLoader().getResourceAsStream("assets/" + FleaMarket.MODID + "/itemoffers/default_item_offers.json"), defaultConfig);
+            FileUtils.copyToFile(MinecraftServer.class.getClassLoader().getResourceAsStream(
+                    "assets/" + FleaMarket.MODID + "/itemoffers/default_item_offers.json"), defaultConfig);
         }
         catch (IOException e) {
             FleaMarket.getLogger().error("Exception setting up the default item offer config!", e);

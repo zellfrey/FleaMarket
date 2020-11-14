@@ -52,6 +52,7 @@ public class TextUtils {
     }
 
     public static void loadTextUtils(HashMap<String,String> configMessages){
+        modLanguageMap.clear();
         for (String key : configMessages.keySet()) {
             modLanguageMap.put(key, TransformModLanguageConfig(configMessages.get(key)));
         }

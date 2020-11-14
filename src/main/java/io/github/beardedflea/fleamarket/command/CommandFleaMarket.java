@@ -1,14 +1,16 @@
 package io.github.beardedflea.fleamarket.command;
 
+
+import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
+
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.server.MinecraftServer;
 
-import io.github.beardedflea.fleamarket.store.*;
-import net.minecraft.util.text.TextComponentString;
 
-import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 
 
 import java.util.ArrayList;

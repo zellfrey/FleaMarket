@@ -1,17 +1,15 @@
 package io.github.beardedflea.fleamarket.command;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.utils.TextUtils;
+import io.github.beardedflea.fleamarket.config.ItemOfferParser;
+import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import net.minecraft.command.*;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
-
-import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
-import io.github.beardedflea.fleamarket.config.ItemOfferParser;
-import io.github.beardedflea.fleamarket.store.ItemOfferList;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 
 public class CommandOPFleaMarket extends CommandBase{
 
@@ -94,8 +92,8 @@ public class CommandOPFleaMarket extends CommandBase{
 
                 case "reload":
                     sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadMod")));
-                    FleaMarket.instance.reloadConfig();
-                    TextUtils.loadTextUtils(FleaMarket.config.messagesConfigMap());
+                    FleaMarket.instance.loadConfig();
+                    loadTextUtils(FleaMarket.config.messagesConfigMap());
                     reloadItemOfferData(sender);
                 break;
 

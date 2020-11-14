@@ -1,6 +1,6 @@
 package io.github.beardedflea.fleamarket.config;
 
-import net.minecraftforge.common.config.*;
+import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
