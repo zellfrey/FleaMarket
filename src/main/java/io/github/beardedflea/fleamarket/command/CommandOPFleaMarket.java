@@ -95,7 +95,7 @@ public class CommandOPFleaMarket extends CommandBase{
                 case "reload":
                     sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadMod")));
                     FleaMarket.instance.reloadConfig();
-                    TextUtils.reloadTextUtils(FleaMarket.config.messagesConfigMap());
+                    TextUtils.loadTextUtils(FleaMarket.config.messagesConfigMap());
                     reloadItemOfferData(sender);
                 break;
 

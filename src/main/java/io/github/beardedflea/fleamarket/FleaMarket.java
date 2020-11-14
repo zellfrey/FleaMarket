@@ -56,7 +56,6 @@ public class FleaMarket
         log.info("Pre int of Flea market, creating folders");
 
         TextUtils.init(FleaMarket.config.messagesConfigMap());
-//        LanguageParser.init(event);
         ItemOfferParser.init(event);
         CurrentItemOfferParser.init(event);
     }

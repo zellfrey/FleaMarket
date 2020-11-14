@@ -34,20 +34,20 @@ minecraft {
 }
 
 configurations {
-    shade
-    compile.extendsFrom shade
+//    shade
+//    compile.extendsFrom shade
 }
 
 dependencies {
-    shade'org.yaml:snakeyaml:1.25'
+//    shade'org.yaml:snakeyaml:1.25'
 }
 
 jar {
-    configurations.shade.each { dep ->
-        from(project.zipTree(dep)){
-            exclude 'META-INF', 'META-INF/**'
-        }
-    }
+//    configurations.shade.each { dep ->
+//        from(project.zipTree(dep)){
+//            exclude 'META-INF', 'META-INF/**'
+//        }
+//    }
 }
 
 processResources {

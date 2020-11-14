@@ -1,7 +1,9 @@
 package io.github.beardedflea.fleamarket.utils;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,17 +48,11 @@ public class TextUtils {
 
     public static void init(HashMap<String,String> configMessages){
         populateColourMap();
-
-        for (String key : configMessages.keySet()) {
-          FleaMarket.getLogger().info(configMessages.get(key));
-            modLanguageMap.put(key, TransformModLanguageConfig(configMessages.get(key)));
-        }
-
+        loadTextUtils(configMessages);
     }
 
-    public static void reloadTextUtils(HashMap<String,String> configMessages){
+    public static void loadTextUtils(HashMap<String,String> configMessages){
         for (String key : configMessages.keySet()) {
-            FleaMarket.getLogger().info(configMessages.get(key));
             modLanguageMap.put(key, TransformModLanguageConfig(configMessages.get(key)));
         }
 
@@ -66,7 +62,6 @@ public class TextUtils {
     public static String TransformModLanguageConfig(String configMessage){
 
         ArrayList<String> colourCodes = new ArrayList<>();
-
         Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(configMessage);
 
         while (codeMatch.find()) {
@@ -82,33 +77,6 @@ public class TextUtils {
 
         return configMessage;
     }
-
-//    public static String TransformModLanguage(Object yamlObj){
-//
-//        if(yamlObj == null){
-//            return "";
-//        }
-//
-//        ArrayList<String> colourCodes = new ArrayList<>();
-//
-//        String inputString = yamlObj.toString() + "";
-//
-//        Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(inputString);
-//
-//        while (codeMatch.find()) {
-//            if(!colourCodes.contains(codeMatch.group())){
-//                colourCodes.add(codeMatch.group());
-//            }
-//        }
-//        if(colourCodes.size() != 0){
-//
-//            for(String colour : colourCodes){
-//                inputString = inputString.replace(colour, COLOUR_MAP.get(colour));
-//            }
-//        }
-//
-//        return inputString;
-//    }
 
     public static ITextComponent getModTextBorder(){
         ITextComponent borderLeft = new TextComponentString(TextFormatting.BLUE + "==================");

@@ -126,7 +126,6 @@ public class FleaMarketConfig{
             configuration.get(category + ".playerCommands", "fmsell",
                     "/fm sell - Current method of selling items").getString());
 
-    //todo Add \n to fmhelp component
     //player Messages
 
     this.messagesConfigMap.put("itemOfferNoneMsg",
@@ -167,7 +166,6 @@ public class FleaMarketConfig{
               configuration.get(category + ".opCommands", "opfmreload",
                       "/opfm reload - Reloads ItemOffers folder & lang.json").getString());
 
-    //todo Add \n to opfmhelp component
     // op Messages
 
     this.messagesConfigMap.put("cycleStart",
