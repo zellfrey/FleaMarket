@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket;
 
+import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -29,7 +30,7 @@ public class FleaMarket
     public static final String MODID = "fleamarket";
     public static final String NAME = "Flea Market";
     public static final String MCVERSIONS = "[1.12, 1.13)";
-    public static final String VERSION = "1.15";
+    public static final String VERSION = "1.2.0";
     @Mod.Instance(MODID)
     public static FleaMarket instance;
     public static FleaMarketConfig config;
@@ -43,18 +44,12 @@ public class FleaMarket
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
         this.modConfigDictionary = event.getModConfigurationDirectory();
-        FleaMarket.config = new FleaMarketConfig();
-        try {
-            FleaMarket.config.load(new File(this.modConfigDictionary, "fleamarket"));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
         log.info("Pre int of Flea market, creating folders");
 
-        LanguageParser.init(event);
+        loadConfig();
+        TextUtils.init(FleaMarket.config.messagesConfigMap());
         ItemOfferParser.init(event);
         CurrentItemOfferParser.init(event);
     }
@@ -84,7 +79,7 @@ public class FleaMarket
         CurrentItemOfferParser.saveCurrentItemOffer();
     }
 
-    public void reloadConfig() {
+    public void loadConfig() {
         FleaMarket.config = new FleaMarketConfig();
         try {
             FleaMarket.config.load(new File(this.modConfigDictionary, "fleamarket"));

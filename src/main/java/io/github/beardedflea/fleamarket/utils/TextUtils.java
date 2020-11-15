@@ -1,7 +1,9 @@
 package io.github.beardedflea.fleamarket.utils;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ public class TextUtils {
 
     private static HashMap<String, String> COLOUR_MAP = new HashMap <>();
 
-    public static void populateColourMap(){
+    private static void populateColourMap(){
         COLOUR_MAP.put("&0", "\u00A70");
         COLOUR_MAP.put("&1", "\u00A71");
         COLOUR_MAP.put("&2", "\u00A72");
@@ -44,18 +46,24 @@ public class TextUtils {
         //As seen here >>> https://minecraft.gamepedia.com/Formatting_codes
     }
 
-    //Iterate through strings to get MOTD colour format
-    public static String TransformModLanguage(Object yamlObj){
+    public static void init(HashMap<String,String> configMessages){
+        populateColourMap();
+        loadTextUtils(configMessages);
+    }
 
-        if(yamlObj == null){
-            return "";
+    public static void loadTextUtils(HashMap<String,String> configMessages){
+        modLanguageMap.clear();
+        for (String key : configMessages.keySet()) {
+            modLanguageMap.put(key, TransformModLanguageConfig(configMessages.get(key)));
         }
 
+    }
+
+    //Iterate through strings to get MOTD colour format
+    public static String TransformModLanguageConfig(String configMessage){
+
         ArrayList<String> colourCodes = new ArrayList<>();
-
-        String inputString = yamlObj.toString() + "";
-
-        Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(inputString);
+        Matcher codeMatch = COLOUR_CODE_PATTERN.matcher(configMessage);
 
         while (codeMatch.find()) {
             if(!colourCodes.contains(codeMatch.group())){
@@ -63,13 +71,12 @@ public class TextUtils {
             }
         }
         if(colourCodes.size() != 0){
-
             for(String colour : colourCodes){
-                inputString = inputString.replace(colour, COLOUR_MAP.get(colour));
+                configMessage = configMessage.replace(colour, COLOUR_MAP.get(colour));
             }
         }
 
-        return inputString;
+        return configMessage;
     }
 
     public static ITextComponent getModTextBorder(){

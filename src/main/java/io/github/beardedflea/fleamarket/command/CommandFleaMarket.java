@@ -1,14 +1,16 @@
 package io.github.beardedflea.fleamarket.command;
 
+
+import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
+
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.server.MinecraftServer;
 
-import io.github.beardedflea.fleamarket.store.*;
-import net.minecraft.util.text.TextComponentString;
 
-import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 
 
 import java.util.ArrayList;
@@ -49,9 +51,9 @@ public class CommandFleaMarket extends CommandBase{
 
     private static ITextComponent getHelpUsage(){
         ITextComponent comp1 = getModTextBorder();
-        ITextComponent comp2 = new TextComponentString(modLanguageMap.get("fmhelp"));
-        ITextComponent comp3 = new TextComponentString(modLanguageMap.get("fmcheck"));
-        ITextComponent comp4 = new TextComponentString(modLanguageMap.get("fmsell"));
+        ITextComponent comp2 = new TextComponentString("\n" + modLanguageMap.get("fmhelp") + "\n");
+        ITextComponent comp3 = new TextComponentString(modLanguageMap.get("fmcheck") + "\n");
+        ITextComponent comp4 = new TextComponentString(modLanguageMap.get("fmsell") + "\n");
         ITextComponent comp5 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
