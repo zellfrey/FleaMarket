@@ -164,7 +164,7 @@ public class FleaMarketConfig{
 
       this.messagesConfigMap.put("opfmreload",
               configuration.get(category + ".opCommands", "opfmreload",
-                      "/opfm reload - Reloads ItemOffers folder & lang.json").getString());
+                      "/opfm reload - Reloads ItemOffers folder & FleaMarket.cfg").getString());
 
     // op Messages
 
