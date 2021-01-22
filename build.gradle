@@ -11,9 +11,9 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = mod_version
-group = mod_group
-archivesBaseName = mod_name
+version = "${project.mc_version}-" + "${project.mod_version}"
+group = project.mod_group // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = project.mod_name
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -31,6 +31,8 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20171003"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    replace "@VERSION@", project.mod_version
+//    replace "@UPDATE_JSON@", project.update_json
 }
 
 configurations {
@@ -52,15 +54,22 @@ jar {
 
 processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mod_version", project.mod_version
+    inputs.property "mc_version", project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand  'mod_id':project.mod_id,
+                'mod_name':project.mod_name,
+                'mod_description':project.mod_description,
+                'mod_version':project.mod_version,
+                'mc_version':project.mc_version,
+                'url':project.url
+//                'update_url':project.update_json
+
     }
 
     // copy everything else except the mcmod.info
