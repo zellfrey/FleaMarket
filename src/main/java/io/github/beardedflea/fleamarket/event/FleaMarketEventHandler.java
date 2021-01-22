@@ -3,8 +3,17 @@ package io.github.beardedflea.fleamarket.event;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -82,6 +91,24 @@ public class FleaMarketEventHandler {
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if( (FleaMarket.config.joinMessage()) && (ItemOfferList.currentItemOffer != null) ){
             event.player.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+        }
+    }
+
+//    @SubscribeEvent(priority = FleaMarket.config.signShopEnabled ? EventPriority.LOW : null)
+    @SubscribeEvent
+    public static void onSignInteract(PlayerInteractEvent.RightClickBlock event){
+        World world = event.getWorld();
+        Block targetBlock = world.getBlockState(event.getPos()).getBlock();
+
+        if(targetBlock.getLocalizedName().equals("Sign")){
+            EntityPlayer player = event.getEntityPlayer();
+            TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
+            if(shopSign.signText[0].getUnformattedText().equals("[FleaMarket]")) {
+                for (ITextComponent line : shopSign.signText) {
+                    player.sendMessage(line);
+                }
+                player.sendMessage(new TextComponentString(TextFormatting.GOLD + "You have sold those items!"));
+            }
         }
     }
 }
