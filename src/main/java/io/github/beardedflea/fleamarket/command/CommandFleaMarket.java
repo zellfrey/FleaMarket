@@ -1,23 +1,35 @@
 package io.github.beardedflea.fleamarket.command;
 
-
-import io.github.beardedflea.fleamarket.store.ItemOfferList;
-import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
-
-import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.ICommandSender;
+import net.minecraftforge.server.command.CommandTreeBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.server.MinecraftServer;
 
-
-
-
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class CommandFleaMarket extends CommandBase{
+import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 
+public class CommandFleaMarket extends CommandTreeBase {
+
+    public CommandFleaMarket(){
+        addSubcommand(new CommandFMCheck());
+        addSubcommand(new CommandFMSell());
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() { return 0; }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
+    }
 
     @Override
     public String getName() {
@@ -25,28 +37,14 @@ public class CommandFleaMarket extends CommandBase{
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
-        return "/fleamarket [help:check:sell]";
-    }
-
+    public String getUsage(ICommandSender sender) { return "/fleamarket [help:check:sell]"; }
 
     @Override
-    public List<String> getAliases()
-    {
+    public List<String> getAliases() {
         ArrayList<String> aliases = new ArrayList<>();
         aliases.add("fm");
         aliases.add("fleamkt");
         return aliases;
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 0;
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
     }
 
     private static ITextComponent getHelpUsage(){
@@ -57,63 +55,29 @@ public class CommandFleaMarket extends CommandBase{
         ITextComponent comp5 = getModTextBorder();
 
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
-
         return comp1;
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        boolean isItemOn;
-        if(args.length > 1){
-            throw new SyntaxErrorException("Too many arguments");
+        if(args.length == 0 || args[0].toLowerCase().equals("help")) {
+            sender.sendMessage(getHelpUsage());
         }
-        if(args.length == 1){
-            switch(args[0].toLowerCase()){
-                case "help":
-                    sender.sendMessage(getHelpUsage());
-                break;
-
-                case "check":
-                     isItemOn = checkItemOffer(sender);
-
-                    if(isItemOn){
-                        sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
-                    }
-                break;
-
-                case "sell":
-                    isItemOn = checkItemOffer(sender);
-
-                    if(isItemOn){
-                        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
-                        ItemOfferList.sellItemOffer(playerMP);
-                    }
-                break;
-
-                default:
-                    throw new WrongUsageException(getUsage(sender));
+        else {
+            try{
+                super.execute(server, sender, args);
+            }
+            catch (CommandException e){
+                throw new WrongUsageException(getUsage(sender));
             }
         }
-        else{
-            throw new WrongUsageException(getUsage(sender));
-        }
     }
 
-    private static boolean checkItemOffer(ICommandSender sender){
-        if(ItemOfferList.currentItemOffer == null){
-            sender.sendMessage(new TextComponentString(modLanguageMap.get("itemOfferNoneMsg")));
-
-            return false;
-        }
-        else if(ItemOfferList.itemOfferUptime <= 0){
-            sender.sendMessage(new TextComponentString(modLanguageMap.get("itemOfferFindingMsg")));
-
-            return false;
-
-        }else{
-            return true;
-        }
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        String [] subCmdNames = new String[] {"help", "check", "sell"};
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, subCmdNames) : Collections.emptyList();
     }
-
 }

@@ -1,9 +1,10 @@
 package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.config.FleaMarketConfig;
 import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
 import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
+
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -139,6 +140,22 @@ public class ItemOfferList {
         clearPlayerTransactionList();
         server.getPlayerList().sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         CurrentItemOfferParser.saveCurrentItemOffer();
+    }
+
+    public static boolean checkItemOffer(ICommandSender sender){
+        if(currentItemOffer == null){
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("itemOfferNoneMsg")));
+
+            return false;
+        }
+        else if(itemOfferUptime <= 0){
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("itemOfferFindingMsg")));
+
+            return false;
+
+        }else{
+            return true;
+        }
     }
 
     //fm sell

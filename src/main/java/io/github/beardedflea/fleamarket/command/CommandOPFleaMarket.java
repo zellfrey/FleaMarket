@@ -1,18 +1,37 @@
 package io.github.beardedflea.fleamarket.command;
 
-import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.config.ItemOfferParser;
-import io.github.beardedflea.fleamarket.store.ItemOfferList;
-import net.minecraft.command.*;
+
+import net.minecraft.command.CommandException;
+import net.minecraftforge.server.command.CommandTreeBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.server.MinecraftServer;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static io.github.beardedflea.fleamarket.utils.TextUtils.*;
 
-public class CommandOPFleaMarket extends CommandBase{
+public class CommandOPFleaMarket extends CommandTreeBase {
 
+    public CommandOPFleaMarket() {
+        addSubcommand(new CommandOPFMStart());
+        addSubcommand(new CommandOPFMPause());
+        addSubcommand(new CommandOPFMSkip());
+        addSubcommand(new CommandOPFMReload());
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() { return 4; }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
+    }
 
     @Override
     public String getName() {
@@ -20,31 +39,17 @@ public class CommandOPFleaMarket extends CommandBase{
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
-        return "/opfleamarket [help:start:pause:skip:reload]";
-    }
+    public String getUsage(ICommandSender sender) { return "/opfleamarket [help:start:pause:skip:reload]"; }
 
     @Override
-    public List<String> getAliases()
-    {
+    public List<String> getAliases() {
         ArrayList<String> aliases = new ArrayList<>();
         aliases.add("opfm");
         aliases.add("opfleamkt");
         return aliases;
     }
 
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 4;
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
-    }
-
-
-    private static ITextComponent getOPHelpUsage(){
+    private static ITextComponent getOPHelpUsage() {
         ITextComponent comp1 = getModTextBorder();
         ITextComponent comp2 = new TextComponentString("\n" + modLanguageMap.get("opfmhelp") + "\n");
         ITextComponent comp3 = new TextComponentString(modLanguageMap.get("opfmstart") + "\n");
@@ -60,69 +65,23 @@ public class CommandOPFleaMarket extends CommandBase{
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        if(args.length > 1){
-            throw new SyntaxErrorException("Too many arguments");
+        if(args.length == 0 || args[0].toLowerCase().equals("help")) {
+            sender.sendMessage(getOPHelpUsage());
         }
-        if(args.length == 1){
-            switch(args[0].toLowerCase()){
-                case "help":
-                    sender.sendMessage(getOPHelpUsage());
-                break;
-
-                case "start":
-                    boolean startedCycle = ItemOfferList.startItemOfferCycle(server);
-
-                    if(!startedCycle){
-                        sender.sendMessage(new TextComponentString(modLanguageMap.get("cycleInProgress")));
-                    }
-                    else{
-                        sender.sendMessage(new TextComponentString(modLanguageMap.get("cycleStart")));
-                    }
-                break;
-
-                case "pause":
-                    ItemOfferList.pauseCycle = !ItemOfferList.pauseCycle;
-                    sender.sendMessage(new TextComponentString(TransformModLanguageConfig("&7ItemOffer paused: " + ItemOfferList.pauseCycle)));
-                break;
-
-                case "skip":
-                    sender.sendMessage(new TextComponentString(modLanguageMap.get("skipItemOffer")));
-                    ItemOfferList.setCurrentItemOffer(server);
-                break;
-
-                case "reload":
-                    sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadMod")));
-                    FleaMarket.instance.loadConfig();
-                    loadTextUtils(FleaMarket.config.messagesConfigMap());
-                    reloadItemOfferData(sender);
-                break;
-
-                default:
+        else {
+            try{
+                super.execute(server, sender, args);
+            }
+            catch (CommandException e){
                 throw new WrongUsageException(getUsage(sender));
             }
-
-        }else{
-            throw new WrongUsageException(getUsage(sender));
         }
     }
 
-    private static void reloadItemOfferData(ICommandSender sender){
-        ItemOfferList.clearFairRandomArray();
-        ItemOfferParser.loadItemOfferData();
-        int itemOfferCount = ItemOfferList.getItemOfferSize();
-        int fileCount = ItemOfferParser.configDir.listFiles().length;
-
-        if(itemOfferCount == 0){
-            sender.sendMessage(new TextComponentString(modLanguageMap.get("noItemsFound")));
-        }
-
-        if(fileCount == 0){
-            sender.sendMessage(new TextComponentString(modLanguageMap.get("noFilesFound")));
-        }
-
-        sender.sendMessage(new TextComponentString(TransformModLanguageConfig(
-                "&9FleaMarket registered a total of " + itemOfferCount + " ItemOffers in " + fileCount + " files!")));
-
-        sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadFinished")));
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        String [] subCmdNames = new String[] {"help", "start", "pause", "skip", "reload"};
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, subCmdNames) : Collections.emptyList();
     }
 }
