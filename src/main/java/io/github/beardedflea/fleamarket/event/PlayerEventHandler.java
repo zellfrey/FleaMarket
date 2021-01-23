@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(value = Side.SERVER, modid = FleaMarket.MODID)
 public class PlayerEventHandler {
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if( (FleaMarket.config.joinMessage()) && (ItemOfferList.currentItemOffer != null) ){
             event.player.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
