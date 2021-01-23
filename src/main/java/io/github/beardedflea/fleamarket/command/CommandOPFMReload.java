@@ -1,6 +1,7 @@
 package io.github.beardedflea.fleamarket.command;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.event.ShopSignEventHandler;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import io.github.beardedflea.fleamarket.config.ItemOfferParser;
 
@@ -36,6 +37,13 @@ public class CommandOPFMReload extends CommandBase{
 
         sender.sendMessage(new TextComponentString(modLanguageMap.get("reloadMod")));
         FleaMarket.instance.loadConfig();
+
+        if(!FleaMarket.config.shopSignEnabled()){
+            ShopSignEventHandler.shutdown();
+        }else{
+            ShopSignEventHandler.init();
+        }
+
         loadTextUtils(FleaMarket.config.messagesConfigMap());
         reloadItemOfferData(sender);
     }

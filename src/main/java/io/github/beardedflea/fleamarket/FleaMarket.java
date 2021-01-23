@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket;
 
+import io.github.beardedflea.fleamarket.event.ShopSignEventHandler;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -61,7 +62,9 @@ public class FleaMarket
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        log.info("Flea market test");
+        if(FleaMarket.config.shopSignEnabled()){
+            ShopSignEventHandler.init();
+        }
     }
 
     @Mod.EventHandler
@@ -71,6 +74,8 @@ public class FleaMarket
 
         CurrentItemOfferParser.loadCurrentItemOffer();
         ItemOfferParser.loadItemOfferData();
+
+
     }
 
     @Mod.EventHandler

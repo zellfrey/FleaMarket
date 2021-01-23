@@ -3,20 +3,29 @@ package io.github.beardedflea.fleamarket.event;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(value = Side.SERVER, modid = FleaMarket.MODID)
 public class ShopSignEventHandler {
 
-    //    @SubscribeEvent(priority = FleaMarket.config.signShopEnabled ? EventPriority.LOW : null)
+    public static void init() {
+        FleaMarket.getLogger().info("Registering ShopSignEventHandler...");
+        MinecraftForge.EVENT_BUS.register(ShopSignEventHandler.class);
+
+    }
+
+    public static void shutdown(){
+        FleaMarket.getLogger().info("ShopSignEventHandler shutting down...");
+        MinecraftForge.EVENT_BUS.unregister(ShopSignEventHandler.class);
+    }
+
     @SubscribeEvent
     public static void onSignInteract(PlayerInteractEvent.RightClickBlock event){
         World world = event.getWorld();

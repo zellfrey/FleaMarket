@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket.command;
 
+import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -31,8 +32,15 @@ public class CommandFMCheck extends CommandBase{
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args){
-        if(ItemOfferList.checkItemOffer(sender)){
-            sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+
+        if(!FleaMarket.config.shopSignEnabled()) {
+
+            if (ItemOfferList.checkItemOffer(sender)){
+                sender.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+            }
+        }
+        else{
+            sender.sendMessage(new TextComponentString(modLanguageMap.get("shopSignMessage")));
         }
     }
 }
