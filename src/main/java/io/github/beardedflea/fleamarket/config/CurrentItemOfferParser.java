@@ -2,7 +2,7 @@ package io.github.beardedflea.fleamarket.config;
 
 import com.google.gson.*;
 import io.github.beardedflea.fleamarket.FleaMarket;
-import io.github.beardedflea.fleamarket.event.FleaMarketEventHandler;
+import io.github.beardedflea.fleamarket.event.EventTickHandler;
 import io.github.beardedflea.fleamarket.store.ItemOffer;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
@@ -61,7 +61,7 @@ public class CurrentItemOfferParser {
                             ItemOfferList.itemOfferIndex = currentItemObject.get("itemIndex").getAsInt();
                             ItemOfferList.itemOfferUptime = currentItemObject.get("uptimeLeft").getAsInt();
 
-                            FleaMarketEventHandler.salesInterval = currentItemObject.get("saleTimeLeft").getAsInt();
+                            EventTickHandler.salesInterval = currentItemObject.get("saleTimeLeft").getAsInt();
 
                             JsonArray playerIds = currentItemObject.get("playerTransactionList").getAsJsonArray();
 
@@ -119,7 +119,7 @@ public class CurrentItemOfferParser {
             //wow thats a lot. Okay we cool, lets move on
             ItemObject.addProperty("uptimeLeft", ItemOfferList.itemOfferUptime);
             ItemObject.addProperty("itemIndex", ItemOfferList.itemOfferIndex);
-            ItemObject.addProperty("saleTimeLeft", FleaMarketEventHandler.salesInterval);
+            ItemObject.addProperty("saleTimeLeft", EventTickHandler.salesInterval);
 
             //add playerTransactionList to Json file
             JsonArray playerTransactionArray = new Gson().toJsonTree(ItemOfferList.getPlayerTransactionList()).getAsJsonArray();
