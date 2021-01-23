@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class FleaMarketConfig{
 
   //Config common variables
-  boolean debugMode, joinMessage;
+  boolean debugMode, joinMessage, shopSign;
   int BroadcastReminder, saleInterval;
   String selectionType;
 
@@ -86,6 +86,11 @@ public class FleaMarketConfig{
     this.selectionType =
             configuration.getString("Reward Selection Type", category,"descending", varComment, selectionTypeArray);
 
+    varComment = "This will allow opped players to create a flea market shop sign in a location in the world.\n" +
+                  "Enabling this feature will disable /fm sell & /fm check.\n";
+    this.shopSign =
+            configuration.getBoolean("Physical shop sign", category,  true, varComment);
+
   }
 
   private void loadDefaultItemFieldsConfig(String category, Configuration configuration){
@@ -144,6 +149,9 @@ public class FleaMarketConfig{
             configuration.get(category + ".playerMessages", "noItemFoundMsg",
                     "&cYou do not have the required item on offer").getString());
 
+    this.messagesConfigMap.put("shopSignMessage",
+            configuration.get(category + ".playerMessages", "shopSignMessage",
+                    "&2This server requires you to visit an in-world Flea market").getString());
       //op Commands
 
       this.messagesConfigMap.put("opfmhelp",
