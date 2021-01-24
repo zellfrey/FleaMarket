@@ -1,17 +1,12 @@
 package io.github.beardedflea.fleamarket.event;
 
-import com.mojang.authlib.GameProfile;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -33,18 +28,25 @@ public class ShopSignEventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onSignInteract(PlayerInteractEvent.RightClickBlock event){
+    public static void onSignInteract(PlayerInteractEvent event){
         World world = event.getWorld();
         Block targetBlock = world.getBlockState(event.getPos()).getBlock();
 
-
         if(targetBlock.getLocalizedName().equals("Sign")){
-            String name = event.getEntityPlayer().getName();
-            EntityPlayerMP playerMP = event.getEntityPlayer().getServer().getPlayerList().getPlayerByUsername(name);
             TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
+            int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
 
             if(shopSign.signText[0].getUnformattedText().equals("[FLEAMARKET]")) {
-                ItemOfferList.sellItemOffer(playerMP);
+                String name = event.getEntityPlayer().getName();
+                EntityPlayerMP playerMP = event.getEntityPlayer().getServer().getPlayerList().getPlayerByUsername(name);
+
+                if(event instanceof PlayerInteractEvent.RightClickBlock){
+                    if(ItemOfferList.checkItemOffer(playerMP)) ItemOfferList.sellItemOffer(playerMP);
+
+                }else if(event instanceof PlayerInteractEvent.LeftClickBlock){
+                    if(ItemOfferList.checkItemOffer(playerMP))
+                        playerMP.sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
+                }
             }
         }
     }
