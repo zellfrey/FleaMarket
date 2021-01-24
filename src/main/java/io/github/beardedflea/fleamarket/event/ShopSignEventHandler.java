@@ -15,6 +15,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -42,8 +43,25 @@ public class ShopSignEventHandler {
             EntityPlayerMP playerMP = event.getEntityPlayer().getServer().getPlayerList().getPlayerByUsername(name);
             TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
 
-            if(shopSign.signText[0].getUnformattedText().equals("[FleaMarket]")) {
+            if(shopSign.signText[0].getUnformattedText().equals("[FLEAMARKET]")) {
                 ItemOfferList.sellItemOffer(playerMP);
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void shouldSignBreak(BlockEvent.BreakEvent event){
+        World world = event.getWorld();
+        Block targetBlock = world.getBlockState(event.getPos()).getBlock();
+
+        if(targetBlock.getLocalizedName().equals("Sign")){
+            EntityPlayer player = event.getPlayer();
+            TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
+            int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
+            FleaMarket.getLogger().info(fmSignID);
+            if(!FleaMarket.isOpped(player.getGameProfile()) && shopSign.signText[0].getUnformattedText().equals("[FLEAMARKET]")){
+
+                event.setCanceled(true);
             }
         }
     }

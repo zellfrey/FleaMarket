@@ -1,7 +1,10 @@
 package io.github.beardedflea.fleamarket;
 
+import com.mojang.authlib.GameProfile;
 import io.github.beardedflea.fleamarket.event.ShopSignEventHandler;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -82,6 +85,13 @@ public class FleaMarket
     public void onServerStopping(FMLServerStoppingEvent event) {
         log.info("saving currentItemOffer data...");
         CurrentItemOfferParser.saveCurrentItemOffer();
+    }
+
+    public static boolean isOpped(GameProfile uuid){
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        int playerLvl = server.getPlayerList().getOppedPlayers().getPermissionLevel(uuid);
+
+        return server.getOpPermissionLevel() == playerLvl;
     }
 
     public void loadConfig() {
