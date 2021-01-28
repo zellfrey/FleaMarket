@@ -2,32 +2,19 @@ package io.github.beardedflea.fleamarket.event;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import io.github.beardedflea.fleamarket.store.ShopSign;
 import net.minecraft.init.Blocks;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketSignEditorOpen;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 public class ShopSignEventHandler {
 
@@ -50,11 +37,14 @@ public class ShopSignEventHandler {
         if (state.getBlock() != Blocks.WALL_SIGN && state.getBlock() != Blocks.STANDING_SIGN) {
             return;
         }
+        if(ShopSign.shopSigns.isEmpty()){
+            return;
+        }
 
-        TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
-        int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
+        TileEntitySign potentialShopSign = (TileEntitySign) world.getTileEntity(event.getPos());
+        int signID = world.loadedTileEntityList.indexOf(potentialShopSign);
 
-        if(shopSign.signText[0].getUnformattedText().equals("[FLEAMARKET]")) {
+        if(ShopSign.isRegistered(signID)) {
             String name = event.getEntityPlayer().getName();
             EntityPlayerMP playerMP = event.getEntityPlayer().getServer().getPlayerList().getPlayerByUsername(name);
 
@@ -78,15 +68,14 @@ public class ShopSignEventHandler {
         }
 
         EntityPlayer player = event.getEntityPlayer();
-        if(!FleaMarket.isOpped(player.getGameProfile())){
-            return;
-        }
-
         TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
+        String sign1stLine = shopSign.signText[0].getUnformattedText();
 
-        if(event.getEntityPlayer().isSneaking() && shopSign.signText[0].getUnformattedText().equals("[FLEAMARKET]")) {
+        if(sign1stLine.equals("[FLEAMARKET]") && event.getEntityPlayer().isSneaking()) {
 
-            event.getEntityPlayer().sendMessage(new TextComponentString("Registering Sign"));
+            int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
+            int dimID = event.getEntityPlayer().dimension;
+            ShopSign.registerShopSign(player,fmSignID, dimID, shopSign.getPos());
         }
     }
 
@@ -98,13 +87,24 @@ public class ShopSignEventHandler {
         if (state.getBlock() != Blocks.WALL_SIGN && state.getBlock() != Blocks.STANDING_SIGN) {
             return;
         }
+        if(ShopSign.shopSigns.isEmpty()){
+            return;
+        }
 
         EntityPlayer player = event.getPlayer();
-        TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
-        int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
-        if (!FleaMarket.isOpped(player.getGameProfile()) && shopSign.signText[0].getUnformattedText().equals("[FLEAMARKET]")) {
+        TileEntitySign potentialShopSign = (TileEntitySign) world.getTileEntity(event.getPos());
+        int signID = world.loadedTileEntityList.indexOf(potentialShopSign);
 
-            event.setCanceled(true);
+        if(ShopSign.isRegistered(signID)){
+            if (!FleaMarket.isOpped(player.getGameProfile())){
+                event.setCanceled(true);
+            }else{
+                int shopSignIdx = ShopSign.findIndexFromSignID(signID);
+                if(shopSignIdx != -1){
+                    ShopSign.shopSigns.remove(shopSignIdx);
+                    player.sendMessage(new TextComponentString("Removed registered Shop sign"));
+                }
+            }
         }
     }
 }

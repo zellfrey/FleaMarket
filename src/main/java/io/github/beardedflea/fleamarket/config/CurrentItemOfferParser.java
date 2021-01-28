@@ -35,11 +35,11 @@ public class CurrentItemOfferParser {
 
     public static void loadCurrentItemOffer(){
         FleaMarket.getLogger().info("Loading current Item Offer...");
+
         File[] currentItemOfferFolder = configDir.listFiles(
                 (dir, name) -> name.startsWith("currentItemOffer") && name.endsWith(".json")
         );
-
-        if(currentItemOfferFolder== null) {
+        if(currentItemOfferFolder == null || currentItemOfferFolder.length == 0) {
             FleaMarket.getLogger().info("No file was found in currentItemOffer folder.");
         }
         else{
