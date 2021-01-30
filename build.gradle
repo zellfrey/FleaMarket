@@ -32,7 +32,7 @@ minecraft {
     mappings = "snapshot_20171003"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     replace "@VERSION@", project.mod_version
-//    replace "@UPDATE_JSON@", project.update_json
+    replace "@UPDATE_JSON@", project.update_json
 }
 
 configurations {
@@ -67,8 +67,8 @@ processResources {
                 'mod_description':project.mod_description,
                 'mod_version':project.mod_version,
                 'mc_version':project.mc_version,
-                'url':project.url
-//                'update_url':project.update_json
+                'url':project.url,
+                'update_url':project.update_json
 
     }
 

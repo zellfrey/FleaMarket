@@ -24,6 +24,7 @@ import java.io.IOException;
         modid = FleaMarket.MODID,
         name = FleaMarket.NAME,
         version = FleaMarket.VERSION,
+        updateJSON = FleaMarket.UPDATE_JSON,
         acceptedMinecraftVersions = FleaMarket.MCVERSIONS,
         acceptableRemoteVersions = "*",
         serverSideOnly = true
@@ -35,6 +36,7 @@ public class FleaMarket
     public static final String NAME = "Flea Market";
     public static final String MCVERSIONS = "[1.12, 1.13)";
     public static final String VERSION = "@VERSION@";
+    public static final String UPDATE_JSON = "@UPDATE_JSON@";
     @Mod.Instance(MODID)
     public static FleaMarket instance;
     public static FleaMarketConfig config;
