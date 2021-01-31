@@ -5,9 +5,9 @@
         "1.12.2-recommended": "1.3.0"
     },
     "1.12.2": {
-        "1.3.0": "",
-        "1.2.0": "",
-        "1.1.0": "",
-        "1.0.0": ""
+        "1.3.0": "- Added shopsigns for in world Flea Market.\n -Added mod update handler(Should have done this earlier...).",
+        "1.2.0": "- Removed snakeyaml & removed lang.yaml.\n- Fleamarket.cfg now contains mod messages.",
+        "1.1.0": "- Added Fairrandom option for itemOffer list.\n- Added new message file lang.yaml.\n- Revised Config.",
+        "1.0.0": "- Initial release."
     }
 }

@@ -2,14 +2,12 @@ package io.github.beardedflea.fleamarket;
 
 import com.mojang.authlib.GameProfile;
 import io.github.beardedflea.fleamarket.event.ShopSignEventHandler;
+import io.github.beardedflea.fleamarket.utils.ModUpdateHandler;
 import io.github.beardedflea.fleamarket.utils.TextUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,8 +77,11 @@ public class FleaMarket
 
         CurrentItemOfferParser.loadCurrentItemOffer();
         ItemOfferParser.loadItemOfferData();
+    }
 
-
+    @Mod.EventHandler
+    public void onServerStarted(FMLServerStartedEvent event) {
+        ModUpdateHandler.notifyServer();
     }
 
     @Mod.EventHandler
