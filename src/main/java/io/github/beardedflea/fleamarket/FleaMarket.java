@@ -63,11 +63,8 @@ public class FleaMarket
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        if(FleaMarket.config.shopSignEnabled()){
-            ShopSignEventHandler.init();
-        }
+    public void init(FMLInitializationEvent event) {
+        if(FleaMarket.config.shopSignEnabled()) ShopSignEventHandler.init();
     }
 
     @Mod.EventHandler

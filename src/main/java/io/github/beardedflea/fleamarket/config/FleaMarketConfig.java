@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class FleaMarketConfig{
 
   //Config common variables
-  boolean debugMode, joinMessage, shopSignEnabled;
+  boolean debugMode, joinMessage, shopSignEnabled, updateCheckerEnabled;
   int BroadcastReminder, saleInterval;
   String selectionType;
 
@@ -90,6 +90,11 @@ public class FleaMarketConfig{
                   "Enabling this feature will disable /fm sell & /fm check.\n";
     this.shopSignEnabled =
             configuration.getBoolean("Physical shop sign", category,  false, varComment);
+
+    varComment = "Whether to announce updates to opped players & to console.\n" +
+            "Note: available updates will be logged to console regardless\n";
+    this.updateCheckerEnabled =
+            configuration.getBoolean("Update Checker", category,  true, varComment);
 
   }
 
@@ -229,6 +234,8 @@ public class FleaMarketConfig{
   }
 
   public boolean shopSignEnabled() { return this.shopSignEnabled; }
+
+  public boolean updateCheckerEnabled() {return this.updateCheckerEnabled; }
 
   //Config Default Item Fields category getter methods
 
