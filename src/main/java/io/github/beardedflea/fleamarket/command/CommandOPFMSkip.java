@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket.command;
 
+import io.github.beardedflea.fleamarket.store.ShopSign;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -28,5 +29,6 @@ public class CommandOPFMSkip extends CommandBase{
 
         sender.sendMessage(new TextComponentString(modLanguageMap.get("skipItemOffer")));
         ItemOfferList.setCurrentItemOffer(server);
+        ShopSign.updateShopSigns();
     }
 }

@@ -71,11 +71,12 @@ public class ShopSignEventHandler {
         TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
         String sign1stLine = shopSign.signText[0].getUnformattedText();
 
-        if(sign1stLine.equals("[FLEAMARKET]") && event.getEntityPlayer().isSneaking()) {
+        if(sign1stLine.contains("[FLEAMARKET]") && event.getEntityPlayer().isSneaking()) {
 
             int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
             int dimID = event.getEntityPlayer().dimension;
             ShopSign.registerShopSign(player,fmSignID, dimID, shopSign.getPos());
+            ShopSign.updateShopSigns();
         }
     }
 

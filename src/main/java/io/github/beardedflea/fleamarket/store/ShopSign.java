@@ -3,12 +3,19 @@ package io.github.beardedflea.fleamarket.store;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ShopSign {
 
@@ -50,6 +57,44 @@ public class ShopSign {
         }
         else{
             player.sendMessage(new TextComponentString("Shop sign has already been registered"));
+        }
+    }
+
+    private SPacketUpdateTileEntity setShopSign(TileEntitySign sign, @Nullable ItemOffer item){
+        sign.signText[0] = new TextComponentString(TextFormatting.DARK_PURPLE + "[FLEAMARKET]");
+
+        if(item != null){
+            sign.signText[1] = new TextComponentString("Buying" + item.getItemAmount());
+            sign.signText[2] = new TextComponentString(item.getDisplayName());
+            sign.signText[3] = new TextComponentString("");
+        }else{
+            sign.signText[1] = new TextComponentString("Looking for");
+            sign.signText[2] = new TextComponentString("another item");
+            sign.signText[3] = new TextComponentString("come back later");
+        }
+        sign.markDirty();
+        return sign.getUpdatePacket();
+    }
+
+    public static void updateShopSigns(){
+        if(shopSigns.isEmpty()){
+            return;
+        }
+        MinecraftServer server =  FMLCommonHandler.instance().getMinecraftServerInstance();
+        World world = server.getEntityWorld();
+
+        for(ShopSign sign : shopSigns){
+            TileEntitySign registeredSign = (TileEntitySign)world.loadedTileEntityList.get(sign.signID);
+            WorldServer worldServer = (WorldServer) registeredSign.getWorld();
+            int chunkX = registeredSign.getPos().getX() >> 4;
+            int chunkZ = registeredSign.getPos().getZ() >> 4;
+            SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign, ItemOfferList.currentItemOffer);
+            for (EntityPlayer entityPlayer : registeredSign.getWorld().playerEntities) {
+                EntityPlayerMP entityPlayerMP = (EntityPlayerMP) entityPlayer;
+                if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(entityPlayerMP, chunkX, chunkZ)) {
+                    entityPlayerMP.connection.sendPacket(updateTileEntity);
+                }
+            }
         }
     }
 
