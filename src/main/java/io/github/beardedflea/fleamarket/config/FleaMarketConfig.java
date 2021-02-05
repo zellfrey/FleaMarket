@@ -209,6 +209,14 @@ public class FleaMarketConfig{
             configuration.get(category + ".opMessages", "reloadFinished",
                     "&2Finished reloading").getString());
 
+    this.messagesConfigMap.put("updateAvailable",
+            configuration.get(category + ".opMessages", "updateAvailable",
+                    "&2There's an update available for &6Flea Market&2!\n").getString());
+
+    this.messagesConfigMap.put("checkServerLog",
+            configuration.get(category + ".opMessages", "checkServerLog",
+                    "&2Check the server log for more details.").getString());
+
   }
 
   //Config Common category getter methods

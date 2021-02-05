@@ -23,14 +23,10 @@ public class PlayerEventHandler {
 
         if(FleaMarket.config.updateCheckerEnabled() && FleaMarket.isOpped(event.player.getGameProfile())){
             if(ModUpdateHandler.hasUpdate(ModUpdateHandler.getResult())){
-
-                String notifyUpdate = "&2There's an update available for &6Flea Market&2!\n";
-                String availableUpdate = "&2Check the server log for more details.";
-                String updateNotification = TextUtils.TransformModLanguageConfig(notifyUpdate+ availableUpdate);
-
-                event.player.sendMessage(new TextComponentString(updateNotification));
+                String updateAvailable = TextUtils.modLanguageMap.get("updateAvailable");
+                String checkServerLog = TextUtils.modLanguageMap.get("checkServerLog");
+                event.player.sendMessage(new TextComponentString(updateAvailable+ checkServerLog));
             }
-
         }
     }
 }

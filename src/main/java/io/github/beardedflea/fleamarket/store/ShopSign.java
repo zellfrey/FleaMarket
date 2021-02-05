@@ -64,9 +64,11 @@ public class ShopSign {
         sign.signText[0] = new TextComponentString(TextFormatting.DARK_PURPLE + "[FLEAMARKET]");
 
         if(item != null){
-            sign.signText[1] = new TextComponentString("Buying" + item.getItemAmount());
+            sign.signText[1] = new TextComponentString("Buying: " + item.getItemAmount());
             sign.signText[2] = new TextComponentString(item.getDisplayName());
-            sign.signText[3] = new TextComponentString("");
+            sign.signText[3] = new TextComponentString("123456789012345");
+            //Sign can have a max of 15 characters on a line
+            FleaMarket.getLogger().info(item.getDisplayName().length());
         }else{
             sign.signText[1] = new TextComponentString("Looking for");
             sign.signText[2] = new TextComponentString("another item");
@@ -77,7 +79,7 @@ public class ShopSign {
     }
 
     public static void updateShopSigns(){
-        if(shopSigns.isEmpty()){
+        if(!FleaMarket.config.shopSignEnabled() || shopSigns.isEmpty()){
             return;
         }
         MinecraftServer server =  FMLCommonHandler.instance().getMinecraftServerInstance();
