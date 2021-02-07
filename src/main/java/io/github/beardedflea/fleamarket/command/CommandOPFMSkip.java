@@ -29,6 +29,5 @@ public class CommandOPFMSkip extends CommandBase{
 
         sender.sendMessage(new TextComponentString(modLanguageMap.get("skipItemOffer")));
         ItemOfferList.setCurrentItemOffer(server);
-        ShopSign.updateShopSigns();
     }
 }

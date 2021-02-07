@@ -140,6 +140,7 @@ public class ItemOfferList {
         clearPlayerTransactionList();
         server.getPlayerList().sendMessage(new TextComponentString(ItemOfferList.currentItemOffer.getBroadcastMsg()));
         CurrentItemOfferParser.saveCurrentItemOffer();
+        ShopSign.updateShopSigns();
     }
 
     public static boolean checkItemOffer(ICommandSender sender){

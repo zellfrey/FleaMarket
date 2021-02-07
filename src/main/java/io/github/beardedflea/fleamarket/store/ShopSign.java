@@ -13,7 +13,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import scala.math.Ordering;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
