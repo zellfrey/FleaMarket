@@ -13,6 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import scala.math.Ordering;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -60,24 +61,6 @@ public class ShopSign {
         }
     }
 
-    private SPacketUpdateTileEntity setShopSign(TileEntitySign sign, @Nullable ItemOffer item){
-        sign.signText[0] = new TextComponentString(TextFormatting.DARK_PURPLE + "[FLEAMARKET]");
-
-        if(item != null){
-            sign.signText[1] = new TextComponentString("Buying: " + item.getItemAmount());
-            sign.signText[2] = new TextComponentString(item.getDisplayName());
-            sign.signText[3] = new TextComponentString("123456789012345");
-            //Sign can have a max of 15 characters on a line
-            FleaMarket.getLogger().info(item.getDisplayName().length());
-        }else{
-            sign.signText[1] = new TextComponentString("Looking for");
-            sign.signText[2] = new TextComponentString("another item");
-            sign.signText[3] = new TextComponentString("come back later");
-        }
-        sign.markDirty();
-        return sign.getUpdatePacket();
-    }
-
     public static void updateShopSigns(){
         if(!FleaMarket.config.shopSignEnabled() || shopSigns.isEmpty()){
             return;
@@ -97,6 +80,44 @@ public class ShopSign {
                     entityPlayerMP.connection.sendPacket(updateTileEntity);
                 }
             }
+        }
+    }
+
+    private SPacketUpdateTileEntity setShopSign(TileEntitySign sign, @Nullable ItemOffer item){
+        sign.signText[0] = new TextComponentString(TextFormatting.DARK_PURPLE + "[FLEAMARKET]");
+
+        if(item != null){
+            String[] itemSignNameArray = {"",""};
+            sign.signText[1] = new TextComponentString("Buying: " + item.getItemAmount());
+            transformNameForSign(itemSignNameArray, item.getDisplayName());
+            sign.signText[2] = new TextComponentString(itemSignNameArray[0]);
+            sign.signText[3] = new TextComponentString(itemSignNameArray[1]);
+        }else{
+            sign.signText[1] = new TextComponentString("Looking for");
+            sign.signText[2] = new TextComponentString("another item");
+            sign.signText[3] = new TextComponentString("come back later");
+        }
+        sign.markDirty();
+        return sign.getUpdatePacket();
+    }
+
+    private void transformNameForSign(String[] itemSignNameArray, String itemName){
+        if(itemName.length() > 15){
+            StringBuilder lineOneText = new StringBuilder(15);
+            StringBuilder lineTwoText = new StringBuilder(15);
+            String[] nameArray = itemName.split(" ");
+            for(String word : nameArray){
+                if((lineOneText.length() < 15) && ((lineOneText.length()-1) + word.length() < 15)){
+                    lineOneText.append(word).append(" ");
+                }else{
+                    lineTwoText.append(word).append(" ");
+                }
+            }
+            itemSignNameArray[0] = lineOneText.toString().trim();
+            itemSignNameArray[1] = lineTwoText.toString().trim();
+        }else{
+            itemSignNameArray[0] = itemName;
+            itemSignNameArray[1] = "";
         }
     }
 
