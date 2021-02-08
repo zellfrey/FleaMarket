@@ -72,7 +72,7 @@ public class ShopSign {
             WorldServer worldServer = (WorldServer) registeredSign.getWorld();
             int chunkX = registeredSign.getPos().getX() >> 4;
             int chunkZ = registeredSign.getPos().getZ() >> 4;
-            SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign, ItemOfferList.currentItemOffer);
+            SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign);
             for (EntityPlayer entityPlayer : registeredSign.getWorld().playerEntities) {
                 EntityPlayerMP entityPlayerMP = (EntityPlayerMP) entityPlayer;
                 if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(entityPlayerMP, chunkX, chunkZ)) {
@@ -82,10 +82,11 @@ public class ShopSign {
         }
     }
 
-    private SPacketUpdateTileEntity setShopSign(TileEntitySign sign, @Nullable ItemOffer item){
+    private SPacketUpdateTileEntity setShopSign(TileEntitySign sign){
+        ItemOffer item = ItemOfferList.currentItemOffer;
         sign.signText[0] = new TextComponentString(TextFormatting.DARK_PURPLE + "[FLEAMARKET]");
 
-        if(item != null){
+        if(ItemOfferList.itemOfferUptime != 0 && item != null){
             String[] itemSignNameArray = {"",""};
             sign.signText[1] = new TextComponentString("Buying: " + item.getItemAmount());
             transformNameForSign(itemSignNameArray, item.getDisplayName());

@@ -3,6 +3,7 @@ package io.github.beardedflea.fleamarket.event;
 import io.github.beardedflea.fleamarket.FleaMarket;
 import io.github.beardedflea.fleamarket.config.CurrentItemOfferParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
+import io.github.beardedflea.fleamarket.store.ShopSign;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -19,7 +20,7 @@ public class EventTickHandler {
     public static MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
     private static int minuteCounter = 0, saveCounter = 0, broadcastCounter = 0, salesIntervalCounter = 0;
-    private static boolean executing = false;
+    private static boolean executing = false, updateSaleIntervalSign = true;
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
@@ -59,7 +60,11 @@ public class EventTickHandler {
                 }
             }
             if(FleaMarket.config.saleInterval() != 0 && ItemOfferList.itemOfferUptime <= 0){
-
+                if(updateSaleIntervalSign){
+                    ShopSign.updateShopSigns();
+                    FleaMarket.getLogger().info("rendering sales interval");
+                    updateSaleIntervalSign = false;
+                }
                 if(++salesIntervalCounter >= 1200 *2) {
                     executing = true;
                     salesIntervalCounter -= 1200 *2;
@@ -69,6 +74,7 @@ public class EventTickHandler {
                     if(salesInterval == 0){
                         ItemOfferList.setCurrentItemOffer(server);
                         salesInterval = FleaMarket.config.saleInterval();
+                        updateSaleIntervalSign = true;
                     }
                 }
             }
