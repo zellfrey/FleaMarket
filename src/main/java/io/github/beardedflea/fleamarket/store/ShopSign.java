@@ -2,6 +2,7 @@ package io.github.beardedflea.fleamarket.store;
 
 
 import io.github.beardedflea.fleamarket.FleaMarket;
+import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -14,12 +15,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class ShopSign {
 
-    private int signID, dimID, posX, posY, posZ;
+    private int signID, dimID;
+    private BlockPos signPos;
     private String creator;
 
     public static ArrayList<ShopSign> shopSigns = new ArrayList<>();
@@ -28,9 +29,7 @@ public class ShopSign {
         this.creator = playerName;
         this.signID = signID;
         this.dimID = dimID;
-        this.posX = signPos.getX();
-        this.posY = signPos.getY();
-        this.posZ = signPos.getZ();
+        this.signPos = signPos;
     }
 
     public static void registerShopSign(EntityPlayer player, int newSignID, int dimID, BlockPos signPos){
@@ -52,8 +51,7 @@ public class ShopSign {
             shopSigns.add(new ShopSign(player.getName(), newSignID, dimID, signPos));
             ShopSign newSign = shopSigns.get(shopSigns.size()-1);
             FleaMarket.getLogger().info("New flea market shop sign registered by {}", newSign.creator);
-            String signParamsString = "SignID:{}, DIM:{}, PosX:{}, PosY:{}, PosZ:{}";
-            FleaMarket.getLogger().info(signParamsString , newSign.signID, newSign.dimID, newSign.posX, newSign.posY, newSign.posZ);
+            FleaMarket.getLogger().info("SignID:{}, {}" , newSign.signID, newSign.signPos.toString());
         }
         else{
             player.sendMessage(new TextComponentString("Shop sign has already been registered"));
@@ -65,19 +63,21 @@ public class ShopSign {
             return;
         }
         MinecraftServer server =  FMLCommonHandler.instance().getMinecraftServerInstance();
-        World world = server.getEntityWorld();
 
         for(ShopSign sign : shopSigns){
-            TileEntitySign registeredSign = (TileEntitySign)world.loadedTileEntityList.get(sign.signID);
-            WorldServer worldServer = (WorldServer) registeredSign.getWorld();
-            int chunkX = registeredSign.getPos().getX() >> 4;
-            int chunkZ = registeredSign.getPos().getZ() >> 4;
+            World dim = server.getWorld(sign.dimID);
+            TileEntitySign registeredSign = (TileEntitySign)dim.getTileEntity(sign.signPos);
+//            WorldServer worldServer = (WorldServer) registeredSign.getWorld();
+//            int chunkX = registeredSign.getPos().getX() >> 4;
+//            int chunkZ = registeredSign.getPos().getZ() >> 4;
             SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign);
+
             for (EntityPlayer entityPlayer : registeredSign.getWorld().playerEntities) {
                 EntityPlayerMP entityPlayerMP = (EntityPlayerMP) entityPlayer;
-                if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(entityPlayerMP, chunkX, chunkZ)) {
-                    entityPlayerMP.connection.sendPacket(updateTileEntity);
-                }
+                entityPlayerMP.connection.sendPacket(updateTileEntity);
+//                if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(entityPlayerMP, chunkX, chunkZ)) {
+//                    entityPlayerMP.connection.sendPacket(updateTileEntity);
+//                }
             }
         }
     }

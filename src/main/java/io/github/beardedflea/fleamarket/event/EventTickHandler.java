@@ -62,7 +62,6 @@ public class EventTickHandler {
             if(FleaMarket.config.saleInterval() != 0 && ItemOfferList.itemOfferUptime <= 0){
                 if(updateSaleIntervalSign){
                     ShopSign.updateShopSigns();
-                    FleaMarket.getLogger().info("rendering sales interval");
                     updateSaleIntervalSign = false;
                 }
                 if(++salesIntervalCounter >= 1200 *2) {
