@@ -1,5 +1,6 @@
 package io.github.beardedflea.fleamarket;
 
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import io.github.beardedflea.fleamarket.event.ShopSignEventHandler;
 import io.github.beardedflea.fleamarket.utils.ModUpdateHandler;
@@ -8,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +40,10 @@ public class FleaMarket
     @Mod.Instance(MODID)
     public static FleaMarket instance;
     public static FleaMarketConfig config;
-    File modConfigDictionary;
+    public static File modConfigDictionary;
+    public static File configDataDir;
+    public static JsonParser jsonParser = new JsonParser();
+
 
     private static final Logger log = LogManager.getLogger(MODID);
 
@@ -48,14 +53,14 @@ public class FleaMarket
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        this.modConfigDictionary = event.getModConfigurationDirectory();
+        modConfigDictionary = event.getModConfigurationDirectory();
 
         log.info("Pre int of Flea market, creating folders");
 
         loadConfig();
         TextUtils.init(FleaMarket.config.messagesConfigMap());
         ItemOfferParser.init(event);
-        CurrentItemOfferParser.init(event);
+        initDataDirectory();
     }
 
     public static boolean isDebugMode(){
@@ -94,10 +99,22 @@ public class FleaMarket
         return server.getOpPermissionLevel() == playerLvl;
     }
 
+    private static void initDataDirectory(){
+        configDataDir = new File(modConfigDictionary, "fleamarket/data");
+        if(!configDataDir.exists()){
+            try {
+                FileUtils.forceMkdir(configDataDir);
+            }
+            catch (IOException e) {
+                FleaMarket.getLogger().error("Exception setting up the fleamarket data folder!", e);
+            }
+        }
+    }
+
     public void loadConfig() {
         FleaMarket.config = new FleaMarketConfig();
         try {
-            FleaMarket.config.load(new File(this.modConfigDictionary, "fleamarket"));
+            FleaMarket.config.load(new File(modConfigDictionary, "fleamarket"));
         }
         catch (IOException e) {
             e.printStackTrace();

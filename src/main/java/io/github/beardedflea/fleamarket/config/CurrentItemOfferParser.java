@@ -17,26 +17,10 @@ import java.io.FileNotFoundException;
 
 public class CurrentItemOfferParser {
 
-    private static File configDir;
-
-    private static JsonParser parser = new JsonParser();
-
-    public static void init(FMLPreInitializationEvent event) {
-        configDir = new File(event.getModConfigurationDirectory(), "fleamarket/currentItemOffer");
-        if(!configDir.exists()){
-            try {
-                FileUtils.forceMkdir(configDir);
-            }
-            catch (IOException e) {
-                FleaMarket.getLogger().error("Exception setting up the current item offer folder!", e);
-            }
-        }
-    }
-
     public static void loadCurrentItemOffer(){
         FleaMarket.getLogger().info("Loading current Item Offer...");
 
-        File[] currentItemOfferFolder = configDir.listFiles(
+        File[] currentItemOfferFolder = FleaMarket.configDataDir.listFiles(
                 (dir, name) -> name.startsWith("currentItemOffer") && name.endsWith(".json")
         );
         if(currentItemOfferFolder == null || currentItemOfferFolder.length == 0) {
@@ -50,7 +34,7 @@ public class CurrentItemOfferParser {
             }
             else{
                 try{
-                    JsonObject currentItemObject = parser.parse(new FileReader(currentItemOfferFile)).getAsJsonObject();
+                    JsonObject currentItemObject = FleaMarket.jsonParser.parse(new FileReader(currentItemOfferFile)).getAsJsonObject();
 
                     ItemOffer currentItem = ItemOfferParser.setupItemOfferObjects(currentItemObject, 0, "currentItemOffer.json");
                     if(currentItem == null){
@@ -130,7 +114,7 @@ public class CurrentItemOfferParser {
             }
 
             try {
-                FileWriter file = new FileWriter(configDir+"/currentItemOffer.json");
+                FileWriter file = new FileWriter(FleaMarket.configDataDir+"/currentItemOffer.json");
                 file.write(new GsonBuilder().setPrettyPrinting().create().toJson(ItemObject));
                 file.close();
 
