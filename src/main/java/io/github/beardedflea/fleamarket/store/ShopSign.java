@@ -18,20 +18,19 @@ import java.util.ArrayList;
 
 public class ShopSign {
 
-    private int signID, dimID;
+    private int dimID;
     private BlockPos pos;
     private String creator;
 
     public static ArrayList<ShopSign> shopSigns = new ArrayList<>();
 
-    public ShopSign(String playerName, int signID, int dimID, BlockPos signPos){
+    public ShopSign(String playerName, int dimID, BlockPos signPos){
         this.creator = playerName;
-        this.signID = signID;
         this.dimID = dimID;
         this.pos = signPos;
     }
 
-    public static void registerShopSign(EntityPlayer player, int newSignID, int dimID, BlockPos signPos){
+    public static void registerShopSign(EntityPlayer player, int dimID, BlockPos signPos){
 
         if(!FleaMarket.isOpped(player.getGameProfile())){
             String onlyOps = "Only Opped players are able to register flea market signs!";
@@ -39,13 +38,13 @@ public class ShopSign {
             return;
         }
 
-        if(!isRegistered(newSignID)){
-            ShopSign newSign = new ShopSign(player.getName(), newSignID, dimID, signPos);
+        if(!isRegistered(signPos)){
+            ShopSign newSign = new ShopSign(player.getName(), dimID, signPos);
             shopSigns.add(newSign);
             ShopSignParser.saveShopSignsData();
             player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Sign registered"));
             FleaMarket.getLogger().info("New flea market shop sign registered by {}", newSign.creator);
-            FleaMarket.getLogger().info("SignID:{}, {}" , newSign.signID, newSign.pos.toString());
+            FleaMarket.getLogger().info("At location: {}" , newSign.pos.toString());
         }
         else{
             player.sendMessage(new TextComponentString("Shop sign has already been registered"));
@@ -117,25 +116,23 @@ public class ShopSign {
         }
     }
 
-    public static boolean isRegistered(int potentialSign){
+    public static boolean isRegistered(BlockPos potentialSignPos){
         for(ShopSign fmSign : shopSigns){
-            if(fmSign.signID == potentialSign){
+            if(fmSign.pos.equals(potentialSignPos)){
                 return true;
             }
         }
         return false;
     }
 
-    public static int findIndexFromSignID(int potentialSignID){
+    public static int findIndexFromBlockPos(BlockPos potentialSignPos){
         for(ShopSign fmSign : shopSigns){
-            if(fmSign.signID == potentialSignID){
+            if(fmSign.pos.equals(potentialSignPos)){
                 return shopSigns.indexOf(fmSign);
             }
         }
         return -1;
     }
-
-    public int getSignID() { return this.signID; }
 
     public int getDimID() { return this.dimID; }
 

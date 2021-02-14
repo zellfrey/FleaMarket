@@ -22,7 +22,6 @@ public class ShopSignParser {
         for(ShopSign sign : ShopSign.shopSigns){
             JsonObject shopSignObject = new JsonObject();
 
-            shopSignObject.addProperty("signID", sign.getSignID());
             shopSignObject.addProperty("creator", sign.getCreator());
             shopSignObject.addProperty("dim", sign.getDimID());
             shopSignObject.addProperty("x", sign.getPos().getX());
@@ -68,11 +67,10 @@ public class ShopSignParser {
                     boolean doesSignExist = signBlockExists(posX, posY, posZ, dimID);
 
                     if(doesSignExist){
-                        int signID = shopSignObject.get("signID").getAsInt();
                         String signCreator = shopSignObject.get("creator").getAsString();
 
                         BlockPos signPos = new BlockPos(posX, posY, posZ);
-                        ShopSign loadedSign = new ShopSign(signCreator, signID, dimID, signPos);
+                        ShopSign loadedSign = new ShopSign(signCreator, dimID, signPos);
 
                         ShopSign.shopSigns.add(loadedSign);
                     }

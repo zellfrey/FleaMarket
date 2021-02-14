@@ -43,9 +43,8 @@ public class ShopSignEventHandler {
         }
 
         TileEntitySign potentialShopSign = (TileEntitySign) world.getTileEntity(event.getPos());
-        int signID = world.loadedTileEntityList.indexOf(potentialShopSign);
 
-        if(ShopSign.isRegistered(signID)) {
+        if(ShopSign.isRegistered(potentialShopSign.getPos())) {
             String name = event.getEntityPlayer().getName();
             EntityPlayerMP playerMP = event.getEntityPlayer().getServer().getPlayerList().getPlayerByUsername(name);
 
@@ -72,11 +71,10 @@ public class ShopSignEventHandler {
         TileEntitySign shopSign = (TileEntitySign) world.getTileEntity(event.getPos());
         String sign1stLine = shopSign.signText[0].getUnformattedText();
 
-        if(sign1stLine.contains("[FLEAMARKET]") && event.getEntityPlayer().isSneaking()) {
 
-            int fmSignID = world.loadedTileEntityList.indexOf(shopSign);
+        if(sign1stLine.contains("[FLEAMARKET]") && event.getEntityPlayer().isSneaking()) {
             int dimID = event.getEntityPlayer().dimension;
-            ShopSign.registerShopSign(player,fmSignID, dimID, shopSign.getPos());
+            ShopSign.registerShopSign(player, dimID, shopSign.getPos());
             ShopSign.updateShopSigns();
         }
     }
@@ -95,13 +93,12 @@ public class ShopSignEventHandler {
 
         EntityPlayer player = event.getPlayer();
         TileEntitySign potentialShopSign = (TileEntitySign) world.getTileEntity(event.getPos());
-        int signID = world.loadedTileEntityList.indexOf(potentialShopSign);
 
-        if(ShopSign.isRegistered(signID)){
+        if(ShopSign.isRegistered(potentialShopSign.getPos())){
             if (!FleaMarket.isOpped(player.getGameProfile())){
                 event.setCanceled(true);
             }else{
-                int shopSignIdx = ShopSign.findIndexFromSignID(signID);
+                int shopSignIdx = ShopSign.findIndexFromBlockPos(potentialShopSign.getPos());
                 if(shopSignIdx != -1){
                     ShopSign.shopSigns.remove(shopSignIdx);
                     ShopSignParser.saveShopSignsData();
