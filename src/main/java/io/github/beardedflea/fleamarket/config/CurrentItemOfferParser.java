@@ -17,62 +17,57 @@ import java.io.FileNotFoundException;
 
 public class CurrentItemOfferParser {
 
-    public static void loadCurrentItemOffer(){
+    public static void loadCurrentItemOfferData(){
         FleaMarket.getLogger().info("Loading current Item Offer...");
 
         File[] currentItemOfferFolder = FleaMarket.configDataDir.listFiles(
                 (dir, name) -> name.startsWith("currentItemOffer") && name.endsWith(".json")
         );
+
         if(currentItemOfferFolder == null || currentItemOfferFolder.length == 0) {
-            FleaMarket.getLogger().info("No file was found in currentItemOffer folder.");
+            FleaMarket.getLogger().info("No file was found in fleamarket data folder.");
+            return;
         }
-        else{
-            File currentItemOfferFile = currentItemOfferFolder[0];
 
-            if (currentItemOfferFile.length() == 0) {
-                FleaMarket.getLogger().warn("currentItemOffer.json is empty! Skipping...");
-            }
-            else{
-                try{
-                    JsonObject currentItemObject = FleaMarket.jsonParser.parse(new FileReader(currentItemOfferFile)).getAsJsonObject();
+        if (currentItemOfferFolder[0].length() != 0) {
+            try{
+                FileReader currentItemOfferFile = new FileReader(currentItemOfferFolder[0]);
+                JsonObject currentItemObject = FleaMarket.jsonParser.parse(currentItemOfferFile).getAsJsonObject();
 
-                    ItemOffer currentItem = ItemOfferParser.setupItemOfferObjects(currentItemObject, 0, "currentItemOffer.json");
-                    if(currentItem == null){
-                        FleaMarket.getLogger().error("error loading current item offer object!");
-                    }
-                    else{
-                        ItemOfferList.currentItemOffer = currentItem;
-                        ItemOfferList.itemOfferIndex = currentItemObject.get("itemIndex").getAsInt();
-                        ItemOfferList.itemOfferUptime = currentItemObject.get("uptimeLeft").getAsInt();
-
-                        EventTickHandler.salesInterval = currentItemObject.get("saleTimeLeft").getAsInt();
-
-                        JsonArray playerIds = currentItemObject.get("playerTransactionList").getAsJsonArray();
-
-                        //it just works: https://stackoverflow.com/questions/18544133/parsing-json-array-into-java-util-list-with-gson
-                        String[] idsArray = new Gson().fromJson(playerIds, String[].class);
-
-                        if(idsArray.length !=0){
-                            for (String uuid : idsArray) {
-                                ItemOfferList.addPlayerTransactionUUID(uuid);
-                            }
-                        }
-
-                        if(currentItemObject.has("fairRandomArray")){
-                            JsonArray fairRandInts = currentItemObject.get("fairRandomArray").getAsJsonArray();
-                            int[] fairRandArray = new Gson().fromJson(fairRandInts, int[].class);
-
-                            if(fairRandArray.length !=0){
-                                for (int itemIndex : fairRandArray) {
-                                    ItemOfferList.addFairRandomArray(itemIndex);
-                                }
-                            }
-                        }
-
-                    }
-                }catch (FileNotFoundException e) {
-                    FleaMarket.getLogger().error("error parsing current item offer file!", e);
+                ItemOffer currentItem = ItemOfferParser.setupItemOfferObjects(currentItemObject, 0, "currentItemOffer.json");
+                if(currentItem == null){
+                    FleaMarket.getLogger().error("error loading current item offer object!");
                 }
+                else{
+                    ItemOfferList.currentItemOffer = currentItem;
+                    ItemOfferList.itemOfferIndex = currentItemObject.get("itemIndex").getAsInt();
+                    ItemOfferList.itemOfferUptime = currentItemObject.get("uptimeLeft").getAsInt();
+
+                    EventTickHandler.salesInterval = currentItemObject.get("saleTimeLeft").getAsInt();
+
+                    JsonArray playerIds = currentItemObject.get("playerTransactionList").getAsJsonArray();
+
+                    //it just works: https://stackoverflow.com/questions/18544133/parsing-json-array-into-java-util-list-with-gson
+                    String[] idsArray = new Gson().fromJson(playerIds, String[].class);
+                    if(idsArray.length !=0){
+                        for (String uuid : idsArray) {
+                            ItemOfferList.addPlayerTransactionUUID(uuid);
+                        }
+                    }
+
+                    if(currentItemObject.has("fairRandomArray")){
+                        JsonArray fairRandInts = currentItemObject.get("fairRandomArray").getAsJsonArray();
+                        int[] fairRandArray = new Gson().fromJson(fairRandInts, int[].class);
+
+                        if(fairRandArray.length !=0){
+                            for (int itemIndex : fairRandArray) {
+                                ItemOfferList.addFairRandomArray(itemIndex);
+                            }
+                        }
+                    }
+                }
+            }catch (FileNotFoundException e) {
+                FleaMarket.getLogger().error("error parsing current item offer file!", e);
             }
         }
     }

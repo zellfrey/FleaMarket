@@ -77,7 +77,7 @@ public class FleaMarket
         event.registerServerCommand(new CommandFleaMarket());
         event.registerServerCommand(new CommandOPFleaMarket());
 
-        CurrentItemOfferParser.loadCurrentItemOffer();
+        CurrentItemOfferParser.loadCurrentItemOfferData();
         ItemOfferParser.loadItemOfferData();
         ShopSignParser.loadShopSignData();
     }
