@@ -17,9 +17,9 @@ public class ShopSignParser {
 
     private static JsonArray shopSignsArray = new JsonArray();
 
-    public static void saveShopSignsData(){
+    public static void saveShopSignsData() {
 
-        for(ShopSign sign : ShopSign.shopSigns){
+        for (ShopSign sign : ShopSign.shopSigns) {
             JsonObject shopSignObject = new JsonObject();
 
             shopSignObject.addProperty("creator", sign.getCreator());
@@ -32,7 +32,7 @@ public class ShopSignParser {
         }
 
         try {
-            FileWriter file = new FileWriter(FleaMarket.configDataDir+"/shopsigns.json");
+            FileWriter file = new FileWriter(FleaMarket.configDataDir + "/shopsigns.json");
             file.write(new GsonBuilder().setPrettyPrinting().create().toJson(shopSignsArray));
             file.close();
 
@@ -42,22 +42,24 @@ public class ShopSignParser {
         shopSignsArray = new JsonArray();
     }
 
-    public static void loadShopSignData(){
+    public static void loadShopSignData() {
         FleaMarket.getLogger().info("Loading shop signs file...");
 
         File[] shopsignsFolder = FleaMarket.configDataDir.listFiles(
                 (dir, name) -> name.startsWith("shopsigns") && name.endsWith(".json")
         );
 
-        if(shopsignsFolder == null || shopsignsFolder.length == 0) {
+        if (shopsignsFolder == null || shopsignsFolder.length == 0) {
             FleaMarket.getLogger().info("No file was found in fleamarket data folder.");
-        }else{
-            try{
+            return;
+        }
+        if (shopsignsFolder[0].length() != 0) {
+            try {
+
                 FileReader fileShopSigns = new FileReader(shopsignsFolder[0]);
                 JsonArray shopSignsArray = FleaMarket.jsonParser.parse(fileShopSigns).getAsJsonArray();
-                FleaMarket.getLogger().info(shopSignsArray.size());
-                for(JsonElement element : shopSignsArray){
 
+                for (JsonElement element : shopSignsArray) {
                     JsonObject shopSignObject = element.getAsJsonObject();
 
                     int dimID = shopSignObject.get("dim").getAsInt();
@@ -66,7 +68,7 @@ public class ShopSignParser {
                     int posZ = shopSignObject.get("z").getAsInt();
                     boolean doesSignExist = signBlockExists(posX, posY, posZ, dimID);
 
-                    if(doesSignExist){
+                    if (doesSignExist) {
                         String signCreator = shopSignObject.get("creator").getAsString();
 
                         BlockPos signPos = new BlockPos(posX, posY, posZ);
@@ -77,7 +79,7 @@ public class ShopSignParser {
                 }
                 ShopSignParser.saveShopSignsData();
 
-            }catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 FleaMarket.getLogger().error("error parsing current item offer file!", e);
             }
         }
