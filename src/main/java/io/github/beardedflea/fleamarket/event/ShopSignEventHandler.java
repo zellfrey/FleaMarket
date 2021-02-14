@@ -1,6 +1,7 @@
 package io.github.beardedflea.fleamarket.event;
 
 import io.github.beardedflea.fleamarket.FleaMarket;
+import io.github.beardedflea.fleamarket.config.ShopSignParser;
 import io.github.beardedflea.fleamarket.store.ItemOfferList;
 import io.github.beardedflea.fleamarket.store.ShopSign;
 import net.minecraft.init.Blocks;
@@ -103,6 +104,7 @@ public class ShopSignEventHandler {
                 int shopSignIdx = ShopSign.findIndexFromSignID(signID);
                 if(shopSignIdx != -1){
                     ShopSign.shopSigns.remove(shopSignIdx);
+                    ShopSignParser.saveShopSignsData();
                     player.sendMessage(new TextComponentString("Removed registered Shop sign"));
                 }
             }

@@ -2,7 +2,7 @@ package io.github.beardedflea.fleamarket.store;
 
 
 import io.github.beardedflea.fleamarket.FleaMarket;
-import net.minecraft.client.renderer.Vector3d;
+import io.github.beardedflea.fleamarket.config.ShopSignParser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 public class ShopSign {
 
     private int signID, dimID;
-    private BlockPos signPos;
+    private BlockPos pos;
     private String creator;
 
     public static ArrayList<ShopSign> shopSigns = new ArrayList<>();
@@ -29,7 +28,7 @@ public class ShopSign {
         this.creator = playerName;
         this.signID = signID;
         this.dimID = dimID;
-        this.signPos = signPos;
+        this.pos = signPos;
     }
 
     public static void registerShopSign(EntityPlayer player, int newSignID, int dimID, BlockPos signPos){
@@ -39,19 +38,14 @@ public class ShopSign {
             player.sendMessage(new TextComponentString(TextFormatting.RED + onlyOps));
             return;
         }
-        boolean alreadyRegistered = false;
-        for(ShopSign fmSign : shopSigns){
-            if(fmSign.signID == newSignID){
-                alreadyRegistered = true;
-                break;
-            }
-        }
-        if(!alreadyRegistered){
+
+        if(!isRegistered(newSignID)){
+            ShopSign newSign = new ShopSign(player.getName(), newSignID, dimID, signPos);
+            shopSigns.add(newSign);
+            ShopSignParser.saveShopSignsData();
             player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Sign registered"));
-            shopSigns.add(new ShopSign(player.getName(), newSignID, dimID, signPos));
-            ShopSign newSign = shopSigns.get(shopSigns.size()-1);
             FleaMarket.getLogger().info("New flea market shop sign registered by {}", newSign.creator);
-            FleaMarket.getLogger().info("SignID:{}, {}" , newSign.signID, newSign.signPos.toString());
+            FleaMarket.getLogger().info("SignID:{}, {}" , newSign.signID, newSign.pos.toString());
         }
         else{
             player.sendMessage(new TextComponentString("Shop sign has already been registered"));
@@ -66,18 +60,20 @@ public class ShopSign {
 
         for(ShopSign sign : shopSigns){
             World dim = server.getWorld(sign.dimID);
-            TileEntitySign registeredSign = (TileEntitySign)dim.getTileEntity(sign.signPos);
+            TileEntitySign registeredSign = (TileEntitySign)dim.getTileEntity(sign.pos);
 //            WorldServer worldServer = (WorldServer) registeredSign.getWorld();
 //            int chunkX = registeredSign.getPos().getX() >> 4;
 //            int chunkZ = registeredSign.getPos().getZ() >> 4;
-            SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign);
+            if(registeredSign != null){
+                SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign);
 
-            for (EntityPlayer entityPlayer : registeredSign.getWorld().playerEntities) {
-                EntityPlayerMP entityPlayerMP = (EntityPlayerMP) entityPlayer;
-                entityPlayerMP.connection.sendPacket(updateTileEntity);
+                for (EntityPlayer entityPlayer : registeredSign.getWorld().playerEntities) {
+                    EntityPlayerMP entityPlayerMP = (EntityPlayerMP) entityPlayer;
+                    entityPlayerMP.connection.sendPacket(updateTileEntity);
 //                if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(entityPlayerMP, chunkX, chunkZ)) {
 //                    entityPlayerMP.connection.sendPacket(updateTileEntity);
 //                }
+                }
             }
         }
     }
@@ -140,6 +136,10 @@ public class ShopSign {
     }
 
     public int getSignID() { return this.signID; }
+
+    public int getDimID() { return this.dimID; }
+
+    public BlockPos getPos() { return this.pos; }
 
     public String getCreator() { return this.creator; }
 }

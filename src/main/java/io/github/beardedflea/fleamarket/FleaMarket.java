@@ -79,6 +79,7 @@ public class FleaMarket
 
         CurrentItemOfferParser.loadCurrentItemOffer();
         ItemOfferParser.loadItemOfferData();
+        ShopSignParser.loadShopSignData();
     }
 
     @Mod.EventHandler
@@ -88,8 +89,9 @@ public class FleaMarket
 
     @Mod.EventHandler
     public void onServerStopping(FMLServerStoppingEvent event) {
-        log.info("saving currentItemOffer data...");
+        log.info("saving fleamarket data...");
         CurrentItemOfferParser.saveCurrentItemOffer();
+        ShopSignParser.saveShopSignsData();
     }
 
     public static boolean isOpped(GameProfile uuid){
