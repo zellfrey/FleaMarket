@@ -178,7 +178,9 @@ public class ItemOfferList {
             itemFullName += itemDamageNum != 0 ? ":" + itemDamageNum : "";
             String itemNBTRaw = item.getItem().getNBTShareTag(item) + "";
 
-            if(FleaMarket.isDebugMode()){ printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw); }
+            if(FleaMarket.isDebugMode() && FleaMarket.isOpped(playerMP.getGameProfile())){
+                printDebugStrConsole(item.getItem().getItemStackDisplayName(item), itemFullName, itemNBTRaw);
+            }
 
             if(itemFullName.equals(currentItemOffer.getItemName())
                     && itemNBTRaw.equals(currentItemOffer.getNbtRaw() + "")) {
