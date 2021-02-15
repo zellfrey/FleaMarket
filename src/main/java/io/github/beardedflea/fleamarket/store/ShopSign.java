@@ -60,18 +60,12 @@ public class ShopSign {
         for(ShopSign sign : shopSigns){
             World dim = server.getWorld(sign.dimID);
             TileEntitySign registeredSign = (TileEntitySign)dim.getTileEntity(sign.pos);
-//            WorldServer worldServer = (WorldServer) registeredSign.getWorld();
-//            int chunkX = registeredSign.getPos().getX() >> 4;
-//            int chunkZ = registeredSign.getPos().getZ() >> 4;
             if(registeredSign != null){
                 SPacketUpdateTileEntity updateTileEntity = sign.setShopSign(registeredSign);
 
                 for (EntityPlayer entityPlayer : registeredSign.getWorld().playerEntities) {
                     EntityPlayerMP entityPlayerMP = (EntityPlayerMP) entityPlayer;
                     entityPlayerMP.connection.sendPacket(updateTileEntity);
-//                if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(entityPlayerMP, chunkX, chunkZ)) {
-//                    entityPlayerMP.connection.sendPacket(updateTileEntity);
-//                }
                 }
             }
         }

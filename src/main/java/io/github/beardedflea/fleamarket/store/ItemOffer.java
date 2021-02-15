@@ -61,7 +61,8 @@ public class ItemOffer {
 
     public String getItemName(){
         String itemToRemove = this.itemStack.getItem().getRegistryName() + "";
-        itemToRemove += this.itemStack.getItem().getMetadata(this.itemStack) != 0 ? ":" + this.itemStack.getItem().getMetadata(this.itemStack) : "";
+        int metaDataNum = this.itemStack.getItem().getMetadata(this.itemStack);
+        itemToRemove += metaDataNum != 0 ? ":" + metaDataNum : "";
         return itemToRemove;
     }
 

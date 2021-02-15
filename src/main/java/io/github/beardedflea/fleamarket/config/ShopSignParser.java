@@ -55,7 +55,6 @@ public class ShopSignParser {
         }
         if (shopsignsFolder[0].length() != 0) {
             try {
-
                 FileReader fileShopSigns = new FileReader(shopsignsFolder[0]);
                 JsonArray shopSignsArray = FleaMarket.jsonParser.parse(fileShopSigns).getAsJsonArray();
 
