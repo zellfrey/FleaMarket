@@ -1,10 +1,11 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/flea-market",
     "promos": {
-        "1.12.2-latest": "1.3.0",
-        "1.12.2-recommended": "1.3.0"
+        "1.12.2-latest": "1.3.1",
+        "1.12.2-recommended": "1.3.1"
     },
     "1.12.2": {
+        "1.3.1": "Updated player check for op commands. \nEmbarrassing, how did i let this pass me",
         "1.3.0": "- Added shopsigns for in world Flea Market.\n -Added mod update handler(Should have done this earlier...).",
         "1.2.0": "- Removed snakeyaml & removed lang.yaml.\n- Fleamarket.cfg now contains mod messages.",
         "1.1.0": "- Added Fairrandom option for itemOffer list.\n- Added new message file lang.yaml.\n- Revised Config.",

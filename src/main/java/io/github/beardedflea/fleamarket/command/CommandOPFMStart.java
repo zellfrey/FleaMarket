@@ -22,12 +22,6 @@ public class CommandOPFMStart extends CommandBase{
     }
 
     @Override
-    public int getRequiredPermissionLevel() { return 4; }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) { return true; }
-
-    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args){
 
         if(!ItemOfferList.startItemOfferCycle(server)){

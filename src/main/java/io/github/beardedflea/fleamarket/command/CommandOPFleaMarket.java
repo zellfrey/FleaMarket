@@ -30,7 +30,7 @@ public class CommandOPFleaMarket extends CommandTreeBase {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
+        return sender.canUseCommand(getRequiredPermissionLevel(), this.getName());
     }
 
     @Override
